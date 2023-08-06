@@ -1,4 +1,3 @@
-
 spring:
   data:
     web:
@@ -13,7 +12,7 @@ spring:
         format_sql: true
 
   datasource:
-    url: jdbc:mysql://101.101.210.91:3306/DEV
+    url: jdbc:mariadb://101.101.210.91:3306/DEV
     username: DEV_USER
     password: pass@word1
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver

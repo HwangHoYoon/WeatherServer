@@ -29,7 +29,7 @@ public class QnaAnswer {
     private Integer qnaId;
 
 
-    /* 유저 식별자 */
+    /* qna 식별자 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qnaId")
     private Qna qnaTb;

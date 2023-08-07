@@ -12,11 +12,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Merge to main
+    - name: Merge to develop
       if: startsWith(github.event.issue.title, 'issue-')
       run: |
         branch="issue-${{ github.event.issue.number }}/done"
         git fetch origin $branch:$branch
-        git checkout main
+        git checkout develop
         git merge $branch --no-edit
-        git push origin main
+        git push origin develop

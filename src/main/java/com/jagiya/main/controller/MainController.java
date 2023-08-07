@@ -1,8 +1,8 @@
 package com.jagiya.main.controller;
 
-import com.jagiya.main.entity.TestReq;
-import com.jagiya.main.entity.TestRes;
-import com.jagiya.main.service.TestService;
+import com.jagiya.main.dto.TestReq;
+import com.jagiya.main.dto.TestRes;
+import com.jagiya.main.service.Impl.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

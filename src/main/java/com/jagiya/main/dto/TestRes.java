@@ -1,5 +1,6 @@
-package com.jagiya.main.entity;
+package com.jagiya.main.dto;
 
+import com.jagiya.main.entity.Test;
 import lombok.Getter;
 
 @Getter

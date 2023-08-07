@@ -5,11 +5,18 @@ spring:
         one-indexed-parameters: true
         default-page-size: 5
   jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     defer-datasource-initialization: true
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
+        show_sql: false
         format_sql: true
+        use_sql_comments: true
 
   datasource:
     url: jdbc:mariadb://101.101.210.91:3306/DEV

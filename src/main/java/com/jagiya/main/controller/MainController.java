@@ -17,7 +17,7 @@ public class MainController {
 
     @GetMapping
     public String main(TestReq testReq) {
-        log.info("main controller");
+        log.info("test main controller");
         if (testReq.getId() == null) {
             testReq.setId(1L);
         }

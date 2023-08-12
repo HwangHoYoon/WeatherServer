@@ -52,6 +52,14 @@ dependencies {
 	//Swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+	// gson
+	implementation'com.google.code.gson:gson:2.8.7'
+
+	// oauth2
+	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// security
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

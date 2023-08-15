@@ -3,13 +3,22 @@ package com.jagiya.signup.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.jagiya.common.enums.SnsType;
+import com.jagiya.common.enums.OAuthProvider;
 import com.jagiya.main.entity.SnsInfo;
 import com.jagiya.main.entity.Users;
 import com.jagiya.main.repository.SnsInfoRepository;
 import com.jagiya.main.repository.UsersRepository;
+import com.jagiya.signup.dto.KakaoToken;
+import com.jagiya.signup.dto.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -22,6 +31,25 @@ public class SignUpService {
 
     private final SnsInfoRepository snsInfoRepository;
     private final UsersRepository usersRepository;
+    private final RestTemplate restTemplate;
+
+    @Value("${oauth.kakao.url.auth}")
+    private String authUrl;
+
+    @Value("${oauth.kakao.url.api}")
+    private String apiUrl;
+
+    @Value("${oauth.kakao.client-id}")
+    private String clientId;
+
+    @Value("${oauth.kakao.client_secret}")
+    private String clientSecret;
+
+    @Value("${oauth.kakao.grant_type}")
+    private String grantType;
+
+    @Value("${oauth.kakao.redirect_uri}")
+    private String redirectUri;
 
     public String getKaKaoAccessToken(String code){
         String access_Token = "";
@@ -120,7 +148,7 @@ public class SignUpService {
 
             br.close();
 
-            SnsInfo snsInfoRst = snsInfoRepository.findBySnsTypeAndSnsProfile(SnsType.KAKAo.getCode(), email)
+            SnsInfo snsInfoRst = snsInfoRepository.findBySnsTypeAndSnsProfile(OAuthProvider.KAKAO.getCode(), email)
                     .orElseGet(() -> {
 
                         Users users = Users.builder()
@@ -134,8 +162,8 @@ public class SignUpService {
                         Users usersRst = usersRepository.save(users);
 
                         SnsInfo snsInfo = SnsInfo.builder()
-                                .snsType(SnsType.KAKAo.getCode())
-                                .snsName(SnsType.KAKAo.getName())
+                                .snsType(OAuthProvider.KAKAO.getCode())
+                                .snsName(OAuthProvider.KAKAO.getName())
                                 .snsProfile(email)
                                 .usersTb(usersRst)
                                 .accessToken(token)
@@ -149,5 +177,82 @@ public class SignUpService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public SnsInfo signUp(String code) {
+        KakaoToken kakaoToken = requestAccessToken(code);
+        KakaoUserInfo kakaoUserInfo = requestOauthInfo(kakaoToken);
+
+        long id = kakaoUserInfo.getId();
+        String email = kakaoUserInfo.getEmail();
+        String nickname = kakaoUserInfo.getNickname();
+        String token = kakaoToken.getAccessToken();
+        Date connectedAt = kakaoUserInfo.getConnectedAt();
+
+        System.out.println("id : " + id);
+        System.out.println("email : " + email);
+        System.out.println("nickname : " + nickname);
+        System.out.println("connected_at : " + connectedAt);
+
+        SnsInfo snsInfoRst = snsInfoRepository.findBySnsTypeAndSnsProfile(OAuthProvider.KAKAO.getCode(), email)
+                .orElseGet(() -> {
+
+                    Users users = Users.builder()
+                            .email(email)
+                            .nickname(nickname)
+                            .username(nickname)
+                            .deleteFlag(0)
+                            .agreesFalg(0)
+                            .regDate(new Date())
+                            .build();
+                    Users usersRst = usersRepository.save(users);
+
+                    SnsInfo snsInfo = SnsInfo.builder()
+                            .snsType(OAuthProvider.KAKAO.getCode())
+                            .snsName(OAuthProvider.KAKAO.getName())
+                            .snsProfile(email)
+                            .usersTb(usersRst)
+                            .accessToken(token)
+                            .snsConnectDate(connectedAt)
+                            .build();
+
+                    return snsInfoRepository.save(snsInfo);
+                });
+        return snsInfoRst;
+    }
+
+    public KakaoToken requestAccessToken(String code) {
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();;
+        body.add("grant_type", grantType);
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("redirect_uri", redirectUri);
+        body.add("code", code);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
+
+        KakaoToken response = restTemplate.postForObject(authUrl, request, KakaoToken.class);
+
+        // TODO 토큰 정보를 가져오지 못하면 예외발생 처리 추가
+        assert response != null;
+        return response;
+    }
+
+    public KakaoUserInfo requestOauthInfo(KakaoToken kakaoToken) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        httpHeaders.set("Authorization", "Bearer " + kakaoToken.getAccessToken());
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();;
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
+        KakaoUserInfo response = restTemplate.postForObject(apiUrl, request, KakaoUserInfo.class);
+
+        // TODO 유저 정보를 가져오지 못하면 예외발생 처리 추가
+        assert response != null;
+        return response;
     }
 }

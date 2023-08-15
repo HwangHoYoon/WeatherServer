@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum SnsType {
-    KAKAo(0, "kakao"),
+public enum OAuthProvider {
+    KAKAO(0, "kakao"),
     APPLE(1, "apple");
 
     private final Integer code;

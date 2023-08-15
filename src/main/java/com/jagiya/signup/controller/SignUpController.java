@@ -1,5 +1,6 @@
 package com.jagiya.signup.controller;
 
+import com.jagiya.main.entity.SnsInfo;
 import com.jagiya.signup.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +18,14 @@ public class SignUpController {
 
     @ResponseBody
     @GetMapping("/kakao_callback")
-    public void  kakaoCallback(@RequestParam String code) throws Exception {
+    public String kakaoCallback(@RequestParam String code) throws Exception {
 
         System.out.println("code :" + code);
-        String access_Token = signUpService.getKaKaoAccessToken(code);
-        signUpService.createKakaoUser(access_Token);
+        //String access_Token = signUpService.getKaKaoAccessToken(code);
+        //signUpService.createKakaoUser(access_Token);
+
+        SnsInfo snsInfo = signUpService.signUp(code);
+
+        return snsInfo.toString();
     }
 }

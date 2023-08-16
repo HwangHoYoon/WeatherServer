@@ -24,6 +24,11 @@ repositories {
 }
 
 dependencies {
+
+	//spring-doc
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+
 	// WEB
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -49,8 +54,12 @@ dependencies {
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 
-	//Swagger
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	//servlet
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+	//hibernate
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+
 
 }
 

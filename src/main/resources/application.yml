@@ -1,3 +1,27 @@
+server:
+  port: 8080
+# Swagger springdoc-ui Configuration
+# swaggerdoc
+springdoc:
+  packages-to-scan: com.jagiya.main.controller
+  swagger-ui.path: /api-docs
+#  swagger-ui:
+#    tags-sorter: alpha
+#    operations-sorter: alpha
+#    display-query-params-without-oauth2: true
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
 spring:
   data:
     web:
@@ -17,9 +41,9 @@ spring:
         show_sql: false
         format_sql: true
         use_sql_comments: true
-
   datasource:
     url: jdbc:mariadb://101.101.210.91:3306/DEV
     username: DEV_USER
     password: pass@word1
     driver-class-name: org.mariadb.jdbc.Driver
+

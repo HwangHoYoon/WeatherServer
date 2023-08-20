@@ -27,9 +27,16 @@ spring:
 oauth:
   kakao:
     url:
-      auth: https://kauth.kakao.com/oauth/token
+      auth: https://kauth.kakao.com/oauth/authorize
+      token: https://kauth.kakao.com/oauth/token
       api: https://kapi.kakao.com/v2/user/me
     grant_type: authorization_code
     client_id: ec17d3e02513195aac9f3a41a32260af
     client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
     redirect_uri: http://localhost:8080/kakao_callback
+
+jwt:
+  header: Authorization
+  secret: 1
+  access-token-expire-time: 1800000
+  refresh-token-expire-time: 604800000

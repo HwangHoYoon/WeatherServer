@@ -1,11 +1,11 @@
-package com.jagiya.main.repository;
+package com.jagiya.auth.repository;
 
 import com.jagiya.main.entity.SnsInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SnsInfoRepository extends JpaRepository<SnsInfo, Long> {
+public interface AuthSnsInfoRepository extends JpaRepository<SnsInfo, Long> {
 
     Optional<SnsInfo> findBySnsTypeAndSnsProfile(Integer SnsType, String SnsProfile);
 }

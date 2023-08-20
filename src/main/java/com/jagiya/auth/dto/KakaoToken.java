@@ -1,4 +1,4 @@
-package com.jagiya.signup.dto;
+package com.jagiya.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -18,10 +18,10 @@ public class KakaoToken {
     private String refreshToken;
 
     @JsonProperty("expires_in")
-    private String expiresIn;
+    private Integer expiresIn;
 
     @JsonProperty("refresh_token_expires_in")
-    private String refreshTokenExpiresIn;
+    private Integer refreshTokenExpiresIn;
 
     @JsonProperty("scope")
     private String scope;

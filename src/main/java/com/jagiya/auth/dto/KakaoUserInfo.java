@@ -58,10 +58,8 @@ public class KakaoUserInfo {
     }
 
     public Date getBirthDay() {
-
-        String birthDay = kakaoAccount.birthyear + kakaoAccount.birthday;
-
-        if (!birthDay.isBlank()) {
+        if (kakaoAccount.birthyear != null && kakaoAccount.birthday != null) {
+            String birthDay = kakaoAccount.birthyear + kakaoAccount.birthday;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             try {
                 return dateFormat.parse(birthDay);

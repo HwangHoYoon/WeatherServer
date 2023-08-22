@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -35,8 +36,9 @@ public class AuthController {
         return reqUrl;
     }
 
+    //@GetMapping("/kakao_callback")
     @GetMapping({"/auth/kakaoCallback", "/auth/kakaoLogin"})
-    public String kakaoLogin(@RequestParam String code) throws Exception {
+    public String kakaoCallback(@RequestParam String code) throws Exception {
 
         System.out.println("code :" + code);
         //String access_Token = signUpService.getKaKaoAccessToken(code);
@@ -46,4 +48,5 @@ public class AuthController {
 
         return usersRes.toString();
     }
+
 }

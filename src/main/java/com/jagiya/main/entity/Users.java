@@ -10,8 +10,8 @@ import java.util.Date;
 
 
 @Data
-@Entity(name = "Users")
-@Table(name = "Users")
+@Entity(name = "UsersTemp")
+@Table(name = "UsersTemp")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties()
 @DynamicInsert

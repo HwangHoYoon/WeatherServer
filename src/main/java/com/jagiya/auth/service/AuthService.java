@@ -108,7 +108,7 @@ public class AuthService {
         String tokenType = kakaoToken.getTokenType();
 
 
-        Optional<Token> token = tokenRepository.findByUserId(userId);
+        Optional<Token> token = tokenRepository.findByUsersTbUsersId(userId);
 
         if (token.isPresent()) {
             Token updateToken = token.get();

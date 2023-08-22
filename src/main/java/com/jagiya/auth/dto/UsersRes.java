@@ -3,10 +3,12 @@ package com.jagiya.auth.dto;
 import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
+@ToString
 public class UsersRes {
     private final Long usersId;
 

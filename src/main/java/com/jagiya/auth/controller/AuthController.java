@@ -7,14 +7,12 @@ import com.jagiya.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("auth")
 public class AuthController {
 
     private final AuthService signUpService;
@@ -28,7 +26,7 @@ public class AuthController {
     @Value("${oauth.kakao.redirect_uri}")
     private String redirectUri;
 
-    @GetMapping("/auth/getKakaoUrl")
+    @GetMapping("/getKakaoUrl")
     public String getKakaoUrl() throws Exception {
         String reqUrl = kakaoAuthUrl + "?response_type=code" + "&client_id=" + clientId
                 + "&redirect_uri=" + redirectUri;
@@ -37,16 +35,15 @@ public class AuthController {
     }
 
     //@GetMapping("/kakao_callback")
-    @GetMapping({"/auth/kakaoCallback", "/auth/kakaoLogin"})
-    public String kakaoCallback(@RequestParam String code) throws Exception {
+    @GetMapping({"/kakaoCallback", "/kakaoLogin"})
+    public UsersRes kakaoCallback(@RequestParam String code) throws Exception {
 
         System.out.println("code :" + code);
-        //String access_Token = signUpService.getKaKaoAccessToken(code);
+        //S
+        // tring access_Token = signUpService.getKaKaoAccessToken(code);
         //signUpService.createKakaoUser(access_Token);
 
-        UsersRes usersRes = signUpService.signUp(code);
-
-        return usersRes.toString();
+        return signUpService.signUp(code);
     }
 
 }

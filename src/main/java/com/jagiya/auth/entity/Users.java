@@ -83,4 +83,27 @@ public class Users {
     @Column(name = "agreesDate")
     private Date agreesDate;
 
+    public UsersEditor.UsersEditorBuilder toEditor() {
+        return UsersEditor.builder()
+                .email(email)
+                .nickname(nickname)
+                .username(username)
+                .snsProfile(snsProfile)
+                .birthDay(birthday)
+                .gender(gender)
+                .snsConnectDate(snsConnectDate)
+                .modifyDate(modifyDate);
+    }
+
+    public void edit(UsersEditor usersEditor) {
+        email = usersEditor.getEmail();
+        nickname = usersEditor.getNickname();
+        username = usersEditor.getUsername();
+        snsProfile = usersEditor.getSnsProfile();
+        birthday = usersEditor.getBirthDay();
+        gender = usersEditor.getGender();
+        snsConnectDate = usersEditor.getSnsConnectDate();
+        modifyDate = usersEditor.getModifyDate();
+    }
+
 }

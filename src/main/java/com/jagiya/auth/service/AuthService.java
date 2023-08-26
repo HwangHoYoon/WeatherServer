@@ -1,16 +1,14 @@
 package com.jagiya.auth.service;
 
-import com.jagiya.auth.dto.TokenEditor;
+import com.jagiya.auth.entity.TokenEditor;
 import com.jagiya.auth.dto.UsersRes;
 import com.jagiya.auth.entity.Token;
 import com.jagiya.auth.entity.Users;
+import com.jagiya.auth.entity.UsersEditor;
 import com.jagiya.auth.repository.AuthTokenRepository;
-import com.jagiya.common.enums.OAuthProvider;
-import com.jagiya.auth.repository.AuthSnsInfoRepository;
 import com.jagiya.auth.repository.AuthUsersRepository;
 import com.jagiya.auth.dto.KakaoToken;
 import com.jagiya.auth.dto.KakaoUserInfo;
-import com.jagiya.main.entity.SnsInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,8 +19,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -64,6 +60,7 @@ public class AuthService {
         Date connectedAt = kakaoUserInfo.getConnectedAt();
         String gender = kakaoUserInfo.getGender();
         Date birthDay = kakaoUserInfo.getBirthDay();
+        Integer snsType = kakaoUserInfo.getOAuthProvider().getCode();
 
         System.out.println("id : " + id);
         System.out.println("name : " + name);
@@ -71,34 +68,50 @@ public class AuthService {
         System.out.println("nickname : " + nickname);
         System.out.println("connected_at : " + connectedAt);
         System.out.println("profileImage : " + profileImage);
-        System.out.println("birthDay : " + kakaoUserInfo.getBirthDay());
+        System.out.println("birthDay : " + birthDay);
         System.out.println("gender : " + gender);
+        System.out.println("snsType : " + snsType);
 
         //TODO CI, CI_DATE, UUID 추가 필요
+        Optional<Users> usersInfo = usersRepository.findBySnsTypeAndEmail(snsType, email);
 
-        Users usersInfoRst = usersRepository.findBySnsTypeAndId(OAuthProvider.KAKAO.getCode(), id)
-                .orElseGet(() -> {
-                    Users users = Users.builder()
-                            .id(id)
-                            .email(email)
-                            .nickname(nickname)
-                            .username(name)
-                            .snsType(OAuthProvider.KAKAO.getCode())
-                            .snsName(OAuthProvider.KAKAO.getName())
-                            .snsProfile(profileImage)
-                            .birthday(birthDay)
-                            .gender(gender)
-                            .snsConnectDate(connectedAt)
-                            .deleteFlag(0)
-                            .agreesFalg(0)
-                            .regDate(new Date())
-                            .build();
-                    Users usersRst = usersRepository.save(users);
-                    return usersRst;
-                });
+        Users users;
+        // 유저 정보가 있다면 업데이트 없으면 등록
+        if (usersInfo.isPresent()) {
+            users = usersInfo.get();
+            UsersEditor.UsersEditorBuilder usersEditorBuilder = users.toEditor();
+            UsersEditor tokenEditor = usersEditorBuilder
+                    .email(email)
+                    .nickname(nickname)
+                    .username(name)
+                    .snsProfile(profileImage)
+                    .birthDay(birthDay)
+                    .gender(gender)
+                    .snsConnectDate(connectedAt)
+                    .modifyDate(new Date())
+                    .build();
+            users.edit(tokenEditor);
+        } else {
+            users = Users.builder()
+                    .id(id)
+                    .email(email)
+                    .nickname(nickname)
+                    .username(name)
+                    .snsType(kakaoUserInfo.getOAuthProvider().getCode())
+                    .snsName(kakaoUserInfo.getOAuthProvider().getName())
+                    .snsProfile(profileImage)
+                    .birthday(birthDay)
+                    .gender(gender)
+                    .snsConnectDate(connectedAt)
+                    .deleteFlag(0)
+                    .agreesFalg(0)
+                    .regDate(new Date())
+                    .build();
+        }
+        Users usersInfoRst = usersRepository.save(users);
+
         Long userId = usersInfoRst.getUsersId();
         System.out.println("userId : " + userId);
-
 
         String accessToken = kakaoToken.getAccessToken();
         String refreshToken = kakaoToken.getRefreshToken();
@@ -107,13 +120,12 @@ public class AuthService {
         Integer refreshTokenExpiresIn = kakaoToken.getRefreshTokenExpiresIn();
         String tokenType = kakaoToken.getTokenType();
 
-
-        Optional<Token> token = tokenRepository.findByUsersTbUsersId(userId);
-
-        if (token.isPresent()) {
-            Token updateToken = token.get();
-            TokenEditor.TokenEditorBuilder tokenEditorBuilder = updateToken.toEditor();
-
+        Optional<Token> tokenInfo = tokenRepository.findByUsersTbUsersId(userId);
+        Token token;
+        // 토큰 정보가 있다면 수정 없으면 등록
+        if (tokenInfo.isPresent()) {
+            token = tokenInfo.get();
+            TokenEditor.TokenEditorBuilder tokenEditorBuilder = token.toEditor();
             TokenEditor tokenEditor = tokenEditorBuilder
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
@@ -123,10 +135,9 @@ public class AuthService {
                     .tokenType(tokenType)
                     .build();
 
-            updateToken.edit(tokenEditor);
-            tokenRepository.save(updateToken);
+            token.edit(tokenEditor);
         } else {
-            Token insertToken = Token.builder()
+            token = Token.builder()
                     .usersTb(usersInfoRst)
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
@@ -136,8 +147,8 @@ public class AuthService {
                     .tokenType(tokenType)
                     .regDate(new Date())
                     .build();
-            tokenRepository.save(insertToken);
         }
+        tokenRepository.save(token);
 
         return UsersRes.builder()
                 .usersId(userId)
@@ -154,6 +165,7 @@ public class AuthService {
                 .deleteFlag(usersInfoRst.getDeleteFlag())
                 .agreesFalg(usersInfoRst.getAgreesFalg())
                 .regDate(usersInfoRst.getRegDate())
+                .modifyDate(usersInfoRst.getModifyDate())
                 .build();
     }
 

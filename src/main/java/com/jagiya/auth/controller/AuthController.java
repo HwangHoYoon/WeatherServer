@@ -1,8 +1,6 @@
 package com.jagiya.auth.controller;
 
 import com.jagiya.auth.dto.UsersRes;
-import com.jagiya.auth.entity.Users;
-import com.jagiya.main.entity.SnsInfo;
 import com.jagiya.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

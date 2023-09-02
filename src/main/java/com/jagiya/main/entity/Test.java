@@ -1,5 +1,6 @@
 package com.jagiya.main.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,11 +14,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@Schema(description = "Test VO")
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Test ID")
     private Long id;
 
+    @Schema(description = "Name ID")
     private String name;
 
     @Builder

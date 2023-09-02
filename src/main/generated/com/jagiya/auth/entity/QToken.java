@@ -40,7 +40,7 @@ public class QToken extends EntityPathBase<Token> {
 
     public final StringPath tokenType = createString("tokenType");
 
-    public final QUsers usersTb;
+    public final com.jagiya.main.entity.QUsers usersTb;
 
     public QToken(String variable) {
         this(Token.class, forVariable(variable), INITS);
@@ -60,7 +60,7 @@ public class QToken extends EntityPathBase<Token> {
 
     public QToken(Class<? extends Token> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.usersTb = inits.isInitialized("usersTb") ? new QUsers(forProperty("usersTb")) : null;
+        this.usersTb = inits.isInitialized("usersTb") ? new com.jagiya.main.entity.QUsers(forProperty("usersTb")) : null;
     }
 
 }

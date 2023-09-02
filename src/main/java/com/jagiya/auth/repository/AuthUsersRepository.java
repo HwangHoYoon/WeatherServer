@@ -1,6 +1,6 @@
 package com.jagiya.auth.repository;
 
-import com.jagiya.auth.entity.Users;
+import com.jagiya.main.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

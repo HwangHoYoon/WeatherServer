@@ -56,7 +56,6 @@ oauth:
     client_id: ec17d3e02513195aac9f3a41a32260af
     client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
     redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
-
 jwt:
   header: Authorization
   secret: 1

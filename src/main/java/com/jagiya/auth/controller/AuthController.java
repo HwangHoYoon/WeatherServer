@@ -31,7 +31,6 @@ public class AuthController {
     public String getKakaoUrl() throws Exception {
         String reqUrl = kakaoAuthUrl + "?response_type=code" + "&client_id=" + clientId
                 + "&redirect_uri=" + redirectUri;
-
         return reqUrl;
     }
 

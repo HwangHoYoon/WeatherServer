@@ -31,6 +31,8 @@ dependencies {
 
 	// WEB
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// JPA
@@ -39,6 +41,7 @@ dependencies {
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.projectlombok:lombok:1.18.22'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -61,11 +64,35 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15' // 또는 최신 버전
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+
+
+
+	// https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt
+	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
+
+
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+ext {
+	set('springCloudVersion', "2021.0.5")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
 
 // plan jar 생성 방지
 jar {

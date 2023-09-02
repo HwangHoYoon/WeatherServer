@@ -47,3 +47,24 @@ spring:
     password: pass@word1
     driver-class-name: org.mariadb.jdbc.Driver
 
+
+feign:
+  client:
+    apple:
+      name: applelogin
+      url: https://www.readyumbrelladata.com
+
+
+apple:
+  team:
+    id: XQ24HP64B3
+  login:
+    key: TQTRBXTQRD
+  client:
+    id: com.jagiya
+  redirect:
+    url: https://www.readyumbrelladata.com/apple/callback
+  key:
+    path: /keys/AuthKey_TQTRBXTQRD.p8
+
+

@@ -56,8 +56,33 @@ oauth:
     client_id: ec17d3e02513195aac9f3a41a32260af
     client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
     redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
+
+
 jwt:
   header: Authorization
   secret: 1
   access-token-expire-time: 1800000
   refresh-token-expire-time: 604800000
+
+
+feign:
+  client:
+    apple:
+      name: applelogin
+      url: https://www.readyumbrelladata.com
+
+
+apple:
+  team:
+    id: XQ24HP64B3
+  login:
+    key: TQTRBXTQRD
+  client:
+    id: com.jagiya
+  redirect:
+    url: https://www.readyumbrelladata.com/apple/callback
+  key:
+    path: /keys/AuthKey_TQTRBXTQRD.p8
+
+
+

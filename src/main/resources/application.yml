@@ -82,7 +82,7 @@ apple:
   redirect:
     url: https://www.readyumbrelladata.com/apple/callback
   key:
-    path: keys/AuthKey_TQTRBXTQRD.p8
+    path: /keys/AuthKey_TQTRBXTQRD.p8
 
 
 

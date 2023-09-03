@@ -17,7 +17,7 @@ public class AppleController {
 
     private final AppleService appleService;
 
-    @PostMapping("/callback")
+    @PostMapping("/apple/callback")
     public ResponseEntity<MsgEntity> callback(HttpServletRequest request) throws Exception {
         AppleDTO appleInfo = appleService.getAppleInfo(request.getParameter("code"));
 

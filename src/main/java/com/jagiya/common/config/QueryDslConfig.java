@@ -1,4 +1,4 @@
-package com.jagiya.main.config;
+package com.jagiya.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

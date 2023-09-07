@@ -46,6 +46,10 @@ spring:
     username: DEV_USER
     password: pass@word1
     driver-class-name: org.mariadb.jdbc.Driver
+    task:
+      scheduling:
+        pool:
+          size=5:
 oauth:
   kakao:
     url:
@@ -56,6 +60,10 @@ oauth:
     client_id: ec17d3e02513195aac9f3a41a32260af
     client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
     redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
+
+weather:
+  url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  serviceKey: F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D
 
 jwt:
   header: Authorization

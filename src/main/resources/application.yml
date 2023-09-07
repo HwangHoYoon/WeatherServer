@@ -77,7 +77,7 @@ apple:
   login:
     key: TQTRBXTQRD
   client:
-    id: com.jagiya
+    id: com.jagiya.services
   redirect:
     url: https://www.readyumbrelladata.com/apple/callback
   key:

@@ -10,6 +10,7 @@ import com.jagiya.auth.dto.KakaoToken;
 import com.jagiya.auth.dto.KakaoUserInfo;
 import com.jagiya.main.entity.Users;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,29 +25,39 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AuthService {
 
     private final AuthTokenRepository tokenRepository;
     private final AuthUsersRepository usersRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${oauth.kakao.url.token}")
+    @Value("${kakao.url.auth}")
+    private String kakaoAuthUrl;
+
+    @Value("${kakao.url.token}")
     private String tokenUrl;
 
-    @Value("${oauth.kakao.url.api}")
+    @Value("${kakao.url.api}")
     private String apiUrl;
 
-    @Value("${oauth.kakao.client-id}")
+    @Value("${kakao.client-id}")
     private String clientId;
 
-    @Value("${oauth.kakao.client_secret}")
+    @Value("${kakao.client_secret}")
     private String clientSecret;
 
-    @Value("${oauth.kakao.grant_type}")
+    @Value("${kakao.grant_type}")
     private String grantType;
 
-    @Value("${oauth.kakao.redirect_uri}")
+    @Value("${kakao.redirect_uri}")
     private String redirectUri;
+
+    public String getKakaoUrl() {
+        String kakaoUrl = kakaoAuthUrl + "?response_type=code" + "&client_id=" + clientId
+                + "&redirect_uri=" + redirectUri;
+        return kakaoUrl;
+    }
 
     public UsersRes signUp(String code) {
         KakaoToken kakaoToken = requestAccessToken(code);
@@ -62,37 +73,15 @@ public class AuthService {
         Date birthDay = kakaoUserInfo.getBirthDay();
         Integer snsType = kakaoUserInfo.getOAuthProvider().getCode();
 
-        System.out.println("id : " + id);
-        System.out.println("name : " + name);
-        System.out.println("email : " + email);
-        System.out.println("nickname : " + nickname);
-        System.out.println("connected_at : " + connectedAt);
-        System.out.println("profileImage : " + profileImage);
-        System.out.println("birthDay : " + birthDay);
-        System.out.println("gender : " + gender);
-        System.out.println("snsType : " + snsType);
+        Optional<Users> usersInfo = usersRepository.findBySnsTypeAndId(snsType, id);
 
-        //TODO CI, CI_DATE, UUID 추가 필요
-        Optional<Users> usersInfo = usersRepository.findBySnsTypeAndEmail(snsType, email);
-
-        Users users;
+        Users usersInfoRst;
         // 유저 정보가 있다면 업데이트 없으면 등록
         if (usersInfo.isPresent()) {
-            users = usersInfo.get();
-            UsersEditor.UsersEditorBuilder usersEditorBuilder = users.toEditor();
-            UsersEditor tokenEditor = usersEditorBuilder
-                    .email(email)
-                    .nickname(nickname)
-                    .username(name)
-                    .snsProfile(profileImage)
-                    .birthDay(birthDay)
-                    .gender(gender)
-                    .snsConnectDate(connectedAt)
-                    .modifyDate(new Date())
-                    .build();
-            users.edit(tokenEditor);
+            usersInfoRst = usersInfo.get();
         } else {
-            users = Users.builder()
+            log.info("신규유저 등록 {}", nickname);
+            Users users = Users.builder()
                     .id(id)
                     .email(email)
                     .nickname(nickname)
@@ -107,12 +96,10 @@ public class AuthService {
                     .agreesFalg(0)
                     .regDate(new Date())
                     .build();
+            usersInfoRst = usersRepository.save(users);
         }
-        Users usersInfoRst = usersRepository.save(users);
 
         Long userId = usersInfoRst.getUsersId();
-        System.out.println("userId : " + userId);
-
         String accessToken = kakaoToken.getAccessToken();
         String refreshToken = kakaoToken.getRefreshToken();
         String scope = kakaoToken.getScope();
@@ -177,7 +164,7 @@ public class AuthService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();;
         body.add("grant_type", grantType);
         body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        //body.add("client_secret", clientSecret);
         body.add("redirect_uri", redirectUri);
         body.add("code", code);
 

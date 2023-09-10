@@ -46,6 +46,10 @@ spring:
     username: DEV_USER
     password: pass@word1
     driver-class-name: org.mariadb.jdbc.Driver
+    task:
+      scheduling:
+        pool:
+          size=5:
 
 kakao:
   url:
@@ -83,5 +87,16 @@ apple:
   key:
     path: /keys/AuthKey_TQTRBXTQRD.p8
 
+weather:
+  srtUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  ultraSrtUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst
+  serviceKey: F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D
+juso:
+  url: https://business.juso.go.kr/addrlink/addrLinkApi.do
+  confmKey: devU01TX0FVVEgyMDIzMDkxMDE4MjYwNjExNDA4OTk=
 
-
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: INFO

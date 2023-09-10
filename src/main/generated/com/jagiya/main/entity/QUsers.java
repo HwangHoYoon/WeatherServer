@@ -1,4 +1,4 @@
-package com.jagiya.auth.entity;
+package com.jagiya.main.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUsers extends EntityPathBase<Users> {
 
-    private static final long serialVersionUID = -394604829L;
+    private static final long serialVersionUID = 2144406130L;
 
     public static final QUsers users = new QUsers("users");
 

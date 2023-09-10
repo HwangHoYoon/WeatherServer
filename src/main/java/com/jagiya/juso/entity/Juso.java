@@ -1,4 +1,4 @@
-package com.jagiya.weather.entity;
+package com.jagiya.juso.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

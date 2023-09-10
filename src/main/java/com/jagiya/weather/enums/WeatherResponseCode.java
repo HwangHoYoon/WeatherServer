@@ -1,4 +1,4 @@
-package com.jagiya.common.enums;
+package com.jagiya.weather.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
-public enum WeatherCode {
+public enum WeatherResponseCode {
 
     NORMAL_SERVICE( "00", "정상"),
     APPLICATION_ERROR( "01", "어플리케이션 에러"),
@@ -33,7 +33,7 @@ public enum WeatherCode {
     private final String message;
 
     public static String getMessageByCode(String code) {
-        for (WeatherCode weatherCode : WeatherCode.values()) {
+        for (WeatherResponseCode weatherCode : WeatherResponseCode.values()) {
             if (weatherCode.getCode().equals(code)) {
                 return weatherCode.getMessage();
             }
@@ -42,7 +42,7 @@ public enum WeatherCode {
     }
 
     public static boolean getRetryCode(String code) {
-        List<WeatherCode> weatherCodeList = new ArrayList<>();
+        List<WeatherResponseCode> weatherCodeList = new ArrayList<>();
         weatherCodeList.add(APPLICATION_ERROR);
         weatherCodeList.add(DB_ERROR);
         weatherCodeList.add(HTTP_ERROR);
@@ -51,7 +51,7 @@ public enum WeatherCode {
         weatherCodeList.add(SERVICE_KEY_IS_NOT_REGISTERED_ERROR);
         weatherCodeList.add(UNKNOWN_ERROR);
 
-        for (WeatherCode weatherCode : weatherCodeList) {
+        for (WeatherResponseCode weatherCode : weatherCodeList) {
             if (weatherCode.getCode().equals(code)) {
                 return true;
             }

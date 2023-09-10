@@ -13,7 +13,7 @@ public class WeatherScheduledTask {
 
     private final WeatherService weatherService;
 
-    @Scheduled(cron = "0 00 5 * * ?")
+    @Scheduled(cron = "0 00 6 * * ?")
     public void runTask() throws Exception {
         System.out.println("Scheduled Task executed at every minute.");
         log.info("weather Scheduled start");

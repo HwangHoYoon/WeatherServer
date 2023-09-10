@@ -1,8 +1,8 @@
 package com.jagiya;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jagiya.common.enums.WeatherCode;
-import com.jagiya.weather.request.GpsTransfer;
+import com.jagiya.weather.enums.WeatherResponseCode;
+import com.jagiya.juso.request.GpsTransfer;
 import com.jagiya.main.entity.Temp;
 import com.jagiya.weather.entity.Weather;
 import com.jagiya.main.service.Impl.TestService;
@@ -24,6 +24,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @SpringBootTest
@@ -90,7 +94,7 @@ class ApplicationTests {
 
 	@Test
 	void test3() throws Exception {
-		weatherService.insertWeatherWithCode();
+		weatherService.insertWeather();
 	}
 
 	@Test
@@ -123,7 +127,7 @@ class ApplicationTests {
 					WeatherApiResponse response = objectMapper.readValue(responseAsString.getBody(), WeatherApiResponse.class);
 					if (responseAsString.getStatusCode() == HttpStatus.OK) {
 						String resultCode = response.getResponse().getHeader().getResultCode();
-						if (resultCode.equals(WeatherCode.NORMAL_SERVICE.getCode())) {
+						if (resultCode.equals(WeatherResponseCode.NORMAL_SERVICE.getCode())) {
 							System.out.println(response);
 							System.out.println("성공");
 						} else {
@@ -135,7 +139,7 @@ class ApplicationTests {
 				} catch (Exception e) {
 					WeatherErrorResponse weatherApiErrorResponse = xmlConvertToVo(responseAsString.getBody(), WeatherErrorResponse.class);
 					String returnReasonCode = weatherApiErrorResponse.getCmmMsgHeader().getReturnReasonCode();
-					System.out.println(WeatherCode.getMessageByCode(returnReasonCode));
+					System.out.println(WeatherResponseCode.getMessageByCode(returnReasonCode));
 					System.out.println("JSON 변환 실패 XML 변환");
 				}
 			} else {
@@ -145,6 +149,13 @@ class ApplicationTests {
 			e.printStackTrace();
 			System.out.println("API 통신 실패 및 변환실패");
 		}
+	}
+
+	@Test
+	void test5() throws Exception {
+		LocalDateTime dateTime = LocalDateTime.parse("20230910", DateTimeFormatter.ofPattern("yyyyMMdd"));
+		String formattedTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		System.out.println(formattedTime);
 	}
 
 	private <T> T xmlConvertToVo(String xml, Class<T> voClass) throws JAXBException {
@@ -207,5 +218,37 @@ class ApplicationTests {
 		}
 	}
 
+
+	@Test
+	void test6() {
+		LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 40));
+		System.out.println("현재시간 : " +  localDateTime);
+		int minusMinute;
+		List<LocalTime> targetTimes = new ArrayList<>();
+			minusMinute = 15;
+			for (int i = 0; i<=23; i++) {
+				targetTimes.add(LocalTime.of(i, 45));
+			}
+
+		LocalTime currentTime = localDateTime.toLocalTime();
+
+		LocalTime closestTime = null;
+		for (LocalTime targetTime : targetTimes) {
+			if (currentTime.isAfter(targetTime)) {
+				closestTime = targetTime;
+			}
+		}
+
+		if (closestTime == null) {
+			localDateTime = localDateTime.minusDays(1);
+			closestTime = targetTimes.get(targetTimes.size() - 1);
+		}
+
+		closestTime = closestTime.minusMinutes(minusMinute);
+		localDateTime = localDateTime.withHour(closestTime.getHour()).withMinute(closestTime.getMinute());
+
+
+		System.out.println("기준시간 : " +  localDateTime);
+	}
 
 }

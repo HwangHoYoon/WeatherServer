@@ -1,4 +1,4 @@
-package com.jagiya.weather.entity;
+package com.jagiya.juso.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QJuso extends EntityPathBase<Juso> {
 
-    private static final long serialVersionUID = 389782904L;
+    private static final long serialVersionUID = -2138251925L;
 
     public static final QJuso juso = new QJuso("juso");
 

@@ -1,6 +1,6 @@
-package com.jagiya.weather.repository;
+package com.jagiya.juso.repository;
 
-import com.jagiya.weather.entity.Juso;
+import com.jagiya.juso.entity.Juso;
 
 import java.util.List;
 

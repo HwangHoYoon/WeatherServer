@@ -1,7 +1,7 @@
-package com.jagiya.weather.repository;
+package com.jagiya.juso.repository;
 
-import com.jagiya.weather.entity.Juso;
-import com.jagiya.weather.entity.QJuso;
+import com.jagiya.juso.entity.Juso;
+import com.jagiya.juso.entity.QJuso;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

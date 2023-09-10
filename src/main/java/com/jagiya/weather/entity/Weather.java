@@ -2,7 +2,7 @@ package com.jagiya.weather.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jagiya.common.enums.WeatherCategory;
+import com.jagiya.weather.enums.WeatherCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;

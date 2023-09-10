@@ -90,7 +90,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt
 	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
 
-
+	// StringUtils
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
 }
 

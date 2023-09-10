@@ -1,4 +1,4 @@
-package com.jagiya.weather.request;
+package com.jagiya.juso.request;
 
 public class GpsTransfer {
 

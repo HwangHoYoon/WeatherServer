@@ -1,8 +1,6 @@
-package com.jagiya.weather.repository;
+package com.jagiya.juso.repository;
 
-import com.jagiya.auth.entity.Token;
-import com.jagiya.main.entity.Users;
-import com.jagiya.weather.entity.Juso;
+import com.jagiya.juso.entity.Juso;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

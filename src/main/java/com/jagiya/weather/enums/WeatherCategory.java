@@ -1,4 +1,4 @@
-package com.jagiya.common.enums;
+package com.jagiya.weather.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

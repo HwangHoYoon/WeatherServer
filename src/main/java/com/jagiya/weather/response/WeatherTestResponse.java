@@ -1,45 +1,94 @@
 package com.jagiya.weather.response;
 
-import com.jagiya.common.enums.WeatherCategory;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jagiya.common.utils.DateUtils;
+import com.jagiya.weather.enums.WeatherCategory;
+import com.jagiya.weather.enums.WeatherCode;
 import lombok.Builder;
-import lombok.Setter;
+import org.springframework.util.StringUtils;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class WeatherTestResponse {
 
-    @Schema(description = "발표일자")
+    @JsonProperty("발표일자")
     private String baseDate;
 
-    @Schema(description = "발표시각")
+    @JsonProperty("발표시각")
     private String baseTime;
 
-    @Schema(description = "예보일자")
+    @JsonProperty("예보일자")
     private String fcstDate;
 
-    @Schema(description = "예보시각")
+    @JsonProperty("예보시각")
     private String fcstTime;
 
-    @Schema(description = "강수확률")
+    @JsonProperty("강수확률")
     private String pop;
 
-    @Schema(description = "강수형태")
+    @JsonProperty("강수형태")
     private String pty;
 
-    @Schema(description = "1시간강수량")
+    @JsonProperty("1시간강수량")
     private String pcp;
 
-    @Schema(description = "하늘상태")
+    @JsonProperty("하늘상태")
     private String sky;
 
-    @Schema(description = "1시간기온")
+    @JsonProperty("1시간기온")
     private String tmp;
 
-    @Schema(description = "일최저기온")
+    @JsonProperty("일최저기온")
     private String tmn;
 
-    @Schema(description = "일최기온")
+    @JsonProperty("일최기온")
     private String tmx;
+
+    public String getBaseDate() {
+        return DateUtils.getStringDateFormat("yyyyMMdd", "yyyy-MM-dd", baseDate);
+    }
+
+    public String getBaseTime() {
+        return DateUtils.getStringTimeFormat("HHmm", "HH:mm", baseTime);
+    }
+
+    public String getFcstDate() {
+        return DateUtils.getStringDateFormat("yyyyMMdd", "yyyy-MM-dd", fcstDate);
+    }
+
+    public String getFcstTime() {
+        return DateUtils.getStringTimeFormat("HHmm", "HH:mm", fcstTime);
+    }
+
+    public String getPop() {
+        return pop + WeatherCategory.POP.getUnits();
+    }
+
+    public String getPty() {
+        return WeatherCode.getValueByCategoryAndCode(WeatherCategory.PTY.name(), pty);
+    }
+
+    public String getPcp() {
+        return "강수없음".equals(pcp) ? pcp : pcp + WeatherCategory.PCP.getUnits();
+    }
+
+    public String getSky() {
+        return WeatherCode.getValueByCategoryAndCode(WeatherCategory.SKY.name(), sky);
+    }
+
+    public String getTmp() {
+        return tmp + WeatherCategory.TMP.getUnits();
+    }
+
+    public String getTmn() {
+        return "".equals(tmn) ? tmn : tmn + WeatherCategory.TMN.getUnits();
+    }
+
+    public String getTmx() {
+        return "".equals(tmx) ? tmx : tmx + WeatherCategory.TMX.getUnits();
+    }
 
     @Builder
     public WeatherTestResponse(String baseDate, String baseTime, String fcstDate, String fcstTime, String pop, String pty, String pcp, String sky, String tmp, String tmn, String tmx) {
@@ -54,22 +103,5 @@ public class WeatherTestResponse {
         this.tmp = tmp;
         this.tmn = tmn;
         this.tmx = tmx;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "발표일자='" + baseDate + '\'' +
-                ", 발표시각='" + baseTime + '\'' +
-                ", 예보일자='" + fcstDate + '\'' +
-                ", 예보시각='" + fcstTime + '\'' +
-                ", " + WeatherCategory.POP.getName() + "'="  + pop + WeatherCategory.POP.getUnits() + '\'' +
-                ", " + WeatherCategory.PTY.getName() + "'="  + pty + WeatherCategory.PTY.getUnits() + '\'' +
-                ", " + WeatherCategory.PCP.getName() + "'="  + pcp + WeatherCategory.PCP.getUnits() + '\'' +
-                ", " + WeatherCategory.SKY.getName() + "'="  + sky + WeatherCategory.SKY.getUnits() + '\'' +
-                ", " + WeatherCategory.TMP.getName() + "'="  + tmp + WeatherCategory.TMP.getUnits() + '\'' +
-                ", " + WeatherCategory.TMX.getName() + "'="  + tmx + WeatherCategory.TMX.getUnits() + '\'' +
-                ", " + WeatherCategory.TMN.getName() + "'="  + tmn + WeatherCategory.TMN.getUnits() + '\'' +
-                '}';
     }
 }

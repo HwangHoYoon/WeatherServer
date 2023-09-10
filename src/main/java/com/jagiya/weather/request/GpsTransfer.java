@@ -1,4 +1,4 @@
-package com.jagiya.main.dto;
+package com.jagiya.weather.request;
 
 public class GpsTransfer {
 

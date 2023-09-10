@@ -1,20 +1,27 @@
 package com.jagiya;
 
-import com.jagiya.main.dto.GpsTransfer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jagiya.common.enums.WeatherCode;
+import com.jagiya.weather.request.GpsTransfer;
 import com.jagiya.main.entity.Temp;
-import com.jagiya.main.entity.Weather;
-import com.jagiya.main.response.*;
+import com.jagiya.weather.entity.Weather;
 import com.jagiya.main.service.Impl.TestService;
-import com.jagiya.main.service.Impl.WeatherService;
+import com.jagiya.weather.response.WeatherApiResponse;
+import com.jagiya.weather.response.WeatherErrorResponse;
+import com.jagiya.weather.response.WeatherItem;
+import com.jagiya.weather.service.WeatherService;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.*;
@@ -71,7 +78,7 @@ class ApplicationTests {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
 
-		ResponseEntity<ApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, ApiResponse.class);
+		ResponseEntity<WeatherApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, WeatherApiResponse.class);
 		List<WeatherItem> weatherItemList = response.getBody().getResponse().getBody().getItems().getItem();
 		List<Weather> weathers = groupDataByDateAndTime(weatherItemList);
 		if (weathers.size() > 0) {
@@ -95,11 +102,11 @@ class ApplicationTests {
 		String weatherUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 		UriComponents uri = UriComponentsBuilder
 				.fromHttpUrl(weatherUrl)
-				.queryParam("serviceKey", "F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D")
+				.queryParam("serviceKey", "1F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D")
 				.queryParam("pageNo", "1")
 				.queryParam("numOfRows", "1000")
 				.queryParam("dataType", "JSON")
-				.queryParam("base_date", "20230906")
+				.queryParam("base_date", "20230907")
 				.queryParam("base_time", "0500")
 				.queryParam("nx", "50")
 				.queryParam("ny", "125")
@@ -108,10 +115,44 @@ class ApplicationTests {
 		URI apiUrl = uri.toUri();
 		RestTemplate restTemplate = new RestTemplate();
 		HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-		ResponseEntity<ApiResponse> response = restTemplate.getForEntity(apiUrl, ApiResponse.class);
+		try {
+			ResponseEntity<String> responseAsString = restTemplate.getForEntity(apiUrl, String.class);
+			if (responseAsString != null) {
+				try {
+					ObjectMapper objectMapper = new ObjectMapper();
+					WeatherApiResponse response = objectMapper.readValue(responseAsString.getBody(), WeatherApiResponse.class);
+					if (responseAsString.getStatusCode() == HttpStatus.OK) {
+						String resultCode = response.getResponse().getHeader().getResultCode();
+						if (resultCode.equals(WeatherCode.NORMAL_SERVICE.getCode())) {
+							System.out.println(response);
+							System.out.println("성공");
+						} else {
+							System.out.println("API 통신 오류 : " + resultCode);
+						}
+					} else {
+						System.out.println("API 통신 결과 실패");
+					}
+				} catch (Exception e) {
+					WeatherErrorResponse weatherApiErrorResponse = xmlConvertToVo(responseAsString.getBody(), WeatherErrorResponse.class);
+					String returnReasonCode = weatherApiErrorResponse.getCmmMsgHeader().getReturnReasonCode();
+					System.out.println(WeatherCode.getMessageByCode(returnReasonCode));
+					System.out.println("JSON 변환 실패 XML 변환");
+				}
+			} else {
+				System.out.println("API 통신 실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("API 통신 실패 및 변환실패");
+		}
+	}
 
-		System.out.println(response.getStatusCode());
-		System.out.println(response.getBody().getResponse().getHeader());
+	private <T> T xmlConvertToVo(String xml, Class<T> voClass) throws JAXBException {
+		JAXBContext context = JAXBContext.newInstance(voClass);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+
+		StringReader reader = new StringReader(xml);
+		return (T)unmarshaller.unmarshal(reader);
 	}
 
 
@@ -155,15 +196,11 @@ class ApplicationTests {
 		return arrayList;
 	}
 
-	// Vo 객체의 필드에 값을 설정하는 메서드
 	private void setValue(Object targetObject, String fieldName, String value) {
 		try {
-			// 필드 이름과 일치하는 setter 메서드 찾기
 			String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 			Class<?> targetClass = targetObject.getClass();
-			Class<?> valueType = String.class; // 필드의 데이터 타입에 따라 수정
-
-			// setter 메서드 호출하여 값을 설정
+			Class<?> valueType = String.class;
 			targetClass.getMethod(setterName, valueType).invoke(targetObject, value);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,7 +1,8 @@
-package com.jagiya.main.entity;
+package com.jagiya.weather.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jagiya.common.enums.WeatherCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,11 +49,11 @@ public class Weather {
 
     @Column(name = "latX")
     @Schema(description = "X좌표")
-    private Integer latX;
+    private String latX;
 
     @Column(name = "lonY")
     @Schema(description = "Y좌표")
-    private Integer lonY;
+    private String lonY;
 
     @Column(name = "pop")
     @Schema(description = "강수확률")
@@ -100,6 +101,23 @@ public class Weather {
     @PreUpdate
     public void preUpdate() {
         this.modifyDate = new Date(); // 현재 날짜와 시간으로 수정일 업데이트
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "발표일자='" + baseDate + '\'' +
+                ", 발표시각='" + baseTime + '\'' +
+                ", 예보일자='" + fcstDate + '\'' +
+                ", 예보시각='" + fcstTime + '\'' +
+                ", " + WeatherCategory.POP.getName() + "'="  + pop + WeatherCategory.POP.getUnits() + '\'' +
+                ", " + WeatherCategory.PTY.getName() + "'="  + pty + WeatherCategory.PTY.getUnits() + '\'' +
+                ", " + WeatherCategory.PCP.getName() + "'="  + pcp + WeatherCategory.PCP.getUnits() + '\'' +
+                ", " + WeatherCategory.SKY.getName() + "'="  + sky + WeatherCategory.SKY.getUnits() + '\'' +
+                ", " + WeatherCategory.TMP.getName() + "'="  + tmp + WeatherCategory.TMP.getUnits() + '\'' +
+                ", " + WeatherCategory.TMX.getName() + "'="  + tmx + WeatherCategory.TMX.getUnits() + '\'' +
+                ", " + WeatherCategory.TMN.getName() + "'="  + tmn + WeatherCategory.TMN.getUnits() + '\'' +
+                '}';
     }
 
 }

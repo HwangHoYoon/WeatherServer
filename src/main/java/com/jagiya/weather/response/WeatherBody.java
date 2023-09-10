@@ -1,4 +1,4 @@
-package com.jagiya.main.response;
+package com.jagiya.weather.response;
 
 import lombok.Getter;
 import lombok.Setter;

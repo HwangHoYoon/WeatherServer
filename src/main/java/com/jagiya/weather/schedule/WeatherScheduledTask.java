@@ -1,21 +1,23 @@
-package com.jagiya.main.schedule;
+package com.jagiya.weather.schedule;
 
-import com.jagiya.main.service.Impl.WeatherService;
+import com.jagiya.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class WeatherScheduledTask {
 
     private final WeatherService weatherService;
 
-    @Scheduled(cron = "0 27 2 * * ?")
+    @Scheduled(cron = "0 00 5 * * ?")
     public void runTask() throws Exception {
-        // 주기적으로 실행할 작업 수행
         System.out.println("Scheduled Task executed at every minute.");
-        weatherService.insertWeatherWithCode();
+        log.info("weather Scheduled start");
+        weatherService.insertWeather();
+        log.info("weather Scheduled end");
     }
 }

@@ -1,4 +1,4 @@
-package com.jagiya.main.response;
+package com.jagiya.weather.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,6 @@ public class WeatherItem {
     private String fcstDate;
     private String fcstTime;
     private String fcstValue;
-    private int nx;
-    private int ny;
+    private String nx;
+    private String ny;
 }

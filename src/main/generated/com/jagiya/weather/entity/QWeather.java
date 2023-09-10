@@ -1,4 +1,4 @@
-package com.jagiya.main.entity;
+package com.jagiya.weather.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QWeather extends EntityPathBase<Weather> {
 
-    private static final long serialVersionUID = 560546270L;
+    private static final long serialVersionUID = 904100291L;
 
     public static final QWeather weather = new QWeather("weather");
 
@@ -27,9 +27,9 @@ public class QWeather extends EntityPathBase<Weather> {
 
     public final StringPath fcstTime = createString("fcstTime");
 
-    public final NumberPath<Integer> latX = createNumber("latX", Integer.class);
+    public final StringPath latX = createString("latX");
 
-    public final NumberPath<Integer> lonY = createNumber("lonY", Integer.class);
+    public final StringPath lonY = createString("lonY");
 
     public final DateTimePath<java.util.Date> modifyDate = createDateTime("modifyDate", java.util.Date.class);
 

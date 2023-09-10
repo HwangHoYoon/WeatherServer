@@ -50,23 +50,44 @@ spring:
       scheduling:
         pool:
           size=5:
-oauth:
-  kakao:
-    url:
-      auth: https://kauth.kakao.com/oauth/authorize
-      token: https://kauth.kakao.com/oauth/token
-      api: https://kapi.kakao.com/v2/user/me
-    grant_type: authorization_code
-    client_id: ec17d3e02513195aac9f3a41a32260af
-    client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
-    redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
 
-weather:
-  url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
-  serviceKey: F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D
+kakao:
+  url:
+    auth: https://kauth.kakao.com/oauth/authorize
+    token: https://kauth.kakao.com/oauth/token
+    api: https://kapi.kakao.com/v2/user/me
+  grant_type: authorization_code
+  client_id: d165194cc7896c176244f88be4dce997
+  client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
+  redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
 
 jwt:
   header: Authorization
   secret: 1
   access-token-expire-time: 1800000
   refresh-token-expire-time: 604800000
+
+
+feign:
+  client:
+    apple:
+      name: applelogin
+      url: https://www.readyumbrelladata.com
+
+
+apple:
+  team:
+    id: XQ24HP64B3
+  login:
+    key: TQTRBXTQRD
+  client:
+    id: com.jagiya.services
+  redirect:
+    url: https://www.readyumbrelladata.com/apple/callback
+  key:
+    path: /keys/AuthKey_TQTRBXTQRD.p8
+
+weather:
+  url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  serviceKey: F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D
+

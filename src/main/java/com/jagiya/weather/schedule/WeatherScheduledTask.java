@@ -15,9 +15,8 @@ public class WeatherScheduledTask {
 
     @Scheduled(cron = "0 00 6 * * ?")
     public void runTask() throws Exception {
-        System.out.println("Scheduled Task executed at every minute.");
         log.info("weather Scheduled start");
-        weatherService.insertWeather();
+        //weatherService.insertWeather();
         log.info("weather Scheduled end");
     }
 }

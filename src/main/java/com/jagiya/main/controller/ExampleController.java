@@ -25,7 +25,7 @@ public class ExampleController {
 
     private final TestService testService;
 
-
+    @Hidden
     @Operation(summary = "SnsInfo/QNA 테스트", description = "SnsInfo/QNA 파라미터 값 test")
     @Parameter(name = "SnsInfo 파라미터", description = "SnsInfo 설명설명")
     @PostMapping("/snsTest")
@@ -34,6 +34,7 @@ public class ExampleController {
         return qna ;
     }
 
+    @Hidden
     @Operation(summary = "SDevice 테스트", description = "Device test 설명하는란....")
     @GetMapping("/Device")
     @Parameter(name = "Device 파라미터", description = "Device 설명설명")

@@ -2,6 +2,7 @@ package com.jagiya.juso.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jagiya.main.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,9 +29,9 @@ public class Juso {
     @Schema(description = "jusoId")
     private Long jusoId;
 
-    @Column(name = "code")
+    @Column(name = "regionCd")
     @Schema(description = "법정동코드")
-    private String code;
+    private String regionCd;
 
     @Column(name = "cityDo")
     @Schema(description = "시도")
@@ -63,5 +64,9 @@ public class Juso {
     @Column(name = "regDate")
     @Schema(description = "등록일")
     private String regDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jusoGroupId")
+    private JusoGroup jusoGroup;
 
 }

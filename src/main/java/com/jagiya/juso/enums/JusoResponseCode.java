@@ -30,13 +30,13 @@ public enum JusoResponseCode {
 
     private final String solution;
 
-    public static String getMessageByCode(String code) {
-        for (WeatherResponseCode weatherCode : WeatherResponseCode.values()) {
-            if (weatherCode.getCode().equals(code)) {
-                return weatherCode.getMessage();
+    public static JusoResponseCode getJusoResponseCode(String code) {
+        for (JusoResponseCode jusoCode : JusoResponseCode.values()) {
+            if (jusoCode.getCode().equals(code)) {
+                return jusoCode;
             }
         }
-        return "";
+        return null;
     }
 
     public static boolean getRetryCode(String code) {

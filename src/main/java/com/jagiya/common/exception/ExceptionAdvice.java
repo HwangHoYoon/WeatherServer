@@ -18,6 +18,6 @@ public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public CommonException handleException(Exception e) {
         log.error("Exception({}) - {}", e.getClass().getSimpleName(), e.getMessage());
-        return new CommonException(ExceptionCode.SERVER_ERROR.getMessage(), Integer.parseInt(ExceptionCode.SERVER_ERROR.getCode()));
+        return new CommonException(ExceptionCode.SERVER_ERROR.getMessage(), ExceptionCode.SERVER_ERROR.getCode());
     }
 }

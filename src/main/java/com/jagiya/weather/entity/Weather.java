@@ -2,6 +2,7 @@ package com.jagiya.weather.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jagiya.juso.entity.JusoGroup;
 import com.jagiya.weather.enums.WeatherCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -90,6 +91,10 @@ public class Weather {
     @Column(name = "modifyDate")
     @Schema(description = "수정일")
     private Date modifyDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jusoGroupId")
+    private JusoGroup jusoGroup;
 
     // @PrePersist 메서드 정의 (최초 등록시 호출)
     @PrePersist

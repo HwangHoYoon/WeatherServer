@@ -80,8 +80,6 @@ public class GpsTransfer {
         ro = re * sf / Math.pow(ro, sn);
 
         if (mode == 0) {
-//            rs.lat = lat_X; //gps 좌표 위도
-//            rs.lng = lng_Y; //gps 좌표 경도
             double ra = Math.tan(Math.PI * 0.25 + (gpt.getLat()) * DEGRAD * 0.5);
             ra = re * sf / Math.pow(ra, sn);
             double theta = gpt.getLon() * DEGRAD - olon;
@@ -92,12 +90,8 @@ public class GpsTransfer {
             double y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
             gpt.setxLat(x);
             gpt.setyLon(y);
-//            rs.x = Math.floor(ra * Math.sin(theta) + XO + 0.5);
-//            rs.y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
         }
         else {
-//            rs.x = lat_X; //기존의 x좌표
-//            rs.y = lng_Y; //기존의 경도
             double xlat = gpt.getxLat();
             double ylon = gpt.getyLon();
             double xn = xlat - XO;
@@ -123,8 +117,6 @@ public class GpsTransfer {
                 else theta = Math.atan2(xn, yn);
             }
             double alon = theta / sn + olon;
-//            rs.lat = alat * RADDEG; //gps 좌표 위도
-//            rs.lng = alon * RADDEG; //gps 좌표 경도
             gpt.setLat(alat * RADDEG);
             gpt.setLon(alon * RADDEG);
         }

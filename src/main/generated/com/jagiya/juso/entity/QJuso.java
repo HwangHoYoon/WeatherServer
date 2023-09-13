@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,15 +18,17 @@ public class QJuso extends EntityPathBase<Juso> {
 
     private static final long serialVersionUID = -2138251925L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QJuso juso = new QJuso("juso");
 
     public final StringPath cityDo = createString("cityDo");
 
-    public final StringPath code = createString("code");
-
     public final StringPath eupMyun = createString("eupMyun");
 
     public final StringPath guGun = createString("guGun");
+
+    public final QJusoGroup jusoGroup;
 
     public final NumberPath<Long> jusoId = createNumber("jusoId", Long.class);
 
@@ -39,16 +42,27 @@ public class QJuso extends EntityPathBase<Juso> {
 
     public final StringPath regDate = createString("regDate");
 
+    public final StringPath regionCd = createString("regionCd");
+
     public QJuso(String variable) {
-        super(Juso.class, forVariable(variable));
+        this(Juso.class, forVariable(variable), INITS);
     }
 
     public QJuso(Path<? extends Juso> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QJuso(PathMetadata metadata) {
-        super(Juso.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QJuso(PathMetadata metadata, PathInits inits) {
+        this(Juso.class, metadata, inits);
+    }
+
+    public QJuso(Class<? extends Juso> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.jusoGroup = inits.isInitialized("jusoGroup") ? new QJusoGroup(forProperty("jusoGroup")) : null;
     }
 
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class WeatherTestRequest {
     @Schema(description = "법정동코드")
-    private String code;
+    private String regionCd;
     @Schema(description = "날짜")
     private String fcstDate;
 

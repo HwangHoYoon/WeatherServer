@@ -3,15 +3,8 @@ package com.jagiya.juso.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagiya.common.exception.CommonException;
 import com.jagiya.juso.enums.JusoResponseCode;
-import com.jagiya.juso.response.JusoApiResponse;
-import com.jagiya.juso.response.JusoData;
-import com.jagiya.juso.response.JusoTestResponse;
-import com.jagiya.weather.entity.Weather;
-import com.jagiya.weather.enums.WeatherCategory;
-import com.jagiya.weather.enums.WeatherResponseCode;
-import com.jagiya.weather.response.WeatherApiResponse;
-import com.jagiya.weather.response.WeatherErrorResponse;
-import com.jagiya.weather.response.WeatherItem;
+import com.jagiya.juso.request.GpsTransfer;
+import com.jagiya.juso.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -41,16 +33,27 @@ public class JusoService {
     @Value("${juso.confmKey}")
     private String confmKey;
 
+    @Value("${geocoding.url}")
+    private String geocodingUrl;
+
+    @Value("${geocoding.appKey}")
+    private String geocodingAppKey;
+
+
     private int retryCnt = 0;
 
     private final RestTemplate restTemplate;
 
-    public List<JusoTestResponse> selectLocation(String keyword) throws UnsupportedEncodingException {
+    public List<JusoTestResponse> selectLocation(String keyword) throws Exception {
         retryCnt = 0;
+        if (StringUtils.isBlank(keyword)) {
+            throw new CommonException("검색어를 입력해주세요 {}", "887");
+        }
+
         boolean isCheckSearchedWord = checkSearchedWord(keyword);
         if (!isCheckSearchedWord) {
             log.error("특수문자 또는 사용할수 없는 특정 문자가 들어갔습니다. {}", keyword);
-            throw new CommonException("특수문자 또는 사용할수 없는 특정 문자가 들어갔습니다.", 888);
+            throw new CommonException("특수문자 또는 사용할수 없는 특정 문자가 들어갔습니다.", "888");
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -64,7 +67,7 @@ public class JusoService {
                 .fromHttpUrl(jusoUrl)
                 .queryParam("confmKey", decodedConfmKey)
                 .queryParam("currentPage", "1")
-                .queryParam("countPerPage", "100")
+                .queryParam("countPerPage", "500")
                 .queryParam("keyword", decodedKeyword)
                 .queryParam("resultType", "json")
                 .build(true);
@@ -107,7 +110,9 @@ public class JusoService {
                             log.info("API 성공");
                             return response;
                         } else {
-                            log.error("API 통신 오류 : {}, {}", resultCode, JusoResponseCode.getMessageByCode(resultCode));
+                            JusoResponseCode jusoResponseCode = JusoResponseCode.getJusoResponseCode(resultCode);
+                            log.error("API 통신 오류 : {}, {}, {}", resultCode, jusoResponseCode.getMessage(), jusoResponseCode.getSolution());
+                            throw new CommonException(jusoResponseCode.getMessage() + jusoResponseCode.getSolution(), resultCode);
                         }
                     } catch (Exception e) {
                         log.error("callApi 실패 error returnReasonCode : {} ", e.getMessage());
@@ -165,17 +170,85 @@ public class JusoService {
 
             if (StringUtils.isBlank(jusoTestResponse.getAdmCd())) {
                 String siNm = dataItem.getSiNm();
-                String SggNm = dataItem.getSggNm();
+                String sggNm = dataItem.getSggNm();
                 String emdNm = dataItem.getEmdNm();
 
                 jusoTestResponse.setAdmCd(admCd);
                 jusoTestResponse.setSiNm(siNm);
-                jusoTestResponse.setSggNm(SggNm);
+                jusoTestResponse.setSggNm(sggNm);
                 jusoTestResponse.setEmdNm(emdNm);
+
+                GeocodingApiData apiData = selectGeocoding(siNm, sggNm, emdNm);
+
+                if (apiData != null) {
+                    String lat = apiData.getLat();
+                    String lon = apiData.getLon();
+                    try {
+                        if (StringUtils.isNotBlank(lat) && StringUtils.isNotBlank(lon)) {
+                            GpsTransfer gpsTransfer = new GpsTransfer(Double.parseDouble(lat), Double.parseDouble(lon));
+                            gpsTransfer.transfer(gpsTransfer, 0);
+                            String latX = String.valueOf(gpsTransfer.getxLat());
+                            String lonY = String.valueOf(gpsTransfer.getyLon());
+
+                            jusoTestResponse.setLat(lat);
+                            jusoTestResponse.setLon(lon);
+                            jusoTestResponse.setLatX(latX);
+                            jusoTestResponse.setLonY(lonY);
+                        } else {
+                            log.error("위경도 null : {} {}", lat, lon);
+                        }
+                    } catch (Exception e) {
+                        log.error("위경도 좌표 변환 실패 : {} {}", lat, lon);
+                    }
+                }
                 groupedData.put(admCd, jusoTestResponse);
             }
         }
 
         return new ArrayList<>(groupedData.values());
+    }
+
+    private GeocodingApiData selectGeocoding(String cityDo, String guGun, String dong) {
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.add("appKey", geocodingAppKey);
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+
+        try {
+            String decodedCityDo = URLEncoder.encode(cityDo, "UTF-8");
+            String decodedGuGun = URLEncoder.encode(guGun, "UTF-8");
+            String decodedDong = URLEncoder.encode(dong, "UTF-8");
+            UriComponents uri = UriComponentsBuilder
+                    .fromHttpUrl(geocodingUrl)
+                    .queryParam("version", "1")
+                    .queryParam("city_do", decodedCityDo)
+                    .queryParam("gu_gun", decodedGuGun)
+                    .queryParam("dong", decodedDong)
+                    .queryParam("addressFlag", "F00")
+                    .queryParam("coordType", "WGS84GEO")
+                    .build(true);
+            URI apiUrl = uri.toUri();
+            log.info("uri : " +  apiUrl);
+
+            ResponseEntity<GeocodingApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, GeocodingApiResponse.class);
+
+            if (response == null) {
+                log.info("API 결과 NULL");
+            } else {
+                if (response.getStatusCode() == HttpStatus.OK) {
+                    GeocodingApiData apiData = response.getBody().getCoordinateInfo();
+                    return apiData;
+                } else {
+                    log.error("API 통신 결과 실패 HttpStatus : {} ", response.getStatusCode());
+                    log.error("API 통신 결과 실패 error : {} ", response.getBody().getError());
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.info("Geocoding 주소 인코딩 실패 {}, {}, {}", cityDo, guGun, dong);
+        }
+
+        return null;
     }
 }

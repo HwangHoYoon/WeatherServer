@@ -3,7 +3,7 @@ server:
 # Swagger springdoc-ui Configuration
 # swaggerdoc
 springdoc:
-  packages-to-scan: com.jagiya.main.controller
+  packages-to-scan: com.jagiya
   swagger-ui.path: /api-docs
 #  swagger-ui:
 #    tags-sorter: alpha
@@ -94,6 +94,9 @@ weather:
 juso:
   url: https://business.juso.go.kr/addrlink/addrLinkApi.do
   confmKey: devU01TX0FVVEgyMDIzMDkxMDE4MjYwNjExNDA4OTk=
+geocoding:
+  url: https://apis.openapi.sk.com/tmap/geo/geocoding
+  appKey: 6nFJjjPxQ510mIgcLssvr6QL7N8uNvC91P3cPUq9
 
 logging:
   level:

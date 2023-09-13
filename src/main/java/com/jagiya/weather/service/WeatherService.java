@@ -1,6 +1,7 @@
 package com.jagiya.weather.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jagiya.juso.entity.JusoGroup;
 import com.jagiya.weather.enums.WeatherCategory;
 import com.jagiya.weather.enums.WeatherResponseCode;
 import com.jagiya.juso.entity.Juso;
@@ -42,11 +43,11 @@ public class WeatherService {
 
     private final WeatherRepository weatherRepository;
 
-    private final JusoCustomRepository jusoCustomRepository;
-
     private final JusoRepository jusoRepository;
 
     private final RestTemplate restTemplate;
+
+    private final JusoCustomRepository jusoCustomRepository;
 
     private int retryCnt = 0;
 
@@ -61,20 +62,26 @@ public class WeatherService {
 
     @Transactional
     public void insertWeather() throws Exception {
-        List<Juso> jusoList = jusoCustomRepository.selectJusoGroupByLocation();
+        List<String> cityDos = new ArrayList<>();
+        cityDos.add("서울특별시");
+        cityDos.add("경기도");
+        List<JusoGroup> jusoGroupList = jusoCustomRepository.selectJusoGroupByCityDo(cityDos);
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         log.info("시작 : {}", LocalDateTime.now().format(formatter));
-        for (Juso juso : jusoList) {
-            String latX = juso.getLatX();
-            String lonY = juso.getLonY();
+        for (JusoGroup jusoGroup : jusoGroupList) {
             String baseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            insertWeather(weatherSrtUrl, serviceKey, baseDate, "0500", latX, lonY, "1");
+            insertWeather(weatherSrtUrl, serviceKey, baseDate, "0500", jusoGroup, "1");
         }
         log.info("종료 : {}", LocalDateTime.now().format(formatter));
     }
 
-    private void insertWeather(String weatherUrl, String serviceKey, String baseDate, String baseTime, String nx, String ny, String refreshType) {
+    private void insertWeather(String weatherUrl, String serviceKey, String baseDate, String baseTime, JusoGroup jusoGroup, String refreshType) {
         retryCnt = 0;
+        String nx = jusoGroup.getLatX();
+        String ny = jusoGroup.getLonY();
+        Long jusoGroupId = jusoGroup.getJusoGroupId();
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -85,7 +92,6 @@ public class WeatherService {
                 .queryParam("numOfRows", "10000")
                 .queryParam("dataType", "JSON")
                 .queryParam("base_date", baseDate)
-                //.queryParam("base_date", "20230909")
                 .queryParam("base_time", baseTime)
                 .queryParam("nx", nx)
                 .queryParam("ny", ny)
@@ -99,19 +105,21 @@ public class WeatherService {
 
         if (response != null) {
             List<WeatherItem> weatherItemList = response.getResponse().getBody().getItems().getItem();
+            log.info("groupDataByDateAndTime");
             List<Weather> weathers = groupDataByDateAndTime(weatherItemList);
+            log.info("findByJusoGroupJusoGroupIdAndFcstDateAndFcstTime start");
             if (weathers.size() > 0) {
                 for (Weather weather : weathers) {
                     String fcstDate = weather.getFcstDate();
                     String fcstTime = weather.getFcstTime();
-                    Weather weatherRes = weatherRepository.findByLatXAndLonYAndFcstDateAndFcstTime(nx, ny, fcstDate, fcstTime);
+                    Weather weatherRes = weatherRepository.findByJusoGroupJusoGroupIdAndFcstDateAndFcstTime(jusoGroupId, fcstDate, fcstTime);
                     if (weatherRes != null) {
                         if (StringUtils.equals(refreshType, "1")) {
                             if (StringUtils.isNotBlank(weather.getPop())) {
                                 weatherRes.setPop(weather.getPop());
                             }
                             if (StringUtils.isNotBlank(weather.getPty())) {
-                                weatherRes.setPop(weather.getPty());
+                                weatherRes.setPty(weather.getPty());
                             }
                             if (StringUtils.isNotBlank(weather.getTmx())) {
                                 weatherRes.setTmx(weather.getTmx());
@@ -140,13 +148,14 @@ public class WeatherService {
                         if (StringUtils.isNotBlank(weather.getBaseTime())) {
                             weatherRes.setBaseTime(weather.getBaseTime());
                         }
-
                         weatherRes.setModifyDate(new Date());
                         weatherRepository.save(weatherRes);
                     } else {
+                        weather.setJusoGroup(jusoGroup);
                         weatherRepository.save(weather);
                     }
                 }
+                log.info("findByJusoGroupJusoGroupIdAndFcstDateAndFcstTime end");
             } else {
                 log.info("Call API 값이 없습니다.");
             }
@@ -162,7 +171,7 @@ public class WeatherService {
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        Optional<Juso> jusoOptional = jusoRepository.findByCode("1111010600");
+        Optional<Juso> jusoOptional = jusoRepository.findByRegionCd("1111010600");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         log.info("시작 : {}", LocalDateTime.now().format(formatter));
@@ -317,16 +326,13 @@ public class WeatherService {
         }
     }
 
-    public List<WeatherTestResponse> selectLocationForWeather(WeatherTestRequest weatherRequest) {
-        String code = weatherRequest.getCode();
-        Optional<Juso> jusoOptional = jusoRepository.findByCode(code);
+    public List<WeatherTestResponse> selectLocationForWeather(String regionCd, String fcstDate) {
+        Optional<Juso> jusoOptional = jusoRepository.findByRegionCd(regionCd);
         if (jusoOptional.isPresent()) {
             Juso juso = jusoOptional.get();
-            String latX = juso.getLatX();
-            String lonY = juso.getLonY();
-            String fcstDate = weatherRequest.getFcstDate();
+            Long jusoGroupId = juso.getJusoGroup().getJusoGroupId();
 
-            List<Weather> weatherList = weatherRepository.findByLatXAndLonYAndFcstDateOrderByFcstTimeAsc(latX, lonY, fcstDate);
+            List<Weather> weatherList = weatherRepository.findByJusoGroupJusoGroupIdAndFcstDateOrderByFcstTimeAsc(jusoGroupId, fcstDate);
             List<WeatherTestResponse> weatherTestResponseList = new ArrayList<>();
             for (Weather weather : weatherList) {
                 WeatherTestResponse weatherTestResponse = WeatherTestResponse.builder()
@@ -350,17 +356,15 @@ public class WeatherService {
         }
     }
 
-    public List<WeatherTestResponse> refreshLocationForWeather(WeatherTestRequest weatherRequest) {
-        String code = weatherRequest.getCode();
-        Optional<Juso> jusoOptional = jusoRepository.findByCode(code);
+    public List<WeatherTestResponse> refreshLocationForWeather(String regionCd, String refreshType) {
+        Optional<Juso> jusoOptional = jusoRepository.findByRegionCd(regionCd);
         if (jusoOptional.isPresent()) {
             Juso juso = jusoOptional.get();
-            String latX = juso.getLatX();
-            String lonY = juso.getLonY();
-            String refreshType = weatherRequest.getRefreshType();
+            JusoGroup jusoGroup = juso.getJusoGroup();
             LocalDateTime localDateTime = getSrtWeatherDate(refreshType);
             String baseDate = localDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             String baseTime = localDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HHmm"));
+
             log.info("baseDate {}, baseTime {}", baseDate, baseTime);
 
             String weatherUrl;
@@ -370,11 +374,8 @@ public class WeatherService {
                 weatherUrl = weatherSrtUrl;
             }
 
-            insertWeather(weatherUrl, serviceKey, baseDate, baseTime, latX, lonY, refreshType);
-            WeatherTestRequest weatherTestRequest = new WeatherTestRequest();
-            weatherTestRequest.setCode(code);
-            weatherTestRequest.setFcstDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-            return selectLocationForWeather(weatherTestRequest);
+            insertWeather(weatherUrl, serviceKey, baseDate, baseTime, jusoGroup, refreshType);
+            return selectLocationForWeather(regionCd, LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         } else {
             return null;
         }
@@ -418,6 +419,7 @@ public class WeatherService {
 
         closestTime = closestTime.minusMinutes(minusMinute);
         localDateTime = localDateTime.withHour(closestTime.getHour()).withMinute(closestTime.getMinute());
+
         return localDateTime;
     }
 

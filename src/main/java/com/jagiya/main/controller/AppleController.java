@@ -3,6 +3,7 @@ package com.jagiya.main.controller;
 import com.jagiya.main.dto.login.AppleDTO;
 import com.jagiya.main.dto.login.MsgEntity;
 import com.jagiya.main.service.Impl.AppleService;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class AppleController {
 
     private final AppleService appleService;
 
+    @Hidden
     @PostMapping("/callback")
     public ResponseEntity<MsgEntity> callback(HttpServletRequest request) throws Exception {
         AppleDTO appleInfo = appleService.getAppleInfo(request.getParameter("code"));

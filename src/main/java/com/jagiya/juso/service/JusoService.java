@@ -3,6 +3,7 @@ package com.jagiya.juso.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagiya.common.exception.CommonException;
 import com.jagiya.juso.enums.JusoResponseCode;
+import com.jagiya.juso.enums.LocationShortName;
 import com.jagiya.juso.request.GpsTransfer;
 import com.jagiya.juso.response.*;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -169,11 +171,12 @@ public class JusoService {
             JusoTestResponse jusoTestResponse = groupedData.getOrDefault(admCd, new JusoTestResponse());
 
             if (StringUtils.isBlank(jusoTestResponse.getAdmCd())) {
-                String siNm = dataItem.getSiNm();
+                String siNm = getSidoShortName(dataItem.getSiNm());
                 String sggNm = dataItem.getSggNm();
                 String emdNm = dataItem.getEmdNm();
 
                 jusoTestResponse.setAdmCd(admCd);
+
                 jusoTestResponse.setSiNm(siNm);
                 jusoTestResponse.setSggNm(sggNm);
                 jusoTestResponse.setEmdNm(emdNm);
@@ -250,5 +253,17 @@ public class JusoService {
         }
 
         return null;
+    }
+
+    private String getSidoShortName(String sidoName) {
+        String [] shortList = {"특별자치", "광역", "특별"};
+        if (StringUtils.equals(sidoName, "전북특별자치도")) {
+            sidoName = "전라북도";
+        } else {
+            for (String shortName : shortList) {
+                sidoName = sidoName.replaceAll(shortName, "");
+            }
+        }
+        return sidoName;
     }
 }

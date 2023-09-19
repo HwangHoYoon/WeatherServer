@@ -49,6 +49,7 @@ jobs:
         timeout: 40s
         # 도커 작업
         script: |
+          sudo su - jagiyauser 
           docker stop be-con || true
           docker rm -f be-con || true
           docker rmi $(docker images -f "dangling=true" -q) || true

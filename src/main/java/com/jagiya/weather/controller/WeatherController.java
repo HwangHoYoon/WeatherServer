@@ -33,8 +33,9 @@ public class WeatherController {
     @GetMapping("/getLocationForWeather")
     @Operation(summary = "지역별 날씨", description = "지역코드와 기준날짜를 입력하면 날씨DB를 조회(지역코드는 /juso/getLocation에서 조회가능하다.)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CommonResponse.class))),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !", content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
+            @ApiResponse(responseCode = "200", description = "OK")
+        }
+    )
     public List<WeatherTestResponse> getLocationForWeather(@Schema(description = "주소코드", example = "1111010100", name = "regionCd") String regionCd, @Schema(description = "기준날짜", example = "20230914", name = "fcstDate") String fcstDate) throws Exception {
         return weatherService.selectLocationForWeather(regionCd, fcstDate);
     }
@@ -42,8 +43,9 @@ public class WeatherController {
     @GetMapping("/refreshLocationForWeather")
     @Operation(summary = "지역별 날씨갱신", description = "지역코드와 갱신타입을 입력하면 해당 지역의 날씨를 갱신하여 DB를 저장하고 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CommonResponse.class))),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !", content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
+            @ApiResponse(responseCode = "200", description = "OK")
+        }
+    )
     public List<WeatherTestResponse> refreshLocationForWeather(@Schema(description = "주소코드", example = "1111010100", name = "regionCd") String regionCd, @Schema(description = "갱신타입(0:초단기예보, 1:단기예보)", example = "0", name = "refreshType") String refreshType) throws Exception {
         return weatherService.refreshLocationForWeather(regionCd, refreshType);
     }

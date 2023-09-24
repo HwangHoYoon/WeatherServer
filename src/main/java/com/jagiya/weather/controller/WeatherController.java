@@ -31,7 +31,7 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/getLocationForWeather")
-    @Operation(summary = "지역별 날씨", description = "지역코드와 기준날짜를 입력하면 날씨DB를 조회(지역코드는 /juso/getLocation에서 조회가능하다.)")
+    @Operation(summary = "지역별 날씨", description = "지역코드와 기준날짜를 입력하면 날씨DB를 조회(지역코드는 /location/getLocation에서 조회가능하다.)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
         }

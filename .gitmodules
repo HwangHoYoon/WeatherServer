@@ -1,4 +1,0 @@
-[submodule "jagiya-dev/server-config"]
-	path = jagiya-dev/server-config
-	url = https://github.com/jagiya-dev/server-config.git
-	branch = develop

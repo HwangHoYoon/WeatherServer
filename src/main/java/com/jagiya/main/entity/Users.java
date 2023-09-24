@@ -46,44 +46,6 @@ public class Users {
     @Schema(description = "유저 이메일")
     private String email;
 
-
-    @Column(name = "deleteFlag")
-    @Schema(description = "탈퇴여부(0:유지 / 1:탈퇴)")
-    private Integer deleteFlag;
-
-
-    @Column(name = "agreesFalg")
-    @Schema(description = "약관동의여부(0:미동의 1:동의)")
-    private Integer agreesFalg;
-
-    @Column(name = "regDate")
-    @Schema(description = "가입일")
-    private Date regDate;
-
-    @Column(name = "modifyDate")
-    @Schema(description = "수정일")
-    private Date modifyDate;
-
-    @Column(name = "agreesDate")
-    @Schema(description = "약관동의 날짜")
-    private Date agreesDate;
-
-    @Column(name = "isAdmin")
-    @Schema(description = "관리자 여부")
-    private Integer isAdmin;
-
-    @Column(name = "birthday")
-    @Schema(description = "생년월일")
-    private Date birthday;
-
-    @Column(name = "ciDate")
-    @Schema(description = "ciDate")
-    private Date ciDate;
-
-    @Column(name = "snsConnectDate")
-    @Schema(description = "소셜연결 날짜")
-    private Date snsConnectDate;
-
     @Column(name = "snsType")
     @Schema(description = "소셜타입")
     private Integer snsType;
@@ -107,6 +69,50 @@ public class Users {
     @Column(name = "ci")
     @Schema(description = "ci")
     private String ci;
+
+
+
+    @Column(name = "deleteFlag")
+    @Schema(description = "탈퇴여부(0:유지 / 1:탈퇴)")
+    private Integer deleteFlag;
+
+
+    @Column(name = "agreesFalg")
+    @Schema(description = "약관동의여부(0:미동의 1:동의)")
+    private Integer agreesFalg;
+
+
+    @Column(name = "isAdmin")
+    @Schema(description = "관리자 여부")
+    private Integer isAdmin;
+
+
+    @Column(name = "birthday")
+    @Schema(description = "생년월일")
+    private Date birthday;
+
+    @Column(name = "ciDate")
+    @Schema(description = "ciDate")
+    private Date ciDate;
+
+    @Column(name = "snsConnectDate")
+    @Schema(description = "소셜연결 날짜")
+    private Date snsConnectDate;
+
+
+    @Column(name = "regDate")
+    @Schema(description = "가입일")
+    private Date regDate;
+
+    @Column(name = "modifyDate")
+    @Schema(description = "수정일")
+    private Date modifyDate;
+
+    @Column(name = "agreesDate")
+    @Schema(description = "약관동의 날짜")
+    private Date agreesDate;
+
+
 
     @Column(name = "id")
     @Schema(description = "id")

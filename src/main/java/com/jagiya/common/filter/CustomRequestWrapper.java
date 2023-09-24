@@ -3,11 +3,13 @@ package com.jagiya.common.filter;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+@Slf4j
 public class CustomRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] body;
@@ -15,10 +17,8 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
     public CustomRequestWrapper(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
         try {
-//                this.body = IOUtils.toByteArray(httpServletRequest.getInputStream());
             DataInputStream dis = new DataInputStream(httpServletRequest.getInputStream());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-//                byte[] buffer = new byte[0xFFFF];
             byte[] buffer = new byte[1024];
             for (int len = dis.read(buffer); len != -1; len = dis.read(buffer)) {
                 os.write(buffer, 0, len);
@@ -26,7 +26,7 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
             os.flush();
             this.body = os.toByteArray();
         } catch (IOException ioe) {
-            System.out.println("IOException");
+            log.error("IOException {}", ioe);
         }
     }
 

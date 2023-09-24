@@ -30,11 +30,7 @@ public class QWeather extends EntityPathBase<Weather> {
 
     public final StringPath fcstTime = createString("fcstTime");
 
-    public final com.jagiya.juso.entity.QJusoGroup jusoGroup;
-
-    public final StringPath latX = createString("latX");
-
-    public final StringPath lonY = createString("lonY");
+    public final com.jagiya.location.entity.QLocationGroup locationGroup;
 
     public final DateTimePath<java.util.Date> modifyDate = createDateTime("modifyDate", java.util.Date.class);
 
@@ -74,7 +70,7 @@ public class QWeather extends EntityPathBase<Weather> {
 
     public QWeather(Class<? extends Weather> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.jusoGroup = inits.isInitialized("jusoGroup") ? new com.jagiya.juso.entity.QJusoGroup(forProperty("jusoGroup")) : null;
+        this.locationGroup = inits.isInitialized("locationGroup") ? new com.jagiya.location.entity.QLocationGroup(forProperty("locationGroup")) : null;
     }
 
 }

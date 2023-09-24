@@ -3,11 +3,11 @@ package com.jagiya.auth.service;
 import com.jagiya.auth.entity.TokenEditor;
 import com.jagiya.auth.dto.UsersRes;
 import com.jagiya.auth.entity.Token;
-import com.jagiya.auth.entity.UsersEditor;
 import com.jagiya.auth.repository.AuthTokenRepository;
 import com.jagiya.auth.repository.AuthUsersRepository;
 import com.jagiya.auth.dto.KakaoToken;
 import com.jagiya.auth.dto.KakaoUserInfo;
+import com.jagiya.auth.enums.LoginType;
 import com.jagiya.main.entity.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,14 +137,12 @@ public class AuthService {
         }
         tokenRepository.save(token);
 
-        return UsersRes.builder()
+        /*return UsersRes.builder()
                 .usersId(userId)
                 .id(usersInfoRst.getId())
                 .email(usersInfoRst.getEmail())
-                .nickname(usersInfoRst.getNickname())
                 .username(usersInfoRst.getUsername())
                 .snsType(usersInfoRst.getSnsType())
-                .snsName(usersInfoRst.getSnsName())
                 .snsProfile(usersInfoRst.getSnsProfile())
                 .birthday(usersInfoRst.getBirthday())
                 .gender(usersInfoRst.getGender())
@@ -153,7 +151,10 @@ public class AuthService {
                 .agreesFalg(usersInfoRst.getAgreesFalg())
                 .regDate(usersInfoRst.getRegDate())
                 .modifyDate(usersInfoRst.getModifyDate())
-                .build();
+                .build();*/
+
+
+        return null;
     }
 
     public KakaoToken requestAccessToken(String code) {
@@ -190,4 +191,37 @@ public class AuthService {
         assert response != null;
         return response;
     }
+
+    public UsersRes login(String loginId, String name, String email) {
+        long id = Long.parseLong(loginId);
+        Integer snsType = LoginType.KAKAO.getCode();
+        Optional<Users> usersInfo = usersRepository.findBySnsTypeAndId(snsType, id);
+
+        Users usersInfoRst;
+        // 유저 정보가 있다면 업데이트 없으면 등록
+        if (usersInfo.isPresent()) {
+            usersInfoRst = usersInfo.get();
+        } else {
+            log.info("신규유저 등록 {}", name);
+            Users users = Users.builder()
+                    .id(id)
+                    .email(email)
+                    .username(name)
+                    .snsType(snsType)
+                    .deleteFlag(0)
+                    .agreesFalg(0)
+                    .regDate(new Date())
+                    .build();
+            usersInfoRst = usersRepository.save(users);
+        }
+
+        return UsersRes.builder()
+                .usersId(usersInfoRst.getUsersId())
+                .id(usersInfoRst.getId())
+                .email(usersInfoRst.getEmail())
+                .username(usersInfoRst.getUsername())
+                .snsName(LoginType.getLoginTypeName(usersInfoRst.getSnsType()))
+                .build();
+    }
+
 }

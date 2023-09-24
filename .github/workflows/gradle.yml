@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: checkout
@@ -40,15 +40,7 @@ jobs:
         docker push ${{ secrets.DOCKER_REPO }}/jagiyadocker
 
     - name: Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        timeout: 40s
-        # 도커 작업
-        script: |
+      run: |
           docker stop be-con || true
           docker rm -f be-con || true
           docker rmi $(docker images -f "dangling=true" -q) || true

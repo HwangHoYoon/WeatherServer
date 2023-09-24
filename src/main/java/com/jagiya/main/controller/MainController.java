@@ -3,6 +3,7 @@ package com.jagiya.main.controller;
 import com.jagiya.main.dto.TestReq;
 import com.jagiya.main.dto.TestRes;
 import com.jagiya.main.service.Impl.TestService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +20,7 @@ public class MainController {
 
     private final TestService testService;
 
+    @Hidden
     @Operation(summary = "test 조회 API", description = "test id를 조회합니다.")
     @GetMapping("/test1")
     @Parameter(name = "TestReq 파라미터", description = "TestReq 설명설명")

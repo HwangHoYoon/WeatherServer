@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class LocationResult {
     private LocationCommon common;
-    private List<LocationData> location;
+    private List<LocationData> juso;
 }

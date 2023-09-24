@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -50,6 +51,12 @@ public class LocationService {
             throw new CommonException("검색어를 입력해주세요 {}", "887");
         }
 
+        try {
+            keyword = URLDecoder.decode(keyword, "UTF-8");;
+        } catch (Exception e) {
+            log.error("keyword URLDecoder Exception {}", e);
+        }
+
         boolean isCheckSearchedWord = checkSearchedWord(keyword);
         if (!isCheckSearchedWord) {
             log.error("특수문자 또는 사용할수 없는 특정 문자가 들어갔습니다. {}", keyword);
@@ -61,6 +68,8 @@ public class LocationService {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         String decodedConfmKey = URLEncoder.encode(confmKey, "UTF-8");
+
+
         String decodedKeyword = URLEncoder.encode(keyword, "UTF-8");
 
         UriComponents uri = UriComponentsBuilder
@@ -78,7 +87,7 @@ public class LocationService {
         LocationApiResponse response = callApi(apiUrl, entity);
 
         if (response != null) {
-            List<LocationData> locationDataList = response.getResults().getLocation();
+            List<LocationData> locationDataList = response.getResults().getJuso();
             List<LocationTestResponse> locationResponseList = groupDataByLocation(locationDataList);
 
             if (locationResponseList.size() > 0) {

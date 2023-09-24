@@ -1,0 +1,105 @@
+server:
+  port: 8080
+# Swagger springdoc-ui Configuration
+# swaggerdoc
+springdoc:
+  packages-to-scan: com.jagiya
+  swagger-ui.path: /api-docs
+#  swagger-ui:
+#    tags-sorter: alpha
+#    operations-sorter: alpha
+#    display-query-params-without-oauth2: true
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+spring:
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    defer-datasource-initialization: true
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        use_sql_comments: true
+  datasource:
+    url: jdbc:mariadb://101.101.210.91:3306/DEV
+    username: DEV_USER
+    password: pass@word1
+    driver-class-name: org.mariadb.jdbc.Driver
+    task:
+      scheduling:
+        pool:
+          size=5:
+
+kakao:
+  url:
+    auth: https://kauth.kakao.com/oauth/authorize
+    token: https://kauth.kakao.com/oauth/token
+    api: https://kapi.kakao.com/v2/user/me
+  grant_type: authorization_code
+  client_id: d165194cc7896c176244f88be4dce997
+  client_secret: gmD5csmFGEjcU90cYU3pi2IEo1xasv91
+  redirect_uri: https://www.readyumbrelladata.com/auth/kakaoCallback
+
+jwt:
+  header: Authorization
+  secret: 1
+  access-token-expire-time: 1800000
+  refresh-token-expire-time: 604800000
+
+
+feign:
+  client:
+    apple:
+      name: applelogin
+      url: https://www.readyumbrelladata.com
+
+
+apple:
+  team:
+    id: XQ24HP64B3
+  login:
+    key: TQTRBXTQRD
+  client:
+    id: com.jagiya.services
+  redirect:
+    url: https://www.readyumbrelladata.com/apple/callback
+  key:
+    path: /keys/AuthKey_TQTRBXTQRD.p8
+
+weather:
+  srtUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  ultraSrtUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst
+  serviceKey: F0MSmDjhkdQ1G0EGs%2F2omvk%2BAQkF7O%2Fr6GSul3%2BmgBVmfyYEMNymmK4vUKXVG%2FRhh7Wek5fKnJv2%2FrbQxeNSBQ%3D%3D
+location:
+  url: https://business.juso.go.kr/addrlink/addrLinkApi.do
+  confmKey: devU01TX0FVVEgyMDIzMDkxMDE4MjYwNjExNDA4OTk=
+geocoding:
+  url: https://apis.openapi.sk.com/tmap/geo/geocoding
+  appKey: 6nFJjjPxQ510mIgcLssvr6QL7N8uNvC91P3cPUq9
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: INFO

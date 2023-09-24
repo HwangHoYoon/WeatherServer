@@ -2,7 +2,7 @@ package com.jagiya.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jagiya.common.enums.OAuthProvider;
+import com.jagiya.auth.enums.LoginType;
 import lombok.Getter;
 
 import java.text.ParseException;
@@ -79,7 +79,7 @@ public class KakaoUserInfo {
         return kakaoAccount.profile.profileImage;
     }
 
-    public OAuthProvider getOAuthProvider() {
-        return OAuthProvider.KAKAO;
+    public LoginType getOAuthProvider() {
+        return LoginType.KAKAO;
     }
 }

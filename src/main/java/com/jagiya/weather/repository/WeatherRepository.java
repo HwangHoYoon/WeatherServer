@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface WeatherRepository extends JpaRepository<Weather, Long> {
 
-    List<Weather> findByJusoGroupJusoGroupIdAndFcstDateOrderByFcstTimeAsc(Long jusoGroupId, String fcstDate);
+    List<Weather> findByLocationGroupLocationGroupIdAndFcstDateOrderByFcstTimeAsc(Long locationGroupId, String fcstDate);
 
-    Weather findByJusoGroupJusoGroupIdAndFcstDateAndFcstTime(Long jusoGroupId, String fcstDate, String fcstTime);
+    Weather findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(Long locationoGroupId, String fcstDate, String fcstTime);
 
 }

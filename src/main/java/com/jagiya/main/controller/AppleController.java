@@ -21,8 +21,15 @@ public class AppleController {
     public ResponseEntity<MsgEntity> callback(HttpServletRequest request) throws Exception {
         AppleDTO appleInfo = appleService.getAppleInfo(request.getParameter("code"));
 
+        MsgEntity result = new MsgEntity("Success", appleInfo);
+        log.info("apple callback ===================> {}", result);
+
+
+        
+
         return ResponseEntity.ok()
-                .body(new MsgEntity("Success", appleInfo));
+                .body(result);
+
     }
 
 }

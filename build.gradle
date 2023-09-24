@@ -99,6 +99,10 @@ task copyGitSubmodule(type: Copy) {
 	into './src/main/resources'
 }
 
+processResources {
+	dependsOn copyGitSubmodule
+}
+
 ext {
 	set('springCloudVersion', "2021.0.5")
 }

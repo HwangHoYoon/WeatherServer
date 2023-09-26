@@ -1,4 +1,4 @@
-package com.jagiya.auth.entity;
+package com.jagiya.login.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QToken extends EntityPathBase<Token> {
 
-    private static final long serialVersionUID = -395642156L;
+    private static final long serialVersionUID = 1699996211L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

@@ -1,4 +1,4 @@
-package com.jagiya.auth.enums;
+package com.jagiya.login.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum LoginType {
-    NONE(0, "none"),
-    KAKAO(1, "kakao"),
-    APPLE(2, "apple"),
+    NONE(0, "비회원"),
+    KAKAO(1, "카카오"),
+    APPLE(2, "애플"),
     ;
 
     private final Integer code;

@@ -1,4 +1,4 @@
-package com.jagiya.auth.dto;
+package com.jagiya.login.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

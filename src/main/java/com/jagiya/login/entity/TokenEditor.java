@@ -1,4 +1,4 @@
-package com.jagiya.auth.entity;
+package com.jagiya.login.entity;
 
 import lombok.Builder;
 import lombok.Getter;

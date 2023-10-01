@@ -1,6 +1,6 @@
 package com.jagiya.location.controller;
 
-import com.jagiya.location.response.LocationTestResponse;
+import com.jagiya.location.response.LocationResponse;
 import com.jagiya.location.service.LocationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Location", description = "주소 API")
-@RequestMapping("Location")
+@RequestMapping("location")
 public class LocationController {
     private final LocationService locationService;
 
@@ -29,7 +29,7 @@ public class LocationController {
             @ApiResponse(responseCode = "200", description = "OK")
         }
     )
-    public List<LocationTestResponse> getLocation(@Schema(description = "주소명", example = "상동", name = "keyword") String keyword) throws Exception {
+    public List<LocationResponse> getLocation(@Schema(description = "주소명", example = "상동", name = "keyword") String keyword) throws Exception {
         return locationService.selectLocation(keyword);
     }
 }

@@ -3,7 +3,6 @@ package com.jagiya.main.component;
 import com.jagiya.main.dto.login.ApplePublicKey;
 import com.jagiya.main.dto.login.ApplePublicKeys;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -33,8 +32,8 @@ public class AppleOAuthPublicKeyGenerator {
     }
 
     private PublicKey generatePublicKeyWithApplePublicKey(ApplePublicKey applePublicKey) {
-        byte[] n = Base64Utils.decodeFromUrlSafeString(applePublicKey.getN());
-        byte[] e = Base64Utils.decodeFromUrlSafeString(applePublicKey.getE());
+        byte[] n = null;
+        byte[] e = null;
         RSAPublicKeySpec publicKeySpec =
                 new RSAPublicKeySpec(new BigInteger(POSITIVE_SIGNUM, n), new BigInteger(POSITIVE_SIGNUM, e));
 

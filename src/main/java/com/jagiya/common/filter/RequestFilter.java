@@ -22,11 +22,15 @@ public class RequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
-        CustomRequestWrapper customRequestWrapper = new CustomRequestWrapper((HttpServletRequest) request);
+        CustomRequestWrapper customRequestWrapper = new CustomRequestWrapper(requestWrapper);
+
+        chain.doFilter(customRequestWrapper, responseWrapper);
+
         long start = System.currentTimeMillis();
-        chain.doFilter(requestWrapper, responseWrapper);
         long end = System.currentTimeMillis();
 
         if (requestWrapper.getRequestURI().indexOf("/api-docs/") == -1 && requestWrapper.getRequestURI().indexOf("/swagger-ui/") == -1) {
@@ -35,14 +39,14 @@ public class RequestFilter implements Filter {
                             "Headers : {}\n" +
                             "Request : {}\n" +
                             "Response : {}\n",
-                    ((HttpServletRequest) request).getMethod(),
-                    ((HttpServletRequest) request).getRequestURI(),
+                    ((HttpServletRequest) requestWrapper).getMethod(),
+                    ((HttpServletRequest) requestWrapper).getRequestURI(),
                     responseWrapper.getStatus(),
                     (end - start) / 1000.0,
-                    getHeaders((HttpServletRequest) request),
+                    getHeaders(requestWrapper),
                     buildAccessLog(customRequestWrapper));
         } else {
-            log.info("[REQUEST] {} - {} {} - {}", ((HttpServletRequest) request).getMethod(), ((HttpServletRequest) request).getRequestURI(), responseWrapper.getStatus(), (end - start) / 1000.0);
+            log.info("[REQUEST] {} - {} {} - {}", ((HttpServletRequest) requestWrapper).getMethod(), ((HttpServletRequest) requestWrapper).getRequestURI(), responseWrapper.getStatus(), (end - start) / 1000.0);
         }
         getResponseBody(responseWrapper);
     }

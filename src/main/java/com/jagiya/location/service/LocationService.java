@@ -2,8 +2,13 @@ package com.jagiya.location.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagiya.common.exception.CommonException;
+import com.jagiya.location.entity.Location;
+import com.jagiya.location.entity.LocationGroup;
 import com.jagiya.location.enums.LocationResponseCode;
+import com.jagiya.location.repository.LocationGroupRepository;
+import com.jagiya.location.repository.LocationRepository;
 import com.jagiya.location.request.GpsTransfer;
+import com.jagiya.location.request.LocationRequest;
 import com.jagiya.location.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +50,11 @@ public class LocationService {
 
     private final RestTemplate restTemplate;
 
-    public List<LocationTestResponse> selectLocation(String keyword) throws Exception {
+    private final LocationRepository locationRepository;
+
+    private final LocationGroupRepository locationGroupRepository;
+
+    public List<LocationResponse> selectLocation(String keyword) throws Exception {
         retryCnt = 0;
         if (StringUtils.isBlank(keyword)) {
             throw new CommonException("검색어를 입력해주세요 {}", "887");
@@ -88,7 +97,7 @@ public class LocationService {
 
         if (response != null) {
             List<LocationData> locationDataList = response.getResults().getJuso();
-            List<LocationTestResponse> locationResponseList = groupDataByLocation(locationDataList);
+            List<LocationResponse> locationResponseList = groupDataByLocation(locationDataList);
 
             if (locationResponseList.size() > 0) {
                 return locationResponseList;
@@ -169,24 +178,24 @@ public class LocationService {
         return true;
     }
 
-    private List<LocationTestResponse> groupDataByLocation(List<LocationData> locationDataList) {
-        Map<String, LocationTestResponse> groupedData = new HashMap<>();
+    private List<LocationResponse> groupDataByLocation(List<LocationData> locationDataList) {
+        Map<String, LocationResponse> groupedData = new HashMap<>();
 
         for (LocationData dataItem : locationDataList) {
             String admCd = dataItem.getAdmCd();
 
-            LocationTestResponse locationTestResponse = groupedData.getOrDefault(admCd, new LocationTestResponse());
+            LocationResponse locationResponse = groupedData.getOrDefault(admCd, new LocationResponse());
 
-            if (StringUtils.isBlank(locationTestResponse.getAdmCd())) {
+            if (StringUtils.isBlank(locationResponse.getAdmCd())) {
                 String siNm = getSidoShortName(dataItem.getSiNm());
                 String sggNm = dataItem.getSggNm();
                 String emdNm = dataItem.getEmdNm();
 
-                locationTestResponse.setAdmCd(admCd);
+                locationResponse.setAdmCd(admCd);
 
-                locationTestResponse.setSiNm(siNm);
-                locationTestResponse.setSggNm(sggNm);
-                locationTestResponse.setEmdNm(emdNm);
+                locationResponse.setSiNm(siNm);
+                locationResponse.setSggNm(sggNm);
+                locationResponse.setEmdNm(emdNm);
 
                 GeocodingApiData apiData = selectGeocoding(siNm, sggNm, emdNm);
 
@@ -200,10 +209,10 @@ public class LocationService {
                             String latX = String.valueOf(gpsTransfer.getxLat());
                             String lonY = String.valueOf(gpsTransfer.getyLon());
 
-                            locationTestResponse.setLat(lat);
-                            locationTestResponse.setLon(lon);
-                            locationTestResponse.setLatX(latX);
-                            locationTestResponse.setLonY(lonY);
+                            locationResponse.setLat(lat);
+                            locationResponse.setLon(lon);
+                            locationResponse.setLatX(latX);
+                            locationResponse.setLonY(lonY);
                         } else {
                             log.error("위경도 null : {} {}", lat, lon);
                         }
@@ -211,11 +220,94 @@ public class LocationService {
                         log.error("위경도 좌표 변환 실패 : {} {}", lat, lon);
                     }
                 }
-                groupedData.put(admCd, locationTestResponse);
+                groupedData.put(admCd, locationResponse);
             }
         }
 
         return new ArrayList<>(groupedData.values());
+    }
+
+    public Location selectLocationByRegionCd(String regionCd) {
+        Optional<Location> locationInfo = locationRepository.findByRegionCd(regionCd);
+        if (locationInfo.isPresent()) {
+            return locationInfo.get();
+        } else {
+            return null;
+        }
+    }
+
+    public Location insertLocation (LocationRequest locationRequest) {
+        String cityDo = locationRequest.getCityDo();
+        String guGun = locationRequest.getGuGun();
+        String eupMyun = locationRequest.getEupMyun();
+        String regionCd = locationRequest.getRegionCd();
+
+        GeocodingApiData apiData = selectGeocoding(cityDo, guGun, eupMyun);
+
+        if (apiData != null) {
+            String lat = apiData.getLat();
+            String lon = apiData.getLon();
+            try {
+                if (StringUtils.isNotBlank(lat) && StringUtils.isNotBlank(lon)) {
+                    GpsTransfer gpsTransfer = new GpsTransfer(Double.parseDouble(lat), Double.parseDouble(lon));
+                    gpsTransfer.transfer(gpsTransfer, 0);
+                    String latX = String.valueOf(gpsTransfer.getxLat());
+                    String lonY = String.valueOf(gpsTransfer.getyLon());
+
+                    locationRequest.setLat(lat);
+                    locationRequest.setLon(lon);
+                    locationRequest.setLatX(latX);
+                    locationRequest.setLonY(lonY);
+                } else {
+                    log.error("위경도 null : {} {}", lat, lon);
+                }
+            } catch (Exception e) {
+                log.error("위경도 좌표 변환 실패 : {} {}", lat, lon);
+            }
+        }
+        String lat = locationRequest.getLat();
+        String lon = locationRequest.getLon();
+        String latX = locationRequest.getLatX();
+        String lonY = locationRequest.getLonY();
+
+        Optional<LocationGroup> LocationGroupInfo = locationGroupRepository.findByLatXAndLonY(latX, lonY);
+
+        LocationGroup locationGroup;
+        if (LocationGroupInfo.isPresent()) {
+            locationGroup = LocationGroupInfo.get();
+        } else {
+            locationGroup = LocationGroup.builder()
+                    .latX(latX)
+                    .lonY(lonY)
+                    .regDate(new Date())
+                    .build();
+            locationGroupRepository.save(locationGroup);
+        }
+
+        Location location = Location.builder()
+                .regionCd(regionCd)
+                .cityDo(cityDo)
+                .guGun(guGun)
+                .eupMyun(eupMyun)
+                .lat(lat)
+                .lon(lon)
+                .locationGroup(locationGroup)
+                .regDate(new Date())
+                .build();
+
+        locationRepository.save(location);
+
+        return location;
+    }
+
+    public Location selectInsertLocation(LocationRequest locationRequest) {
+        String regionCd = locationRequest.getRegionCd();
+        Location location = selectLocationByRegionCd(regionCd);
+
+        if (location == null) {
+            location = insertLocation(locationRequest);
+        }
+        return location;
     }
 
     private GeocodingApiData selectGeocoding(String cityDo, String guGun, String dong) {

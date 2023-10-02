@@ -25,7 +25,7 @@ public class QLocationGroup extends EntityPathBase<LocationGroup> {
 
     public final StringPath lonY = createString("lonY");
 
-    public final StringPath regDate = createString("regDate");
+    public final DateTimePath<java.util.Date> regDate = createDateTime("regDate", java.util.Date.class);
 
     public QLocationGroup(String variable) {
         super(LocationGroup.class, forVariable(variable));

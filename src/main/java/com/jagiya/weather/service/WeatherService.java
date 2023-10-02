@@ -1,18 +1,21 @@
 package com.jagiya.weather.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jagiya.location.entity.LocationGroup;
+import com.jagiya.common.exception.CommonException;
 import com.jagiya.location.entity.Location;
-import com.jagiya.weather.enums.WeatherCategory;
-import com.jagiya.weather.enums.WeatherResponseCode;
-import com.jagiya.weather.entity.Weather;
+import com.jagiya.location.entity.LocationGroup;
 import com.jagiya.location.repository.LocationCustomRepository;
 import com.jagiya.location.repository.LocationRepository;
+import com.jagiya.weather.entity.Weather;
+import com.jagiya.weather.entity.WeatherEditor;
+import com.jagiya.weather.enums.WeatherCategory;
+import com.jagiya.weather.enums.WeatherResponseCode;
 import com.jagiya.weather.repository.WeatherRepository;
 import com.jagiya.weather.response.WeatherApiResponse;
 import com.jagiya.weather.response.WeatherErrorResponse;
 import com.jagiya.weather.response.WeatherItem;
 import com.jagiya.weather.response.WeatherTestResponse;
+import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -22,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -75,6 +77,7 @@ public class WeatherService {
         log.info("종료 : {}", LocalDateTime.now().format(formatter));
     }
 
+    @Transactional
     private void insertWeather(String weatherUrl, String serviceKey, String baseDate, String baseTime, LocationGroup locationGroup, String refreshType) {
         retryCnt = 0;
         String nx = locationGroup.getLatX();
@@ -113,42 +116,29 @@ public class WeatherService {
                     String fcstTime = weather.getFcstTime();
                     Weather weatherRes = weatherRepository.findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(jusoGroupId, fcstDate, fcstTime);
                     if (weatherRes != null) {
+                        WeatherEditor.WeatherEditorBuilder editorBuilder = weatherRes.toEditor();
+                        WeatherEditor weatherEditor;
                         if (StringUtils.equals(refreshType, "1")) {
-                            if (StringUtils.isNotBlank(weather.getPop())) {
-                                weatherRes.setPop(weather.getPop());
-                            }
-                            if (StringUtils.isNotBlank(weather.getPty())) {
-                                weatherRes.setPty(weather.getPty());
-                            }
-                            if (StringUtils.isNotBlank(weather.getTmx())) {
-                                weatherRes.setTmx(weather.getTmx());
-                            }
-                            if (StringUtils.isNotBlank(weather.getTmp())) {
-                                weatherRes.setTmp(weather.getTmp());
-                            }
+                            weatherEditor = editorBuilder.pop(weather.getPop())
+                                    .pty(weather.getPty())
+                                    .tmx(weather.getTmx())
+                                    .tmn(weather.getTmn())
+                                    .tmp(weather.getTmp())
+                                    .pcp(weather.getPcp())
+                                    .sky(weather.getSky())
+                                    .baseDate(weather.getBaseDate())
+                                    .baseTime(weather.getBaseTime())
+                                    .build();
+                        } else {
+                            weatherEditor = editorBuilder.pcp(weather.getPcp())
+                                    .tmp(weather.getTmp())
+                                    .sky(weather.getSky())
+                                    .pty(weather.getPty())
+                                    .baseDate(weather.getBaseDate())
+                                    .baseTime(weather.getBaseTime())
+                                    .build();
                         }
-
-                        if (StringUtils.isNotBlank(weather.getPcp())) {
-                            weatherRes.setPcp(weather.getPcp());
-                        }
-
-                        if (StringUtils.isNotBlank(weather.getTmn())) {
-                            weatherRes.setTmn(weather.getTmn());
-                        }
-
-                        if (StringUtils.isNotBlank(weather.getSky())) {
-                            weatherRes.setSky(weather.getSky());
-                        }
-
-                        if (StringUtils.isNotBlank(weather.getBaseDate())) {
-                            weatherRes.setBaseDate(weather.getBaseDate());
-                        }
-
-                        if (StringUtils.isNotBlank(weather.getBaseTime())) {
-                            weatherRes.setBaseTime(weather.getBaseTime());
-                        }
-                        weatherRes.setModifyDate(new Date());
-                        weatherRepository.save(weatherRes);
+                        weatherRes.edit(weatherEditor);
                     } else {
                         weather.setLocationGroup(locationGroup);
                         weatherRepository.save(weather);
@@ -299,6 +289,89 @@ public class WeatherService {
         }
     }
 
+    @Transactional
+    public Weather selectLocationAndTimeForWeather(LocationGroup locationGroup, String fcstDate, String fcstTime) {
+        Long locationGroupId = locationGroup.getLocationGroupId();
+        Weather weather = weatherRepository.findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(locationGroupId, fcstDate, fcstTime);
+        String refreshType = getRefreshType(fcstTime);
+        LocalDateTime localDateTime = getSrtWeatherDate(refreshType);
+        String baseDate = localDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String baseTime = localDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HHmm"));
+
+        // 현재 시간보다 적은 기준날짜는 제외
+        int fcstYear = Integer.parseInt(fcstDate.substring(0, 4));
+        int fcstMonth = Integer.parseInt(fcstDate.substring(4, 6));
+        int fcstDay = Integer.parseInt(fcstDate.substring(6, 8));
+
+        int fcstHour = Integer.parseInt(fcstTime.substring(0, 2));
+        int fcstMiute = Integer.parseInt(fcstTime.substring(2));
+
+        LocalDateTime fcstDateTime = LocalDateTime.of(fcstYear, fcstMonth, fcstDay, fcstHour, fcstMiute);
+        if (fcstDateTime.isAfter(localDateTime)) {
+            String weatherUrl;
+            if (refreshType.equals("0")) {
+                weatherUrl = weatherUltraSrtUrl;
+            } else {
+                weatherUrl = weatherSrtUrl;
+            }
+
+            // 날씨 데이터가 없다면 API 호출
+            if (weather == null) {
+                // 대상 시간이 현재 시간보다 6시간 이전인지 이후인지 체크
+                // 6시간 이전 초단기조회
+                // 6시간 이후 단기조회
+                // 현재시간 기준으로 초단기, 단기 기준시간 조회
+                // API 등록
+                // 이후 데이터 조회
+                log.info("baseDate {}, baseTime {}", baseDate, baseTime);
+                insertWeather(weatherUrl, serviceKey, baseDate, baseTime, locationGroup, refreshType);
+                weather = weatherRepository.findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(locationGroupId, fcstDate, fcstTime);
+            } else { // DB 값이 현재 기준일보다 적을 경우 update
+
+                int baseYear = Integer.parseInt(weather.getBaseDate().substring(0, 4));
+                int baseMonth = Integer.parseInt(weather.getBaseDate().substring(4, 6));
+                int baseDay = Integer.parseInt(weather.getBaseDate().substring(6, 8));
+
+                int baseHour = Integer.parseInt(weather.getBaseTime().substring(0, 2));
+                int baseMiute = Integer.parseInt(weather.getBaseTime().substring(2));
+
+                LocalDateTime weatherDateTime = LocalDateTime.of(baseYear, baseMonth, baseDay, baseHour, baseMiute);
+                if (localDateTime.isAfter(weatherDateTime)) {
+                    log.info("localDateTime isAfter weatherDateTime localDateTime {}, weatherDateTime {}", localDateTime, weatherDateTime);
+
+                    log.info("baseDate {}, baseTime {}", baseDate, baseTime);
+                    insertWeather(weatherUrl, serviceKey, baseDate, baseTime, locationGroup, refreshType);
+                    weather = weatherRepository.findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(locationGroupId, fcstDate, fcstTime);
+                }
+            }
+        }
+        return weather;
+    }
+
+    private String getRefreshType(String fcstTime) {
+        if (fcstTime.length() != 4) {
+            throw new CommonException("시간형식이 올바르지 않습니다.", "666");
+        }
+        int fcstHour = Integer.parseInt(fcstTime.substring(0, 2));
+
+        LocalTime currentLocalTime = LocalTime.now();
+        int currentHour = currentLocalTime.getHour();
+        int currentMinute = currentLocalTime.getMinute();
+
+        if (currentMinute > 45) {
+            currentHour = currentHour + 1;
+        }
+
+        int hout = Math.abs(fcstHour - currentHour);
+
+        if (hout < 6) {
+            return "0";
+        } else {
+            return "1";
+        }
+    }
+
+
     public List<WeatherTestResponse> refreshLocationForWeather(String regionCd, String refreshType) {
         Optional<Location> jusoOptional = locationRepository.findByRegionCd(regionCd);
         if (jusoOptional.isPresent()) {
@@ -361,9 +434,63 @@ public class WeatherService {
         }
 
         closestTime = closestTime.minusMinutes(minusMinute);
-        localDateTime = localDateTime.withHour(closestTime.getHour()).withMinute(closestTime.getMinute());
+        localDateTime = localDateTime.withHour(closestTime.getHour()).withMinute(closestTime.getMinute()).withSecond(0).withNano(0);
 
         return localDateTime;
     }
 
+    public void refreshWeather(LocationGroup locationGroup, String fcstDate, String fcstTime) {
+        Long locationGroupId = locationGroup.getLocationGroupId();
+        Weather weather = weatherRepository.findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(locationGroupId, fcstDate, fcstTime);
+        String refreshType = getRefreshType(fcstTime);
+        LocalDateTime localDateTime = getSrtWeatherDate(refreshType);
+        String baseDate = localDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String baseTime = localDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HHmm"));
+
+        // 현재 시간보다 적은 기준날짜는 제외
+        int fcstYear = Integer.parseInt(fcstDate.substring(0, 4));
+        int fcstMonth = Integer.parseInt(fcstDate.substring(4, 6));
+        int fcstDay = Integer.parseInt(fcstDate.substring(6, 8));
+
+        int fcstHour = Integer.parseInt(fcstTime.substring(0, 2));
+        int fcstMiute = Integer.parseInt(fcstTime.substring(2));
+
+        LocalDateTime fcstDateTime = LocalDateTime.of(fcstYear, fcstMonth, fcstDay, fcstHour, fcstMiute);
+        if (fcstDateTime.isAfter(localDateTime)) {
+            String weatherUrl;
+            if (refreshType.equals("0")) {
+                weatherUrl = weatherUltraSrtUrl;
+            } else {
+                weatherUrl = weatherSrtUrl;
+            }
+
+            // 날씨 데이터가 없다면 API 호출
+            if (weather == null) {
+                // 대상 시간이 현재 시간보다 6시간 이전인지 이후인지 체크
+                // 6시간 이전 초단기조회
+                // 6시간 이후 단기조회
+                // 현재시간 기준으로 초단기, 단기 기준시간 조회
+                // API 등록
+                // 이후 데이터 조회
+                log.info("baseDate {}, baseTime {}", baseDate, baseTime);
+                insertWeather(weatherUrl, serviceKey, baseDate, baseTime, locationGroup, refreshType);
+            } else { // DB 값이 현재 기준일보다 적을 경우 update
+
+                int baseYear = Integer.parseInt(weather.getBaseDate().substring(0, 4));
+                int baseMonth = Integer.parseInt(weather.getBaseDate().substring(4, 6));
+                int baseDay = Integer.parseInt(weather.getBaseDate().substring(6, 8));
+
+                int baseHour = Integer.parseInt(weather.getBaseTime().substring(0, 2));
+                int baseMiute = Integer.parseInt(weather.getBaseTime().substring(2));
+
+                LocalDateTime weatherDateTime = LocalDateTime.of(baseYear, baseMonth, baseDay, baseHour, baseMiute);
+                if (localDateTime.isAfter(weatherDateTime)) {
+                    log.info("localDateTime isAfter weatherDateTime localDateTime {}, weatherDateTime {}", localDateTime, weatherDateTime);
+
+                    log.info("baseDate {}, baseTime {}", baseDate, baseTime);
+                    insertWeather(weatherUrl, serviceKey, baseDate, baseTime, locationGroup, refreshType);
+                }
+            }
+        }
+    }
 }

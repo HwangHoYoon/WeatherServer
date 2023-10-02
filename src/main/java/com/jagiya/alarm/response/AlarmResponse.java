@@ -12,25 +12,25 @@ import java.util.List;
 @Builder
 public class AlarmResponse {
 
-    @JsonProperty("alarmId")
+    @Schema(description = "알람ID", example = "1", name = "alarmId")
     private Long alarmId;
 
-    @JsonProperty("enabled")
+    @Schema(description = "활성화여부(0 : 비활성화, 1 : 활성화)", example = "1", name = "enabled")
     private Integer enabled;
 
-    @JsonProperty("vibration")
+    @Schema(description = "진동여부(0: 비활성화, 1 : 활성화)", example = "1", name = "vibration")
     private Integer vibration;
 
-    @JsonProperty("alarmTime")
+    @Schema(description = "알람시간(AM PM 시간)", example = "0800", name = "alarmTime")
     private String alarmTime;
 
-    @JsonProperty("timeOfDay")
+    @Schema(description = "AM, PM", example = "AM", name = "timeOfDay")
     private String timeOfDay;
 
-    @JsonProperty("alarmLocation")
+    @Schema(description = "알람지역목록", name = "alarmLocation")
     private List<AlarmLocationResponse> alarmLocation;
 
-    @JsonProperty("alarmWeek")
+    @Schema(description = "알람요일목록", name = "alarmWeek")
     private List<AlarmWeekResponse> alarmWeek;
 
 }

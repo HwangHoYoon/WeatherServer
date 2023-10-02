@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public enum TimeOfDay {
 
+    ALLDAY(1, "ALL", "종일"),
     MORINING(0, "AM","오전"),
-    AFTERNOON(1, "PM", "오후"),
-    ALLDAY(1, "ALL", "종일");
+    AFTERNOON(1, "PM", "오후");
 
     private Integer code;
 

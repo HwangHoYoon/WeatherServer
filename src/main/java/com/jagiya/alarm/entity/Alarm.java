@@ -84,6 +84,7 @@ public class Alarm {
                 .alarmTime(alarmTime)
                 .reminder(reminder)
                 .vibration(vibration)
+                .enabled(enabled)
                 .volume(volume)
                 .alarmSound(alarmSound);
     }
@@ -93,6 +94,7 @@ public class Alarm {
         reminder = alarmEditor.getReminder();
         vibration = alarmEditor.getVibration();
         volume = alarmEditor.getVolume();
+        enabled = alarmEditor.getEnabled();
         alarmSound = alarmEditor.getAlarmSound();
     }
 

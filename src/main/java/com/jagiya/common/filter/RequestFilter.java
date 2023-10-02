@@ -33,22 +33,23 @@ public class RequestFilter implements Filter {
         long start = System.currentTimeMillis();
         long end = System.currentTimeMillis();
 
-        if (requestWrapper.getRequestURI().indexOf("/api-docs/") == -1 && requestWrapper.getRequestURI().indexOf("/swagger-ui/") == -1) {
+        if (customRequestWrapper.getRequestURI().indexOf("/api-docs/") == -1 && customRequestWrapper.getRequestURI().indexOf("/swagger-ui/") == -1) {
             log.info("\n" +
                             "[REQUEST] {} - {} {} - {}\n" +
                             "Headers : {}\n" +
                             "Request : {}\n" +
                             "Response : {}\n",
-                    ((HttpServletRequest) requestWrapper).getMethod(),
-                    ((HttpServletRequest) requestWrapper).getRequestURI(),
+                    ((HttpServletRequest) customRequestWrapper).getMethod(),
+                    ((HttpServletRequest) customRequestWrapper).getRequestURI(),
                     responseWrapper.getStatus(),
                     (end - start) / 1000.0,
-                    getHeaders(requestWrapper),
-                    buildAccessLog(customRequestWrapper));
+                    getHeaders(customRequestWrapper),
+                    buildAccessLog(customRequestWrapper),
+                    getResponseBody(responseWrapper));
         } else {
-            log.info("[REQUEST] {} - {} {} - {}", ((HttpServletRequest) requestWrapper).getMethod(), ((HttpServletRequest) requestWrapper).getRequestURI(), responseWrapper.getStatus(), (end - start) / 1000.0);
+            log.info("[REQUEST] {} - {} {} - {}", ((HttpServletRequest) customRequestWrapper).getMethod(), ((HttpServletRequest) customRequestWrapper).getRequestURI(), responseWrapper.getStatus(), (end - start) / 1000.0);
+            getResponseBody(responseWrapper);
         }
-        getResponseBody(responseWrapper);
     }
 
     private Map getHeaders(HttpServletRequest request) {

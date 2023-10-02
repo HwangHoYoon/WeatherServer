@@ -26,6 +26,8 @@ public class QAlarmWeek extends EntityPathBase<AlarmWeek> {
 
     public final NumberPath<Long> alarmWeekId = createNumber("alarmWeekId", Long.class);
 
+    public final DateTimePath<java.util.Date> regDate = createDateTime("regDate", java.util.Date.class);
+
     public final QWeek week;
 
     public QAlarmWeek(String variable) {

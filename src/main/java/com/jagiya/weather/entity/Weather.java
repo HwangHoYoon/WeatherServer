@@ -2,6 +2,7 @@ package com.jagiya.weather.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jagiya.alarm.entity.AlarmEditor;
 import com.jagiya.location.entity.LocationGroup;
 import com.jagiya.weather.enums.WeatherCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -100,4 +101,28 @@ public class Weather {
         this.modifyDate = new Date(); // 현재 날짜와 시간으로 수정일 업데이트
     }
 
+    public WeatherEditor.WeatherEditorBuilder toEditor() {
+        return WeatherEditor.builder()
+                .pcp(pcp)
+                .pty(pty)
+                .tmx(tmx)
+                .tmp(tmp)
+                .pcp(pcp)
+                .tmn(tmn)
+                .sky(sky)
+                .baseDate(baseDate)
+                .baseTime(baseTime);
+    }
+
+    public void edit(WeatherEditor weatherEditor) {
+        this.pop = weatherEditor.getPop();
+        this.pty = weatherEditor.getPty();
+        this.tmx = weatherEditor.getTmx();
+        this.tmp = weatherEditor.getTmp();
+        this.pcp = weatherEditor.getPcp();
+        this.tmn = weatherEditor.getTmn();
+        this.sky = weatherEditor.getSky();
+        this.baseDate = weatherEditor.getBaseDate();
+        this.baseTime = weatherEditor.getBaseTime();
+    }
 }

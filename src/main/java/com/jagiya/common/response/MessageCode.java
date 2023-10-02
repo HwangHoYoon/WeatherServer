@@ -11,7 +11,11 @@ public enum MessageCode {
 
     SUCCESS_SAVE("SS", "정상적으로 저장되었습니다."),
 
-    FAIL_SAVE("FS", "저장에 실패하였습니다.");
+    SUCCESS_DELETE("SD", "정상적으로 삭제되었습니다."),
+
+    FAIL_SAVE("FS", "저장에 실패하였습니다."),
+
+    FAIL_DELETE("FD", "삭제에 실패하였습니다.");
 
     private static final MessageCode[] VALUES;
 

@@ -1,12 +1,12 @@
 package com.jagiya.common.config;
 
-import com.jagiya.common.exception.CommonException;
 import com.jagiya.common.exception.ExceptionCode;
+import com.jagiya.common.response.MessageCode;
 import com.jagiya.common.response.CommonResponse;
 import io.swagger.v3.core.converter.ModelConverters;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.*;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Configuration;
@@ -21,18 +21,16 @@ public class ApiDocsOperationCustomizer implements OperationCustomizer {
     @Override
     public Operation customize(Operation operation,
                                HandlerMethod handlerMethod) {
-        final Content content = operation.getResponses().get("200").getContent();
-
-        operation.getResponses().forEach((code, apiResponse) -> {
-            content.keySet().forEach(mediaTypeKey -> {
-                final MediaType mediaType = content.get(mediaTypeKey);
-                mediaType.schema(customizeSchema(code, mediaType.getSchema()));
-            });
+        ApiResponses apiResponses = operation.getResponses();
+        apiResponses.forEach((code, apiResponse) -> {
+            Content content = operation.getResponses().get(code).getContent();
+            if (content != null) {
+                content.keySet().forEach(mediaTypeKey -> {
+                    final MediaType mediaType = content.get(mediaTypeKey);
+                    mediaType.schema(customizeSchema(code, mediaType.getSchema()));
+                });
+            }
         });
-
-/*        operation.getResponses().forEach((s, apiResponse) -> {
-            final Content content = apiResponse.getContent();
-        });*/
         return operation;
     }
 
@@ -43,6 +41,7 @@ public class ApiDocsOperationCustomizer implements OperationCustomizer {
 
         String responseCode;
         String responseMessage;
+
         if (StringUtils.equals(code, String.valueOf(HttpStatus.OK.value()))) {
             responseCode = String.valueOf(HttpStatus.OK.value());
             responseMessage = HttpStatus.OK.getReasonPhrase();
@@ -51,10 +50,10 @@ public class ApiDocsOperationCustomizer implements OperationCustomizer {
             responseCode = exceptionCode.getCode();
             responseMessage = exceptionCode.getMessage();
         }
-
+        wrapperSchema.addProperties("data", objSchema);
         wrapperSchema.addProperty("code", new StringSchema()._default(responseCode));
         wrapperSchema.addProperty("message", new StringSchema()._default(responseMessage));
-        return  wrapperSchema.addProperties("data", objSchema);
+        return  wrapperSchema;
     }
 
 }

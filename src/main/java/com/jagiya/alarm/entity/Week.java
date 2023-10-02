@@ -1,5 +1,4 @@
-package com.jagiya.location.entity;
-
+package com.jagiya.alarm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,8 +10,8 @@ import org.hibernate.annotations.DynamicInsert;
 import java.util.Date;
 
 @Data
-@Entity(name = "LocationGroup")
-@Table(name = "LocationGroup")
+@Entity(name = "Week")
+@Table(name = "Week")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties()
 @DynamicInsert
@@ -22,24 +21,20 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "LocationGroup VO")
-public class LocationGroup {
+@Schema(description = "Week VO")
+public class Week {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "locationGroupId")
-    @Schema(description = "locationGroupId")
-    private Long locationGroupId;
+    @Column(name = "weekId")
+    @Schema(description = "weekId")
+    private Long weekId;
 
-    @Column(name = "latX")
-    @Schema(description = "X좌표")
-    private String latX;
-
-    @Column(name = "lonY")
-    @Schema(description = "Y좌표")
-    private String lonY;
+    @Column(name = "dayName")
+    @Schema(description = "요일이름")
+    private String dayName;
 
     @Column(name = "regDate")
     @Schema(description = "등록일")
     private Date regDate;
-
 }

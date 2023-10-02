@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Date;
+
 @Data
 @Entity(name = "Location")
 @Table(name = "Location")
@@ -54,7 +56,7 @@ public class Location {
 
     @Column(name = "regDate")
     @Schema(description = "등록일")
-    private String regDate;
+    private Date regDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationGroupId")

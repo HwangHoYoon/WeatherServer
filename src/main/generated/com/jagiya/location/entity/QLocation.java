@@ -36,7 +36,7 @@ public class QLocation extends EntityPathBase<Location> {
 
     public final StringPath lon = createString("lon");
 
-    public final StringPath regDate = createString("regDate");
+    public final DateTimePath<java.util.Date> regDate = createDateTime("regDate", java.util.Date.class);
 
     public final StringPath regionCd = createString("regionCd");
 

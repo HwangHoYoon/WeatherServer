@@ -45,7 +45,7 @@ public class AlarmService {
 
     private final WeatherService weatherService;
 
-    public List<AlarmResponse> getAlarmList(Long userId) {
+    public List<AlarmResponse> selectAlarmList(Long userId) {
         List<Alarm> alarmList = alarmRepository.findByUserUserId(userId);
 
         List<AlarmResponse> alarmResponseList = new ArrayList<>();
@@ -379,7 +379,7 @@ public class AlarmService {
                 alarmLocationRespository.deleteById(alarmLocationId);
             }
 
-            // 지역등록 및 지역시간 등록 및 삭제
+            // 지역등록 및 지역시간 등록 및 수정 삭제
             for (AlarmLocationRequest alarmLocationRequest : alarmLocationRequestList) {
                 AlarmLocation alarmLocation;
                 if (alarmLocationRequest.getAlarmLocationId() == null) {
@@ -404,11 +404,30 @@ public class AlarmService {
                             .build();
                     alarmLocationRespository.save(alarmLocation);
                 } else {
-                    alarmLocation = AlarmLocation.builder()
-                            .alarmLocationId(alarmLocationRequest.getAlarmLocationId())
-                            .build();
-                }
+                    // 장소 변경 및 시간만 변경했을 경우
+                    alarmLocation = alarmLocationRespository.findById(alarmLocationRequest.getAlarmLocationId()).orElseThrow(() -> new CommonException("알람지역정보가 올바르지 않습니다.", "334"));
 
+                    String regionCd = alarmLocationRequest.getRegionCd();
+                    String dbRegionCd = alarmLocation.getLocation().getRegionCd();
+
+                    if (!StringUtils.equals(regionCd, dbRegionCd)) {
+                        String cityDo = alarmLocationRequest.getCityDo();
+                        String guGun = alarmLocationRequest.getGuGun();
+                        String eupMyun = alarmLocationRequest.getEupMyun();
+
+                        LocationRequest locationRequest = new LocationRequest();
+                        locationRequest.setRegionCd(regionCd);
+                        locationRequest.setCityDo(cityDo);
+                        locationRequest.setGuGun(guGun);
+                        locationRequest.setEupMyun(eupMyun);
+
+                        Location location = locationService.selectInsertLocation(locationRequest);
+
+                        AlarmLocationEditor.AlarmLocationEditorBuilder editorBuilder = alarmLocation.toEditor();
+                        AlarmLocationEditor alarmLocationEditor = editorBuilder.alarm(alarm).location(location).build();
+                        alarmLocation.edit(alarmLocationEditor);
+                    }
+                }
 
                 if (alarmLocationRequest.getAlarmLocationId() == null) {
                     // 지역 시간 저장
@@ -702,5 +721,85 @@ public class AlarmService {
                 }
             }
         }
+    }
+
+    public AlarmDetailResponse selectAlarmDetail(Long alarmId) {
+        AlarmDetailResponse alarmDetailResponse = new AlarmDetailResponse();
+        if (alarmId != null) {
+            Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new CommonException("알람정보가 올바르지 않습니다.", "443"));
+
+            // 요일목록
+            List<AlarmWeekResponse> alarmWeekResponseList = new ArrayList<>();
+            List<AlarmWeek> alarmWeekList = alarmWeekRepository.findByAlarmAlarmId(alarmId);
+            if (alarmWeekList != null && alarmWeekList.size() > 0) {
+                for (AlarmWeek alarmWeek : alarmWeekList) {
+                    AlarmWeekResponse alarmWeekResponse = AlarmWeekResponse.builder()
+                            .alarmWeekId(alarmWeek.getAlarmWeekId())
+                            .weekId(alarmWeek.getWeek().getWeekId())
+                            .build();
+                    alarmWeekResponseList.add(alarmWeekResponse);
+                }
+            }
+
+            alarmDetailResponse.setAlarmId(alarm.getAlarmId());
+            alarmDetailResponse.setAlarmSoundId(alarm.getAlarmSound().getAlarmSoundId());
+
+            String asisTime = alarm.getAlarmTime();
+            String timeOfDay = getTimeOfDay(asisTime);
+            String alarmTime = getTime(asisTime, "HHmm", "hhmm");
+            alarmDetailResponse.setTimeOfDay(timeOfDay);
+            alarmDetailResponse.setAlarmTime(alarmTime);
+
+            alarmDetailResponse.setReminder(alarm.getReminder());
+            alarmDetailResponse.setEnabled(alarm.getEnabled());
+            alarmDetailResponse.setUserId(alarm.getUser().getUserId());
+            alarmDetailResponse.setVibration(alarm.getVibration());
+            alarmDetailResponse.setVolume(alarm.getVolume());
+
+
+            List<AlarmLocation> alarmLocationList = alarmLocationRespository.findByAlarmAlarmIdOrderByAlarmLocationId(alarmId);
+            List<AlarmLocationDetailResponse> alarmLocationDetailResponseList = new ArrayList<>();
+
+            // 주소 목록
+            if (alarmLocationList != null && alarmLocationList.size() > 0) {
+                for (AlarmLocation alarmLocation : alarmLocationList) {
+
+                    Long alarmLocationId = alarmLocation.getAlarmLocationId();
+                    String cityDo = alarmLocation.getLocation().getCityDo();
+                    String guGun = alarmLocation.getLocation().getGuGun();
+                    String eupMyun = alarmLocation.getLocation().getEupMyun();
+                    String regionCd = alarmLocation.getLocation().getRegionCd();
+
+                    // 지역 시간 조회
+                    List<AlarmLocationTime> alarmLocationTimeList = alarmLocationTimeRespository.findByAlarmLocationAlarmLocationIdOrderByAlarmLocationTimeId(alarmLocationId);
+                    List<AlarmLocationTimeDetailResponse> alarmLocationTimeDetailResponseList = new ArrayList<>();
+                    for (AlarmLocationTime alarmLocationTime : alarmLocationTimeList) {
+                        AlarmLocationTimeDetailResponse alarmLocationTimeDetailResponse = new AlarmLocationTimeDetailResponse();
+                        alarmLocationTimeDetailResponse.setAlarmLocationTimeId(alarmLocationTime.getAlarmLocationTimeId());
+                        alarmLocationTimeDetailResponse.setLocationTime(alarmLocationTime.getLocationTime());
+                        alarmLocationTimeDetailResponseList.add(alarmLocationTimeDetailResponse);
+                    }
+
+                    AlarmLocationDetailResponse alarmLocationResponse = AlarmLocationDetailResponse.builder()
+                            .cityDo(cityDo)
+                            .guGun(guGun)
+                            .eupMyun(eupMyun)
+                            .regionCd(regionCd)
+                            .alarmLocationId(alarmLocation.getAlarmLocationId())
+                            .alarmLocationTimeDetail(alarmLocationTimeDetailResponseList)
+                            .build();
+
+                    alarmLocationDetailResponseList.add(alarmLocationResponse);
+                }
+            }
+
+            alarmDetailResponse.setAlarmLocation(alarmLocationDetailResponseList);
+            alarmDetailResponse.setAlarmWeek(alarmWeekResponseList);
+
+        } else {
+            throw new CommonException("알람정보가 올바르지 않습니다.", "444");
+        }
+
+        return alarmDetailResponse;
     }
 }

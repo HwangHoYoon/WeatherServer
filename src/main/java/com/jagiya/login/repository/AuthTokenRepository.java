@@ -1,6 +1,6 @@
-package com.jagiya.auth.repository;
+package com.jagiya.login.repository;
 
-import com.jagiya.auth.entity.Token;
+import com.jagiya.login.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

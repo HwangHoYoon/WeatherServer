@@ -93,6 +93,16 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+task copyGitSubmodule(type: Copy) {
+	from './server-config'
+	include '*.yml'
+	into './src/main/resources'
+}
+
+processResources {
+	dependsOn copyGitSubmodule
+}
+
 ext {
 	set('springCloudVersion', "2021.0.5")
 }

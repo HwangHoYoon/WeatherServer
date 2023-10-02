@@ -2,7 +2,7 @@ package com.jagiya.main.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jagiya.auth.entity.UsersEditor;
+import com.jagiya.login.entity.UsersEditor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -121,23 +121,11 @@ public class Users {
     public UsersEditor.UsersEditorBuilder toEditor() {
         return UsersEditor.builder()
                 .email(email)
-                .nickname(nickname)
-                .username(username)
-                .snsProfile(snsProfile)
-                .birthDay(birthday)
-                .gender(gender)
-                .snsConnectDate(snsConnectDate)
                 .modifyDate(modifyDate);
     }
 
     public void edit(UsersEditor usersEditor) {
         email = usersEditor.getEmail();
-        nickname = usersEditor.getNickname();
-        username = usersEditor.getUsername();
-        snsProfile = usersEditor.getSnsProfile();
-        birthday = usersEditor.getBirthDay();
-        gender = usersEditor.getGender();
-        snsConnectDate = usersEditor.getSnsConnectDate();
         modifyDate = usersEditor.getModifyDate();
     }
 

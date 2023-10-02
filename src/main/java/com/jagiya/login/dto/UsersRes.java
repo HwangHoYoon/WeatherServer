@@ -1,11 +1,8 @@
-package com.jagiya.auth.dto;
+package com.jagiya.login.dto;
 
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Date;
 
 @Getter
 @ToString

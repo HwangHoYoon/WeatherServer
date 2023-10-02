@@ -1,4 +1,4 @@
-package com.jagiya.auth.entity;
+package com.jagiya.login.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

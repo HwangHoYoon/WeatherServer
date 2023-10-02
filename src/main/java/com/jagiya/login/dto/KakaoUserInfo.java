@@ -1,8 +1,8 @@
-package com.jagiya.auth.dto;
+package com.jagiya.login.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jagiya.auth.enums.LoginType;
+import com.jagiya.login.enums.LoginType;
 import lombok.Getter;
 
 import java.text.ParseException;

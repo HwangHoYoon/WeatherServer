@@ -11,6 +11,7 @@ import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,18 +29,22 @@ public class RequestFilter implements Filter {
         chain.doFilter(requestWrapper, responseWrapper);
         long end = System.currentTimeMillis();
 
-        log.info("\n" +
-                        "[REQUEST] {} - {} {} - {}\n" +
-                        "Headers : {}\n" +
-                        "Request : {}\n" +
-                        "Response : {}\n",
-                ((HttpServletRequest) request).getMethod(),
-                ((HttpServletRequest) request).getRequestURI(),
-                responseWrapper.getStatus(),
-                (end - start) / 1000.0,
-                getHeaders((HttpServletRequest) request),
-                buildAccessLog(customRequestWrapper),
-                getResponseBody(responseWrapper));
+        if (requestWrapper.getRequestURI().indexOf("/api-docs/") == -1 && requestWrapper.getRequestURI().indexOf("/swagger-ui/") == -1) {
+            log.info("\n" +
+                            "[REQUEST] {} - {} {} - {}\n" +
+                            "Headers : {}\n" +
+                            "Request : {}\n" +
+                            "Response : {}\n",
+                    ((HttpServletRequest) request).getMethod(),
+                    ((HttpServletRequest) request).getRequestURI(),
+                    responseWrapper.getStatus(),
+                    (end - start) / 1000.0,
+                    getHeaders((HttpServletRequest) request),
+                    buildAccessLog(customRequestWrapper));
+        } else {
+            log.info("[REQUEST] {} - {} {} - {}", ((HttpServletRequest) request).getMethod(), ((HttpServletRequest) request).getRequestURI(), responseWrapper.getStatus(), (end - start) / 1000.0);
+        }
+        getResponseBody(responseWrapper);
     }
 
     private Map getHeaders(HttpServletRequest request) {
@@ -69,50 +74,55 @@ public class RequestFilter implements Filter {
 
     private String buildAccessLog(CustomRequestWrapper customRequestWrapper) {
 
-        String requestURL = getRequestURL(customRequestWrapper);
-        String remoteAddr = getRemoteAddr(customRequestWrapper);
-        String method = getMethod(customRequestWrapper);
-        String queryString = getQueryString(customRequestWrapper);
-        String requestBody = getRequestBody(customRequestWrapper);
+        try {
+            String requestURL = getRequestURL(customRequestWrapper);
+            String remoteAddr = getRemoteAddr(customRequestWrapper);
+            String method = getMethod(customRequestWrapper);
+            String queryString = getQueryString(customRequestWrapper);
+            String requestBody = getRequestBody(customRequestWrapper);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        if (requestURL != null) {
-            sb
-                    .append("\"").append("requestURL").append("\"")
-                    .append(":")
-                    .append("\"").append(requestURL).append("\"");
+            StringBuilder sb = new StringBuilder();
+            sb.append("{");
+            if (requestURL != null) {
+                sb
+                        .append("\"").append("requestURL").append("\"")
+                        .append(":")
+                        .append("\"").append(requestURL).append("\"");
+            }
+            if (remoteAddr != null) {
+                sb
+                        .append(",")
+                        .append("\"").append("remoteAddr").append("\"")
+                        .append(":")
+                        .append("\"").append(remoteAddr).append("\"");
+            }
+            if (method != null) {
+                sb
+                        .append(",")
+                        .append("\"").append("method").append("\"")
+                        .append(":")
+                        .append("\"").append(method).append("\"");
+            }
+            if (queryString != null) {
+                sb
+                        .append(",")
+                        .append("\"").append("queryString").append("\"")
+                        .append(":")
+                        .append("\"").append(queryString).append("\"");
+            }
+            if (requestBody != null && requestBody.length() > 0) {
+                sb
+                        .append(",")
+                        .append("\"").append("body").append("\"")
+                        .append(":")
+                        .append("\"").append(requestBody).append("\"");
+            }
+            sb.append("}");
+            return sb.toString();
+        } catch (Exception e) {
+            log.error("buildAccessLog Exception {}", e);
         }
-        if (remoteAddr != null) {
-            sb
-                    .append(",")
-                    .append("\"").append("remoteAddr").append("\"")
-                    .append(":")
-                    .append("\"").append(remoteAddr).append("\"");
-        }
-        if (method != null) {
-            sb
-                    .append(",")
-                    .append("\"").append("method").append("\"")
-                    .append(":")
-                    .append("\"").append(method).append("\"");
-        }
-        if (queryString != null) {
-            sb
-                    .append(",")
-                    .append("\"").append("queryString").append("\"")
-                    .append(":")
-                    .append("\"").append(queryString).append("\"");
-        }
-        if (requestBody != null && requestBody.length() > 0) {
-            sb
-                    .append(",")
-                    .append("\"").append("body").append("\"")
-                    .append(":")
-                    .append("\"").append(requestBody).append("\"");
-        }
-        sb.append("}");
-        return sb.toString();
+        return null;
     }
 
     private String getRequestBody(CustomRequestWrapper customRequestWrapper) {
@@ -132,10 +142,10 @@ public class RequestFilter implements Filter {
         return content;
     }
 
-    private String getQueryString(CustomRequestWrapper customRequestWrapper) {
+    private String getQueryString(CustomRequestWrapper customRequestWrapper) throws UnsupportedEncodingException {
         String queryString = null;
         if (customRequestWrapper.getQueryString() != null) {
-            queryString = customRequestWrapper.getQueryString();
+            queryString = URLDecoder.decode(customRequestWrapper.getQueryString(), "UTF-8");
         }
         return queryString;
     }
@@ -145,7 +155,7 @@ public class RequestFilter implements Filter {
     }
 
     private String getRemoteAddr(CustomRequestWrapper customRequestWrapper) {
-        return customRequestWrapper.getRemoteAddr();
+        return customRequestWrapper.getHeader("X-Forwarded-For") == null ? customRequestWrapper.getRemoteAddr() : customRequestWrapper.getHeader("X-Forwarded-For");
     }
 
     private String getRequestURL(CustomRequestWrapper customRequestWrapper) {

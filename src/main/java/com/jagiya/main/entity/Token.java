@@ -2,7 +2,7 @@ package com.jagiya.main.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jagiya.auth.entity.UsersEditor;
+//import com.jagiya.auth.entity.UsersEditor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 @Data
-@Entity(name = "Token")
+@Entity(name = "LoginToken")
 @Table(name = "Token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties()

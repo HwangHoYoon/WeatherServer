@@ -7,6 +7,7 @@ import com.jagiya.login.repository.LoginRepository;
 import com.jagiya.main.dto.member.UserRes;
 import com.jagiya.main.service.inf.MemberInfoService;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,24 @@ import java.util.Optional;
 public class MemberInfoServiceImpl implements MemberInfoService {
 
     private final LoginRepository usersRepository;
+
+    @Transactional
     public UserRes memberDelete(String snsId, Integer snsType) {
 
-        Optional<User> usersInfo = Optional.ofNullable(usersRepository.findBySnsTypeAndSnsId(snsType, snsId).orElseThrow(() -> new NullPointerException("회원이 존재하지 않습니다.")));
+        User usersInfo = usersRepository.findBySnsTypeAndSnsId(snsType, snsId).orElseThrow(() -> new NullPointerException("회원이 존재하지 않습니다."));
 
-        User usersInfoRst;
+        usersInfo.setDeleteFlag(1);
+        usersInfo.setDeleteDate(new Date());
 
-        User user = User.builder()
-                .snsId(usersInfo.get().getSnsId())
-                .deleteFlag(1)
-                .deleteDate(new Date())
-                .build();
-            usersInfoRst = usersRepository.save(user);
 
         return UserRes.builder()
-                .userId(usersInfoRst.getUserId())
-                .snsId(usersInfoRst.getSnsId())
-                .email(usersInfoRst.getEmail())
-                .name(usersInfoRst.getName())
-                .snsName(LoginType.getLoginTypeName(usersInfoRst.getSnsType()))
-                .deleteFlag(user.getDeleteFlag())
-                .deleteDate(user.getDeleteDate())
+                .userId(usersInfo.getUserId())
+                .snsId(usersInfo.getSnsId())
+                .email(usersInfo.getEmail())
+                .name(usersInfo.getName())
+                .snsName(LoginType.getLoginTypeName(usersInfo.getSnsType()))
+                .deleteFlag(usersInfo.getDeleteFlag())
+                .deleteDate(usersInfo.getDeleteDate())
                 .build();
     }
 

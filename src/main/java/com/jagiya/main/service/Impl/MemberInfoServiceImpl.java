@@ -33,6 +33,7 @@ public class MemberInfoServiceImpl implements MemberInfoService {
 
             usersInfo.setDeleteFlag(1);
             usersInfo.setDeleteDate(new Date());
+            usersInfo.setModifyDate(new Date());
 
 
             return UserRes.builder()

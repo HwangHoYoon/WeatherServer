@@ -2,6 +2,12 @@ package com.jagiya.main.service.Impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagiya.main.dto.login.AppleDTO;
+import com.jagiya.main.dto.login.MsgEntity;
+import com.jagiya.main.entity.Token;
+import com.jagiya.main.entity.Users;
+import com.jagiya.main.repository.TokenRepository;
+import com.jagiya.main.repository.UsersRepository;
+import com.jagiya.main.service.inf.AppleService;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -26,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.management.openmbean.InvalidKeyException;
+import java.beans.Transient;
 import java.io.*;
 import java.net.URL;
 import java.security.KeyFactory;
@@ -36,7 +43,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
-public class AppleService {
+public class AppleServiceImpl implements AppleService {
 
 
     @Value("${apple.team.id}")
@@ -54,8 +61,13 @@ public class AppleService {
     @Value("${apple.key.path}")
     private String APPLE_KEY_PATH;
 
+    private final UsersRepository usersRepository;
+
+    private final TokenRepository tokenRepository;
+
     private final static String APPLE_AUTH_URL = "https://appleid.apple.com";
 
+    @Override
     public String getAppleLogin() {
         return APPLE_AUTH_URL + "/auth/authorize"
                 + "?client_id=" + APPLE_CLIENT_ID
@@ -67,7 +79,7 @@ public class AppleService {
 
 
 
-
+    @Override
     public AppleDTO getAppleInfo(String code) throws Exception {
         if (code == null) throw new Exception("Failed get authorization code");
 
@@ -121,6 +133,7 @@ public class AppleService {
                 .email(email).build();
     }
 
+    /** private **/
     private String createClientSecret() throws Exception {
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES256).keyID(APPLE_LOGIN_KEY).build();
         JWTClaimsSet claimsSet = new JWTClaimsSet();
@@ -195,6 +208,51 @@ public class AppleService {
         }
 
         return content;
+    }
+
+    @Override
+    @Transient
+    public void Save(MsgEntity msgEntity) throws Exception{
+
+        Users users = Users.builder()
+                        .username("test")
+                        .nickname("testNickName")
+                        .email(msgEntity.getResult().getEmail())
+                        .snsType(1)
+                        .snsName("kakao")
+                        .snsProfile("")
+                        .gender("")
+                        .uuid("")
+                        .ci("")
+                        .deleteFlag(1)
+                        .agreesFalg(1)
+                        .isAdmin(1)
+                        .birthday(new Date())
+                        .ciDate(new Date())
+                        .snsConnectDate(new Date())
+                        .regDate(new Date())
+                        .agreesDate(new Date())
+                        .id(Long.valueOf(msgEntity.getResult().getId()))
+                        .build();
+
+        usersRepository.save(users);
+
+
+        Token token = Token.builder()
+                                .users(users)
+                                .tokenType("")
+                                .accessToken(msgEntity.getResult().getToken())
+                                .idToken("")
+                                .refreshToken("")
+                                .scope("")
+                                .regDate(new Date())
+                                .build();
+
+        tokenRepository.save(token);
+
+
+
+
     }
 
 

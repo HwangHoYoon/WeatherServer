@@ -10,6 +10,8 @@ import com.jagiya.location.repository.LocationRepository;
 import com.jagiya.location.request.GpsTransfer;
 import com.jagiya.location.request.LocationRequest;
 import com.jagiya.location.response.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -182,45 +184,22 @@ public class LocationService {
         Map<String, LocationResponse> groupedData = new HashMap<>();
 
         for (LocationData dataItem : locationDataList) {
-            String admCd = dataItem.getAdmCd();
+            String regionCd = dataItem.getAdmCd();
 
-            LocationResponse locationResponse = groupedData.getOrDefault(admCd, new LocationResponse());
+            LocationResponse locationResponse = groupedData.getOrDefault(regionCd, new LocationResponse());
 
-            if (StringUtils.isBlank(locationResponse.getAdmCd())) {
-                String siNm = getSidoShortName(dataItem.getSiNm());
-                String sggNm = dataItem.getSggNm();
-                String emdNm = dataItem.getEmdNm();
+            if (StringUtils.isBlank(locationResponse.getRegionCd())) {
+                String cityDo = getSidoShortName(dataItem.getSiNm());
+                String guGun = dataItem.getSggNm();
+                String eupMyun = dataItem.getEmdNm();
 
-                locationResponse.setAdmCd(admCd);
+                locationResponse.setRegionCd(regionCd);
 
-                locationResponse.setSiNm(siNm);
-                locationResponse.setSggNm(sggNm);
-                locationResponse.setEmdNm(emdNm);
+                locationResponse.setCityDo(cityDo);
+                locationResponse.setGuGun(guGun);
+                locationResponse.setEupMyun(eupMyun);
 
-                GeocodingApiData apiData = selectGeocoding(siNm, sggNm, emdNm);
-
-                if (apiData != null) {
-                    String lat = apiData.getLat();
-                    String lon = apiData.getLon();
-                    try {
-                        if (StringUtils.isNotBlank(lat) && StringUtils.isNotBlank(lon)) {
-                            GpsTransfer gpsTransfer = new GpsTransfer(Double.parseDouble(lat), Double.parseDouble(lon));
-                            gpsTransfer.transfer(gpsTransfer, 0);
-                            String latX = String.valueOf(gpsTransfer.getxLat());
-                            String lonY = String.valueOf(gpsTransfer.getyLon());
-
-                            locationResponse.setLat(lat);
-                            locationResponse.setLon(lon);
-                            locationResponse.setLatX(latX);
-                            locationResponse.setLonY(lonY);
-                        } else {
-                            log.error("위경도 null : {} {}", lat, lon);
-                        }
-                    } catch (Exception e) {
-                        log.error("위경도 좌표 변환 실패 : {} {}", lat, lon);
-                    }
-                }
-                groupedData.put(admCd, locationResponse);
+                groupedData.put(regionCd, locationResponse);
             }
         }
 

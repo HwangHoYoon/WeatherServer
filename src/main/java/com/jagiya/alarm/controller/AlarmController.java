@@ -3,10 +3,7 @@ package com.jagiya.alarm.controller;
 import com.jagiya.alarm.request.AlarmDeleteRequest;
 import com.jagiya.alarm.request.AlarmEnabledRequest;
 import com.jagiya.alarm.request.AlarmRequest;
-import com.jagiya.alarm.response.AlarmDetailResponse;
-import com.jagiya.alarm.response.AlarmLocationNotiResponse;
-import com.jagiya.alarm.response.AlarmLocationWeatherResponse;
-import com.jagiya.alarm.response.AlarmResponse;
+import com.jagiya.alarm.response.*;
 import com.jagiya.alarm.service.AlarmService;
 import com.jagiya.common.response.CommonMsgResponse;
 import com.jagiya.common.response.MessageCode;
@@ -97,4 +94,13 @@ public class AlarmController {
     public List<AlarmLocationWeatherResponse> getAlarmLocationWeatherDetail(@Schema(description = "알람ID", example = "1", name = "alarmId") Long alarmId) {
         return alarmService.selectAlarmLocationWeatherDetail(alarmId);
     }
+
+    @Operation(summary = "알람소리리스트 조회", description = "알람소리리스트 조회")
+    @GetMapping("/getAlarmSoundList")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
+    )
+    public List<AlarmSoundResponse> getAlarmSoundList() throws Exception {
+        return alarmService.selectAlarmSoundList();
+    }
+
 }

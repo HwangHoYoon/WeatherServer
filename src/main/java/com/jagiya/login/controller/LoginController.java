@@ -31,11 +31,26 @@ public class LoginController {
         }
     )
     public UserRes login(@Schema(description = "소셜 계정 ID (비회원은 디바이스 ID)", example = "example1", name = "snsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String snsId,
-                         @Schema(description = "이름", example = "홍길동", name = "name") @NotBlank(message = "이름을 입력해주세요.") String name,
+                         @Schema(description = "이름", example = "홍길동", name = "name") @Nullable String name,
                          @Schema(description = "이메일 (선택 동의했을 경우)", example = "example@naver.com", name = "email") @Nullable String email,
                          @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
     ) {
         return loginService.login(snsId, name, email, snsType);
+    }
+
+    @Operation(summary = "회원전환 로그인", description = "회원전환 로그인")
+    @GetMapping("/loginAndUserTransform ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    }
+    )
+    public UserRes loginAndUserTransform(@Schema(description = "비회원 계정 ID", example = "example1", name = "asisSnsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String asisSnsId,
+                         @Schema(description = "소셜계정 ID", example = "example2", name = "tobeSnsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String tobeSnsId,
+                         @Schema(description = "이름", example = "홍길동", name = "name") @Nullable String name,
+                         @Schema(description = "이메일 (선택 동의했을 경우)", example = "example@naver.com", name = "email") @Nullable String email,
+                         @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
+    ) {
+        return loginService.loginAndUserTransform(asisSnsId, tobeSnsId, name, email, snsType);
     }
 
 }

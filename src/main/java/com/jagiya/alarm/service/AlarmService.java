@@ -802,4 +802,10 @@ public class AlarmService {
 
         return alarmDetailResponse;
     }
+
+    @Transactional
+    public void updateAlarmUserId(Long asisUserId, Long tobeUserId) {
+        List<Alarm> alarmList = alarmRepository.findByUserUserId(asisUserId);
+        alarmList.stream().forEach(alarm -> alarm.setAlarmId(tobeUserId));
+    }
 }

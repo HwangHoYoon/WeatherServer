@@ -29,9 +29,9 @@ public class AlarmSound {
     @Schema(description = "alarmSoundId")
     private Long alarmSoundId;
 
-    @Column(name = "name")
+    @Column(name = "alarmSoundName")
     @Schema(description = "알람소리 이름")
-    private String name;
+    private String alarmSoundName;
 
     @Column(name = "fileName")
     @Schema(description = "파일이름")

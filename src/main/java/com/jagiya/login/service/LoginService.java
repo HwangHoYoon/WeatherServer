@@ -12,7 +12,6 @@ import com.jagiya.login.enums.LoginType;
 import com.jagiya.login.response.UserRes;
 import com.jagiya.main.entity.Users;
 import com.jagiya.main.exception.MemberNotFoundException;
-import com.jagiya.main.service.inf.MemberInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,6 @@ import java.util.Optional;
 public class LoginService {
 
     private final LoginRepository usersRepository;
-    private final MemberInfoService memberInfoService;
 
     public UserRes login(String snsId, String name, String email, Integer snsType) {
         Optional<User> usersInfo = usersRepository.findBySnsTypeAndSnsId(snsType, snsId);

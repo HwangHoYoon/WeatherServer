@@ -6,8 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(name = "alarmRequest")
-public class AlarmRequest {
+@Schema(name = "AlarmUpdateRequest")
+public class AlarmUpdateRequest {
 
     @Schema(description = "유저ID", example = "1", name = "userId")
     private Long userId;

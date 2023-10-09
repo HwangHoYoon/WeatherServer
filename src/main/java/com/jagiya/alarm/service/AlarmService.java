@@ -10,7 +10,7 @@ import com.jagiya.location.entity.Location;
 import com.jagiya.location.entity.LocationGroup;
 import com.jagiya.location.request.LocationRequest;
 import com.jagiya.location.service.LocationService;
-import com.jagiya.login.entity.User;
+import com.jagiya.user.entity.User;
 import com.jagiya.weather.entity.Weather;
 import com.jagiya.weather.service.WeatherService;
 import jakarta.transaction.Transactional;
@@ -197,23 +197,23 @@ public class AlarmService {
     }
 
     @Transactional
-    public void insertAlarm(AlarmRequest alarmRequest) {
+    public void insertAlarm(AlarmInsertRequest alarmInsertRequest) {
         // 알람 저장
-        Long userId = alarmRequest.getUserId();
+        Long userId = alarmInsertRequest.getUserId();
         User user = User.builder()
                 .userId(userId)
                 .build();
 
-        Long alarmSoundId = alarmRequest.getAlarmSoundId();
-        AlarmSound alarmSound = AlarmSound.builder()
+        Long alarmSoundId = alarmInsertRequest.getAlarmSoundId();
+/*        AlarmSound alarmSound = AlarmSound.builder()
                 .alarmSoundId(alarmSoundId)
-                .build();
+                .build();*/
 
-        String reminder = alarmRequest.getReminder();
-        Integer vibration = alarmRequest.getVibration();
-        Integer volume = alarmRequest.getVolume();
-        String alarmTime = alarmRequest.getAlarmTime();
-        String timeOfDay = alarmRequest.getTimeOfDay();
+        String reminder = alarmInsertRequest.getReminder();
+        Integer vibration = alarmInsertRequest.getVibration();
+        Integer volume = alarmInsertRequest.getVolume();
+        String alarmTime = alarmInsertRequest.getAlarmTime();
+        String timeOfDay = alarmInsertRequest.getTimeOfDay();
         String time = getTime(alarmTime, timeOfDay);
 
         Alarm alarm = Alarm.builder()
@@ -221,13 +221,13 @@ public class AlarmService {
                     .reminder(reminder)
                     .vibration(vibration)
                     .volume(volume)
-                    .alarmSound(alarmSound)
+                    .alarmSoundId(alarmSoundId)
                     .user(user)
                     .build();
             alarmRepository.save(alarm);
 
         // 요일 저장 기존 요일 삭제 후 등록
-        List<AlarmWeekRequest> weekList = alarmRequest.getWeekList();
+        List<AlarmWeekRequest> weekList = alarmInsertRequest.getWeekList();
         if (weekList != null && weekList.size() > 0) {
             Long alarmId = alarm.getAlarmId();
             alarmWeekRepository.deleteByAlarmAlarmId(alarmId);
@@ -245,7 +245,7 @@ public class AlarmService {
         }
 
         // 지역 저장
-        List<AlarmLocationRequest> AlarmLocationList = alarmRequest.getAlarmLocationList();
+        List<AlarmLocationRequest> AlarmLocationList = alarmInsertRequest.getAlarmLocationList();
         if (AlarmLocationList != null && AlarmLocationList.size() > 0) {
             for (AlarmLocationRequest alarmLocationRequest : AlarmLocationList) {
                 String regionCd = alarmLocationRequest.getRegionCd();
@@ -300,20 +300,20 @@ public class AlarmService {
     }
 
     @Transactional
-    public void updateAlarm(AlarmRequest alarmRequest) {
+    public void updateAlarm(AlarmUpdateRequest alarmUpdateRequest) {
         // 알람 수정
-        Long alarmSoundId = alarmRequest.getAlarmSoundId();
-        AlarmSound alarmSound = AlarmSound.builder()
+        Long alarmSoundId = alarmUpdateRequest.getAlarmSoundId();
+/*        AlarmSound alarmSound = AlarmSound.builder()
                 .alarmSoundId(alarmSoundId)
-                .build();
+                .build();*/
 
-        String reminder = alarmRequest.getReminder();
-        Integer vibration = alarmRequest.getVibration();
-        Integer volume = alarmRequest.getVolume();
-        String alarmTime = alarmRequest.getAlarmTime();
-        String timeOfDay = alarmRequest.getTimeOfDay();
+        String reminder = alarmUpdateRequest.getReminder();
+        Integer vibration = alarmUpdateRequest.getVibration();
+        Integer volume = alarmUpdateRequest.getVolume();
+        String alarmTime = alarmUpdateRequest.getAlarmTime();
+        String timeOfDay = alarmUpdateRequest.getTimeOfDay();
         String time = getTime(alarmTime, timeOfDay);
-        Long alarmId = alarmRequest.getAlarmId();
+        Long alarmId = alarmUpdateRequest.getAlarmId();
         Alarm alarm;
         if (alarmId != null) {
             Optional<Alarm> alarmInfo = alarmRepository.findById(alarmId);
@@ -324,7 +324,7 @@ public class AlarmService {
                         .reminder(reminder)
                         .vibration(vibration)
                         .volume(volume)
-                        .alarmSound(alarmSound)
+                        .alarmSoundId(alarmSoundId)
                         .build();
                 alarm.edit(alarmEditor);
             } else {
@@ -335,7 +335,7 @@ public class AlarmService {
         }
 
         // 요일 저장
-        List<AlarmWeekRequest> weekList = alarmRequest.getWeekList();
+        List<AlarmWeekRequest> weekList = alarmUpdateRequest.getWeekList();
 
         // 비교를 위해 기존값 조회
         List<AlarmWeek> alarmWeekList = alarmWeekRepository.findByAlarmAlarmId(alarmId);
@@ -365,7 +365,7 @@ public class AlarmService {
         }
 
         // 지역 등록 및 삭제
-        List<AlarmLocationRequest> alarmLocationRequestList = alarmRequest.getAlarmLocationList();
+        List<AlarmLocationRequest> alarmLocationRequestList = alarmUpdateRequest.getAlarmLocationList();
         if (alarmLocationRequestList != null && alarmLocationRequestList.size() > 0) {
             // 비교를 위해 기존 값 조회
             List<AlarmLocation> alarmLocationList = alarmLocationRespository.findByAlarmAlarmIdOrderByAlarmLocationId(alarmId);
@@ -742,7 +742,7 @@ public class AlarmService {
             }
 
             alarmDetailResponse.setAlarmId(alarm.getAlarmId());
-            alarmDetailResponse.setAlarmSoundId(alarm.getAlarmSound().getAlarmSoundId());
+            alarmDetailResponse.setAlarmSoundId(alarm.getAlarmSoundId());
 
             String asisTime = alarm.getAlarmTime();
             String timeOfDay = getTimeOfDay(asisTime);
@@ -815,5 +815,11 @@ public class AlarmService {
         });
 
         return alarmSoundList;
+    }
+
+    @Transactional
+    public void updateAlarmUserId(Long asisUserId, Long tobeUserId) {
+        List<Alarm> alarmList = alarmRepository.findByUserUserId(asisUserId);
+        alarmList.stream().forEach(alarm -> alarm.setUser(User.builder().userId(tobeUserId).build()));
     }
 }

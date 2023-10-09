@@ -2,7 +2,8 @@ package com.jagiya.alarm.controller;
 
 import com.jagiya.alarm.request.AlarmDeleteRequest;
 import com.jagiya.alarm.request.AlarmEnabledRequest;
-import com.jagiya.alarm.request.AlarmRequest;
+import com.jagiya.alarm.request.AlarmInsertRequest;
+import com.jagiya.alarm.request.AlarmUpdateRequest;
 import com.jagiya.alarm.response.*;
 import com.jagiya.alarm.service.AlarmService;
 import com.jagiya.common.response.CommonMsgResponse;
@@ -47,8 +48,8 @@ public class AlarmController {
     @PostMapping("/insertAlarm")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public CommonMsgResponse insertAlarm(@RequestBody AlarmRequest alarmRequest) {
-        alarmService.insertAlarm(alarmRequest);
+    public CommonMsgResponse insertAlarm(@RequestBody AlarmInsertRequest alarmInsertRequest) {
+        alarmService.insertAlarm(alarmInsertRequest);
         return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
     }
 
@@ -56,8 +57,8 @@ public class AlarmController {
     @PutMapping("/updateAlarm")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public CommonMsgResponse updateAlarm(@RequestBody AlarmRequest alarmRequest) {
-        alarmService.updateAlarm(alarmRequest);
+    public CommonMsgResponse updateAlarm(@RequestBody AlarmUpdateRequest alarmUpdateRequest) {
+        alarmService.updateAlarm(alarmUpdateRequest);
         return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
     }
 

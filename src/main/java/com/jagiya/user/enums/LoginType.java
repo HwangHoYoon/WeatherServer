@@ -1,4 +1,4 @@
-package com.jagiya.login.enums;
+package com.jagiya.user.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

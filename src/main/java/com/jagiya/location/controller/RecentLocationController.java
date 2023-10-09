@@ -7,12 +7,12 @@ import com.jagiya.location.response.LocationResponse;
 import com.jagiya.location.response.RecentLocationResponse;
 import com.jagiya.location.service.LocationService;
 import com.jagiya.location.service.RecentLocationService;
-import com.jagiya.login.entity.User;
-import com.jagiya.login.enums.LoginType;
-import com.jagiya.login.repository.LoginRepository;
+import com.jagiya.user.entity.User;
+import com.jagiya.user.enums.LoginType;
 import com.jagiya.main.dto.member.UserRes;
 import com.jagiya.main.exception.MemberNotFoundException;
 import com.jagiya.main.repository.UsersRepository;
+import com.jagiya.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +37,7 @@ import java.util.List;
 public class RecentLocationController {
 
 
-    private final LoginRepository usersRepository;
+    private final UserRepository usersRepository;
     private final RecentLocationService recentLocationService;
     private final RecentLocationRepository recentLocationRepository;
 

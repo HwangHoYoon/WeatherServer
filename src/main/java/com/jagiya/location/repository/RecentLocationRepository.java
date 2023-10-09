@@ -2,7 +2,7 @@ package com.jagiya.location.repository;
 
 import com.jagiya.location.entity.Location;
 import com.jagiya.location.entity.RecentLocation;
-import com.jagiya.login.entity.User;
+import com.jagiya.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -82,6 +82,20 @@ public class RecentLocationController {
 
 
 
+    @Operation(summary = "최근검색 주소삭제", description = "최근 검색한 주소삭제")
+    @GetMapping("/getRecentDeleteLocation")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    public void getRecentDeleteLocation(
+            @Schema(description = "recentLocationId", example = "6", name = "recentLocationId") Long recentLocationId
+    ) throws Exception {
+
+        recentLocationRepository.deleteById(recentLocationId);
+
+    }
+
+
+
+
 
 
 

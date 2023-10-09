@@ -44,13 +44,13 @@ public class LoginController {
             @ApiResponse(responseCode = "200", description = "OK")
     }
     )
-    public UserRes loginAndUserTransform(@Schema(description = "비회원 계정 ID", example = "example1", name = "asisSnsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String asisSnsId,
+    public UserRes loginAndUserTransform(@Schema(description = "비회원 계정 ID", example = "1", name = "userId") @NotBlank(message = "비회원 UserID를 입력해주세요.") Long userId,
                          @Schema(description = "소셜계정 ID", example = "example2", name = "tobeSnsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String tobeSnsId,
                          @Schema(description = "이름", example = "홍길동", name = "name") @Nullable String name,
                          @Schema(description = "이메일 (선택 동의했을 경우)", example = "example@naver.com", name = "email") @Nullable String email,
                          @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
     ) {
-        return loginService.loginAndUserTransform(asisSnsId, tobeSnsId, name, email, snsType);
+        return loginService.loginAndUserTransform(userId, tobeSnsId, name, email, snsType);
     }
 
 }

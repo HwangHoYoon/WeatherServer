@@ -10,15 +10,15 @@ public class AlarmEditor {
     private Integer vibration;
     private Integer volume;
     private Integer enabled;
-    private AlarmSound alarmSound;
+    private Long alarmSoundId;
 
-    public AlarmEditor(String alarmTime, String reminder, Integer vibration, Integer volume, Integer enabled, AlarmSound alarmSound) {
+    public AlarmEditor(String alarmTime, String reminder, Integer vibration, Integer volume, Integer enabled, Long alarmSoundId) {
         this.alarmTime = alarmTime;
         this.reminder = reminder;
         this.vibration = vibration;
         this.volume = volume;
         this.enabled = enabled;
-        this.alarmSound = alarmSound;
+        this.alarmSoundId = alarmSoundId;
     }
     public static AlarmEditorBuilder builder() {
         return new AlarmEditorBuilder();
@@ -30,7 +30,7 @@ public class AlarmEditor {
         private Integer vibration;
         private Integer volume;
         private Integer enabled;
-        private AlarmSound alarmSound;
+        private Long alarmSoundId;
 
         AlarmEditorBuilder() {
         }
@@ -70,15 +70,15 @@ public class AlarmEditor {
             return this;
         }
 
-        public AlarmEditorBuilder alarmSound(final AlarmSound alarmSound) {
-            if (alarmSound != null) {
-                this.alarmSound = alarmSound;
+        public AlarmEditorBuilder alarmSoundId(final Long alarmSoundId) {
+            if (alarmSoundId != null) {
+                this.alarmSoundId = alarmSoundId;
             }
             return this;
         }
 
         public AlarmEditor build() {
-            return new AlarmEditor(this.alarmTime, this.reminder, this.vibration, this.volume, this.enabled, this.alarmSound);
+            return new AlarmEditor(this.alarmTime, this.reminder, this.vibration, this.volume, this.enabled, this.alarmSoundId);
         }
 
     }

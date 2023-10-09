@@ -1,28 +1,24 @@
 package com.jagiya.main.service.Impl;
 
-import com.jagiya.common.filter.CustomRequestWrapper;
-import com.jagiya.login.entity.User;
-import com.jagiya.login.enums.LoginType;
-import com.jagiya.login.repository.LoginRepository;
+import com.jagiya.user.entity.User;
+import com.jagiya.user.enums.LoginType;
+import com.jagiya.user.repository.UserRepository;
 import com.jagiya.main.dto.member.UserRes;
 import com.jagiya.main.exception.MemberNotFoundException;
-import com.jagiya.main.exception.UnauthorizedException;
 import com.jagiya.main.service.inf.MemberInfoService;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class MemberInfoServiceImpl implements MemberInfoService {
 
-    private final LoginRepository usersRepository;
+    private final UserRepository usersRepository;
 
     @Transactional
     public UserRes memberDelete(String snsId, Integer snsType)throws Exception{

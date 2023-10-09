@@ -24,7 +24,7 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final NumberPath<Long> alarmId = createNumber("alarmId", Long.class);
 
-    public final QAlarmSound alarmSound;
+    public final NumberPath<Long> alarmSoundId = createNumber("alarmSoundId", Long.class);
 
     public final StringPath alarmTime = createString("alarmTime");
 
@@ -36,7 +36,7 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final StringPath reminder = createString("reminder");
 
-    public final com.jagiya.login.entity.QUser user;
+    public final com.jagiya.user.entity.QUser user;
 
     public final NumberPath<Integer> vibration = createNumber("vibration", Integer.class);
 
@@ -60,8 +60,7 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public QAlarm(Class<? extends Alarm> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.alarmSound = inits.isInitialized("alarmSound") ? new QAlarmSound(forProperty("alarmSound")) : null;
-        this.user = inits.isInitialized("user") ? new com.jagiya.login.entity.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.jagiya.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.jagiya.login.response;
+package com.jagiya.user.response;
 
 import lombok.Builder;
 import lombok.Getter;

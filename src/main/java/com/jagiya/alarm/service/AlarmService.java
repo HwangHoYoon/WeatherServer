@@ -816,4 +816,10 @@ public class AlarmService {
 
         return alarmSoundList;
     }
+
+    @Transactional
+    public void updateAlarmUserId(Long asisUserId, Long tobeUserId) {
+        List<Alarm> alarmList = alarmRepository.findByUserUserId(asisUserId);
+        alarmList.stream().forEach(alarm -> alarm.setUser(User.builder().userId(tobeUserId).build()));
+    }
 }

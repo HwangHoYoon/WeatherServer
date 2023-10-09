@@ -2,14 +2,13 @@ package com.jagiya.alarm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jagiya.login.entity.User;
+import com.jagiya.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity(name = "Alarm")
@@ -63,9 +62,9 @@ public class Alarm {
     @JoinColumn(name = "userId")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarmSoundId")
-    private AlarmSound alarmSound;
+    @Column(name = "alarmSoundId")
+    @Schema(description = "알람소리코드")
+    private Long alarmSoundId;
 
     // @PrePersist 메서드 정의 (최초 등록시 호출)
     @PrePersist
@@ -86,7 +85,7 @@ public class Alarm {
                 .vibration(vibration)
                 .enabled(enabled)
                 .volume(volume)
-                .alarmSound(alarmSound);
+                .alarmSoundId(alarmSoundId);
     }
 
     public void edit(AlarmEditor alarmEditor) {
@@ -95,7 +94,7 @@ public class Alarm {
         vibration = alarmEditor.getVibration();
         volume = alarmEditor.getVolume();
         enabled = alarmEditor.getEnabled();
-        alarmSound = alarmEditor.getAlarmSound();
+        alarmSoundId = alarmEditor.getAlarmSoundId();
     }
 
 }

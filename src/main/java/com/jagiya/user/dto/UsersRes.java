@@ -1,4 +1,4 @@
-package com.jagiya.login.dto;
+package com.jagiya.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;

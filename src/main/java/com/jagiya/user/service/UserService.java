@@ -1,31 +1,40 @@
-package com.jagiya.login.service;
+package com.jagiya.user.service;
 
 import com.jagiya.alarm.service.AlarmService;
 import com.jagiya.common.exception.CommonException;
-import com.jagiya.login.entity.User;
-import com.jagiya.login.enums.LoginType;
-import com.jagiya.login.repository.LoginRepository;
-import com.jagiya.login.response.UserRes;
+import com.jagiya.user.entity.User;
+import com.jagiya.user.entity.UsersEditor;
+import com.jagiya.user.enums.LoginType;
+import com.jagiya.user.repository.UserRepository;
+import com.jagiya.user.request.UserDetailUpdateRequest;
+import com.jagiya.user.response.HtmlResponse;
+import com.jagiya.user.response.UserDetailResponse;
+import com.jagiya.user.response.UserRes;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class LoginService {
+public class UserService {
 
-    private final LoginRepository usersRepository;
+    private final UserRepository userRepository;
 
     private final AlarmService alarmService;
 
     public UserRes login(String snsId, String name, String email, Integer snsType) {
-        Optional<User> usersInfo = usersRepository.findBySnsTypeAndSnsId(snsType, snsId);
+        Optional<User> usersInfo = userRepository.findBySnsTypeAndSnsId(snsType, snsId);
 
         User usersInfoRst;
         // 유저 정보가 있다면 업데이트 없으면 등록
@@ -38,7 +47,7 @@ public class LoginService {
                 usersInfo.get().setDeleteDate(null);
                 usersInfo.get().setModifyDate(new Date());
                 log.info(" 재가입 확인 {}", usersInfo.get());
-                usersRepository.save(usersInfo.get());
+                userRepository.save(usersInfo.get());
             }
 
             log.info("기존유저 조회 {}", name);
@@ -62,7 +71,7 @@ public class LoginService {
                     .snsType(snsType)
                     .regDate(new Date())
                     .build();
-            usersInfoRst = usersRepository.save(user);
+            usersInfoRst = userRepository.save(user);
         }
 
         return UserRes.builder()
@@ -84,15 +93,51 @@ public class LoginService {
             throw new CommonException("정상적으로 로그인 되지 않았습니다.", "888");
         }
 
-        User asisUser = usersRepository.findById(asisUserId).orElseThrow(() -> new CommonException("회원정보가 없습니다.", "222"));
+        User asisUser = userRepository.findById(asisUserId).orElseThrow(() -> new CommonException("회원정보가 없습니다.", "222"));
 
         // 정상 로그인 시 기존 알람 이관
         alarmService.updateAlarmUserId(asisUserId, tobeUserId);
 
         // 알람 이관 성공 시 기존 유저 삭제
-        usersRepository.deleteById(asisUserId);
+        userRepository.deleteById(asisUserId);
 
         return tobeUserRes;
     }
 
+    public UserDetailResponse selectUserDetail(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CommonException("회원정보가 없습니다.", "222"));
+
+        UserDetailResponse userDetailResponse = UserDetailResponse.builder()
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        return userDetailResponse;
+    }
+
+    @Transactional
+    public void updateUserName(UserDetailUpdateRequest userDetailUpdateRequest) {
+        Long userId = userDetailUpdateRequest.getUserId();
+        String name = userDetailUpdateRequest.getName();
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new CommonException("회원정보가 없습니다.", "222"));
+
+        UsersEditor.UsersEditorBuilder usersEditorBuilder = user.toEditor();
+        UsersEditor usersEditor = usersEditorBuilder.name(name).build();
+        user.edit(usersEditor);
+    }
+
+    public HtmlResponse selectTermsAndPrivacy() throws IOException {
+        Resource htmlResource = new ClassPathResource("static/tt.html");
+        String htmlContent = StreamUtils.copyToString(htmlResource.getInputStream(), StandardCharsets.UTF_8);
+
+        HtmlResponse htmlResponse = new HtmlResponse();
+
+        htmlContent = htmlContent.replaceAll("\r\n", "").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\\\"", "\'");;
+
+        htmlResponse.setHtml(htmlContent);
+
+        return htmlResponse;
+    }
 }

@@ -1,6 +1,5 @@
-package com.jagiya.login.request;
+package com.jagiya.user.request;
 
-import com.jagiya.login.dto.UsersRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

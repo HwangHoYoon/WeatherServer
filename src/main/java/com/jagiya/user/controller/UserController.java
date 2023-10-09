@@ -1,9 +1,12 @@
-package com.jagiya.login.controller;
+package com.jagiya.user.controller;
 
-import com.jagiya.login.dto.UsersRes;
-import com.jagiya.login.response.UserRes;
-import com.jagiya.login.service.LoginService;
-import io.swagger.v3.oas.annotations.Hidden;
+import com.jagiya.common.response.CommonMsgResponse;
+import com.jagiya.common.response.MessageCode;
+import com.jagiya.user.request.UserDetailUpdateRequest;
+import com.jagiya.user.response.HtmlResponse;
+import com.jagiya.user.response.UserDetailResponse;
+import com.jagiya.user.response.UserRes;
+import com.jagiya.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,14 +18,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "login", description = "로그인 API")
-@RequestMapping("auth")
-public class LoginController {
+@Tag(name = "User", description = "유저 API")
+@RequestMapping("user")
+public class UserController {
 
-    private final LoginService loginService;
+    private final UserService userService;
 
     @Operation(summary = "로그인", description = "로그인")
     @GetMapping("/login")
@@ -35,7 +40,7 @@ public class LoginController {
                          @Schema(description = "이메일 (선택 동의했을 경우)", example = "example@naver.com", name = "email") @Nullable String email,
                          @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
     ) {
-        return loginService.login(snsId, name, email, snsType);
+        return userService.login(snsId, name, email, snsType);
     }
 
     @Operation(summary = "회원전환 로그인", description = "회원전환 로그인")
@@ -50,7 +55,41 @@ public class LoginController {
                          @Schema(description = "이메일 (선택 동의했을 경우)", example = "example@naver.com", name = "email") @Nullable String email,
                          @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
     ) {
-        return loginService.loginAndUserTransform(userId, tobeSnsId, name, email, snsType);
+        return userService.loginAndUserTransform(userId, tobeSnsId, name, email, snsType);
     }
 
+    @Operation(summary = "회원조회", description = "회원조회")
+    @GetMapping("/getUserDetail")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    }
+    )
+    public UserDetailResponse getUserDetail(@Schema(description = "계정 ID", example = "1", name = "userId") @NotBlank(message = "UserID를 입력해주세요.") Long userId
+    ) {
+        return userService.selectUserDetail(userId);
+    }
+
+
+    @Operation(summary = "이름 변경", description = "이름 변경")
+    @PutMapping("/updateUserName")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    }
+    )
+    public CommonMsgResponse updateUserName(
+            @RequestBody UserDetailUpdateRequest userDetailUpdateRequest
+    ) {
+        userService.updateUserName(userDetailUpdateRequest);
+        return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
+    }
+
+    @Operation(summary = "약관및개인정보처리방침 조회", description = "약관및개인정보처리방침 조회")
+    @GetMapping("/getTermsAndPrivacy")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    }
+    )
+    public HtmlResponse getTermsAndPrivacy() throws IOException {
+        return userService.selectTermsAndPrivacy();
+    }
 }

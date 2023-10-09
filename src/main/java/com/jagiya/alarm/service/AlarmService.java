@@ -2,10 +2,7 @@ package com.jagiya.alarm.service;
 
 import com.jagiya.alarm.entity.*;
 import com.jagiya.alarm.enums.TimeOfDay;
-import com.jagiya.alarm.repository.AlarmLocationRespository;
-import com.jagiya.alarm.repository.AlarmLocationTimeRespository;
-import com.jagiya.alarm.repository.AlarmRepository;
-import com.jagiya.alarm.repository.AlarmWeekRepository;
+import com.jagiya.alarm.repository.*;
 import com.jagiya.alarm.request.*;
 import com.jagiya.alarm.response.*;
 import com.jagiya.common.exception.CommonException;
@@ -44,6 +41,9 @@ public class AlarmService {
     private final LocationService locationService;
 
     private final WeatherService weatherService;
+
+    private final AlarmSoundRepository alarmSoundRepository;
+
 
     public List<AlarmResponse> selectAlarmList(Long userId) {
         List<Alarm> alarmList = alarmRepository.findByUserUserId(userId);
@@ -803,9 +803,17 @@ public class AlarmService {
         return alarmDetailResponse;
     }
 
-    @Transactional
-    public void updateAlarmUserId(Long asisUserId, Long tobeUserId) {
-        List<Alarm> alarmList = alarmRepository.findByUserUserId(asisUserId);
-        alarmList.stream().forEach(alarm -> alarm.setAlarmId(tobeUserId));
+    public List<AlarmSoundResponse> selectAlarmSoundList() {
+        List<AlarmSoundResponse> alarmSoundList = new ArrayList<>();
+
+        alarmSoundRepository.findAll().stream().forEach(alarmSound -> {
+            AlarmSoundResponse alarmSoundResponse = new AlarmSoundResponse();
+            alarmSoundResponse.setAlarmSoundId(alarmSound.getAlarmSoundId());
+            alarmSoundResponse.setAlarmSoundName(alarmSound.getAlarmSoundName());
+            alarmSoundResponse.setFileName(alarmSound.getFileName());
+            alarmSoundList.add(alarmSoundResponse);
+        });
+
+        return alarmSoundList;
     }
 }

@@ -21,11 +21,11 @@ public class QAlarmSound extends EntityPathBase<AlarmSound> {
 
     public final NumberPath<Long> alarmSoundId = createNumber("alarmSoundId", Long.class);
 
+    public final StringPath alarmSoundName = createString("alarmSoundName");
+
     public final StringPath fileName = createString("fileName");
 
     public final DateTimePath<java.util.Date> modifyDate = createDateTime("modifyDate", java.util.Date.class);
-
-    public final StringPath name = createString("name");
 
     public final DateTimePath<java.util.Date> regDate = createDateTime("regDate", java.util.Date.class);
 

@@ -1,0 +1,690 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>이용약관</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ccfcf929-b87a-4c7f-920c-60111fc5e541" class="page sans"><header><div class="page-header-icon undefined"><h1 class="page-title">이용약관</h1></header><div class="page-body"><hr id="57707ba6-1970-4508-91e4-27e238bad7ca"/><p id="79af96e6-fa7d-48dd-9699-285052f68a8e" class="">이 약관은 ‘자기야’(이하 ‘단체’)의 전체 서비스 이용과 관련하여 이용자와 단체 간에 적용됩니다. 아래의 내용에 동의하는 이용자에 한하여 정상적인 서비스를 이용할 수 있습니다. </p><p id="5a04a9a8-a0e6-480e-ae9d-55250d3c6552" class="">
+</p><h3 id="0e3ac5d3-a034-47b5-966c-9ff11d8343c9" class=""><strong>제 1조 (목적)</strong></h3><p id="9b4426d1-34db-4d27-aedd-f22cc3f58184" class="">이 약관은 단체가 운영하는 ‘레디우산’ 서비스를 통하여 제공하는 관련 모든 서비스 (이하 ‘서비스&#x27;)에 대하여 단체와 회원 간의 의무, 책임 사항, 회원의 서비스 이용 절차에 관한 사항을 규정함을 목적으로 합니다.</p><p id="b55cd2a2-d190-40e2-94b9-0df6c31aea11" class="">
+</p><h3 id="0161214c-1cff-4f56-b9ce-22e4de6725c5" class=""><strong>제 2조 (용어의 정의)</strong></h3><p id="59727143-3297-4c12-8ebf-bfd7fa52a22c" class="">1. ‘서비스&#x27;라 함은 구현되는 단말기(PC, TV, 휴대형단말기 등의 각종 유무선 장치를 포함)와 상관없이 회원이 이용할 수 있는 레디우산 앱 서비스 및 관련 제반 서비스를 의미합니다.</p><p id="e789fbef-dfd3-4c2d-8477-c178886b1540" class="">2. ‘Guest(게스트)&#x27;라 함은 서비스에 접속하여 회원가입을 하지 않고 이 약관에 따라 서비스를 이용하는 사용자를 말합니다. </p><p id="9f742296-df40-4a88-b3b5-8a8812075d21" class="">
+</p><h3 id="8f0cffe8-6a9c-4c77-b09f-997fc4a8b261" class=""><strong>제 3조 (약관의 정의)</strong></h3><p id="ffe21625-4b1e-4855-b2f8-61afa497c6e4" class="">1. 단체는 이 약관을 서비스 이용을 원하는 자와 Guest가 알 수 있도록 &#x27;레디우산&#x27; 공식 사이트에 게시합니다.</p><p id="792876a3-48e5-487d-8219-771bfd2445b2" class="">2. 단체는 본 약관을 관련 법령을 위배하지 않는 범위에서 수시로 개정할 수 있습니다. 개정된 약관은 제 1항의 방법으로 온라인에 명시됨으로써 효력을 발생합니다.</p><p id="b2cd32c1-6a30-4935-b043-7db520236e84" class="">3. 본 약관에 동의하는 것은 정기적으로 서비스를 방문하여 본 약관의 변경사항을 확인하는 것에 동의함을 의미합니다. 변경된 약관에 대한 정보를 알지 못해 발생하는 이용자의 피해는 단체에서 책임지지 않습니다.</p><p id="26c87750-8e72-42d6-b9db-d461af361fac" class="">4. 단체는 이 약관을 개정하는 경우에 개정된 약관의 적용일자를 명시하여 그 적용일자 최소 1주일 이전부터 제 1항의 방법으로 공지합니다.</p><p id="944ac85b-54b8-4313-9cf9-217f809d697c" class="">5. 회원이 개정된 약관에 동의하지 않는 경우 회원은 탈퇴(해지)할 수 있으며. 변경된 약관의 효력 발생일로부터 1주일 이후에도 거부의사를 표시하지 아니하고 서비스를 계속 이용할 경우 개정된 약관에 동의한 것으로 간주합니다.</p><p id="e7e5fde3-896c-43cd-bad9-ba4aaf915a92" class="">
+</p><h3 id="71412bb3-83aa-4cf5-8828-2a3c7ab032f4" class=""><strong>제 4조 (약관 외 준칙)</strong></h3><p id="328388dd-6a99-430e-8c65-d1b66597f4a2" class="">본 약관에 명시되지 않은 사항은 전기통신기본법, 전기통신사업법 및 기타 관련법령의 규정에 준합니다.</p><p id="b9a8c62e-3369-4577-bd05-12e26b4c1f48" class="">
+</p><h3 id="797cf60c-3be9-42c3-b631-5e2b1ffdf707" class=""><strong>제 5조 (이용 계약의 체결)</strong></h3><p id="9d8cba2e-08e7-4f20-80fb-4f07d7bc907b" class="">1. 이용 계약은 회원이 되고자 하는 자(이하 &quot;가입 신청자&quot;)가 약관의 내용에 대하여 동의를 한 다음, 회원가입을 신청하고 단체가 이러한 신청에 대하여 승낙함으로써 체결됩니다.</p><p id="01cf5bfc-c871-4023-b4de-41e1d8fda5a3" class="">2. 회원이 입력한 정보는 사실로 간주합니다. 내용이 사실과 다를 경우(차명, 비실명, 허위정보 등)와 타인의 정보를 도용한 사실이 명백하게 확인 되는 경우, 단체는 회원에게 회원의 권한을 삭제하며 서비스의 전면적인 이용을 거부 할 수 있고, 이로 인해 발생하는 모든 불이익은 단체가 책임지지 않습니다. 또한 단체는 이를 위하여 필요한 경우에는 제증명을 요구할 수 있습니다.</p><p id="24421b4f-f70a-49bd-ac4a-2c3486acabd3" class="">3. 단체는 제1항목과 같은 방법으로 회원 가입을 신청한 회원이 아래 각 호에 해당하는 조건을 충족 하지 못할 경우 회원가입 승낙을 유보 또는 거부 할 수 있습니다.</p><p id="42b8938a-6e01-4d80-87e9-984e600be451" class="">(1) 등록내용 허위 게재 사실이 있는 경우</p><p id="b230477b-d352-4023-b559-05aed8878d13" class="">(2) 제 3자의 전자 우편 주소를 이용하여 신청한 경우</p><p id="f4a1f7bb-c141-4a57-9c08-bae4c4352069" class="">(3) 약관 및 서비스 이용에 관한 관계법령을 위반하여 회원 자격이 상실된 자.</p><p id="9e47ed68-b69e-42de-8d62-faec717e1b85" class="">(4) 사회적 질서 및 미풍양속에 문란이 되는 행위자.</p><p id="b064e644-eb60-4b5f-a4d5-88a40d42533e" class="">(5) 기타 가입결격 사유에 해당한 자.</p><p id="fbb3ff3c-4c2e-4f92-a6b4-c150e9317edf" class="">4. 회원가입 계약 성립 시점은, 가입 승낙이 가입 신청자에게 도달한 시점을 기준으로 합니다.</p><p id="2cef6807-1182-4c26-a4cc-b3f9285956be" class="">5. &#x27;Guest(비회원)&#x27; 의 계약 성립 시점은 &#x27;알람&#x27; 서비스를 이용하는 시점을 기준으로 합니다.</p><p id="efb4be81-b608-499f-9900-5a4905cbe9af" class="">
+</p><h3 id="b2bfc2fd-1b1f-44b0-bf55-1622cf574734" class=""><strong>제 6조 (단체의 의무)</strong></h3><p id="04597811-dffa-45d4-b9e7-097e5e6b5cfb" class="">단체는 &quot;정보통신망법&quot; 등 관계 법령이 정하는 바에 따라 회원의 개인정보를 보호하기 위해 노력합니다. 개인정보의 보호 및 사용에 대해서는 관련법 및 단체의 개인정보취급방침이 적용됩니다. 다만, 단체의 공식 서비스 이외에서는 단체의 개인정보취급방침이 적용되지 않습니다.</p><p id="9eff68de-8888-4f13-8f11-0d9babf38d11" class="">
+</p><h3 id="7b6cac05-d73f-4a21-a5b3-0054139bbc04" class=""><strong>제 7조 (회원에 대한 통지)</strong></h3><p id="4e1404fa-8f2e-411c-87cf-5ec7be64674b" class="">1. 단체가 회원에 대한 통지를 하는 경우 서비스 내 전자우편주소 등으로 할 수 있습니다.</p><p id="597fc347-be02-44f5-961d-a767a1d6946c" class="">2. 단체의 회원 전체에 대한 통지의 경우 서비스에 게시함으로써 제1항의 통지에 갈음할 수 있습니다.</p><p id="5c7e929e-6a8d-4bca-9483-9e6d24587278" class="">
+</p><h3 id="db8725ac-f0eb-4163-99f5-412ebc053299" class=""><strong>제 8조 (단체의 의무)</strong></h3><p id="121b8cd1-92d8-422e-a0b3-7f84b1b5e9f5" class="">1. 단체는 관련법과 이 약관이 금지하거나 미풍양속에 반하는 행위를 하지 않으며, 계속적이고 안정적으로 서비스를 제공하기 위하여 최선을 다하여 노력합니다.</p><p id="13eea5a8-fbab-476b-aafe-df1cd9ae5b15" class="">2. 단체는 회원과 &#x27;Guest&#x27;가 안전하게 서비스를 이용할 수 있도록 개인정보(신용정보 포함)보호를 위해 보안시스템을 갖추어야 하며 개인정보취급방침을 공시하고 준수합니다.</p><p id="305f044f-e148-4cf0-91ed-3ce190c11abc" class="">3. 단체는 서비스 이용과 관련하여 회원과 &#x27;Guest&#x27;로부터 제기된 의견이나 불만이 정당하다고 인정할 경우에는 이를 처리하여야 합니다. 회원이나 &#x27;Guest&#x27;가 제기한 의견이나 불만사항에 대해서는 게시판을 활용하거나 전자우편 등을 통하여 회원에게 처리과정 및 결과를 전달합니다.</p><p id="d8d9f689-db38-4362-b57f-710c0a770783" class="">
+</p><h3 id="c267e26e-1b99-4953-bcf3-45b830fe439c" class=""><strong>제 9조 (회원의 의무)</strong></h3><p id="30c50974-703f-4f46-bbae-e031961f7742" class="">1. 회원은 단체의 명시적 동의가 없는 한 서비스의 이용 권한, 기타 이용 계약 상의 지위를 타인에게 양도, 증여할 수 없으며 이를 담보로 제공할 수 없습니다.</p><p id="d0189b19-0e68-463a-b30d-f9665ed08b6e" class="">2. 회원은 다음 각 호에 해당하는 행위를 하여서는 안되며, 해당 행위를 하는 경우에 단체는 회원의 서비스 이용제한 및 적법 조치를 포함한 제재를 가할 수 있습니다.</p><p id="f1479290-a00b-4477-afc4-a9f1766faff3" class="">(1) 신청 또는 변경 시 허위내용의 등록</p><p id="41f4f379-3f7c-4235-9b2f-f0a7b185eff3" class="">(2) 타인의 정보도용</p><p id="51d496b0-9325-4748-8db9-95d33ad98461" class="">(3) 단체가 게시한 정보의 변경</p><p id="a88d03c3-fa20-4942-83b8-3f096dc792de" class="">(3) 단체의 승인을 받지 않고 다른 사용자의 개인정보를 수집 또는 저장하는 행위</p><p id="2012db9e-d059-4d8d-9a80-7a5c4af7c9de" class="">(5) 기타 불법적이거나 부당한 행위</p><p id="b5f64c80-503a-4cf9-aec0-88a1b51a0e07" class="">5. 회원들간 행위의 책임은 회원들에게 귀속됩니다. 단체에서는 신고된 회원의 행위가 추후 다른 회원에게 추가적인 피해를 입힐 수 있다고 판단되는 경우, 문제 회원을 탈퇴 혹은 아이디 영구 삭제, 등의 후속 조치를 취할 것입니다.</p><h3 id="28d45b1d-41b8-41b9-a096-84e0fa54c0d3" class=""><strong>제 10조 (&#x27;Guest&#x27;의 의무)</strong></h3><p id="c5995841-64d4-4c49-9f78-6b69416fcb7f" class="">1. Guest는 단체의 명시적 동의가 없는 한 서비스의 이용권한, 기타 이용계약상의 지위를 타인에게 양도, 증여할 수 없으며 이를 담보로 제공할 수 없습니다.</p><p id="fd5956e8-6910-4840-adc9-dd4873d07a39" class="">2. Guest는 단체 및 제 3자의 지적 재산권을 침해해서는 안됩니다. 해당 지적 재산권 침해의 결과에 대해 단체는 책임을 지지 않습니다.</p><p id="5bab1a1e-67d3-41c6-a98e-66c1bd6424d1" class="">3. Guest는 다음 각 호에 해당하는 행위를 하여서는 안되며, 해당 행위를 하는 경우에 단체는 게스트의 서비스 이용제한 및 적법 조치를 포함한 제재를 가할 수 있습니다.</p><p id="af31df5e-261c-456a-a1b6-c84ab1363f70" class="">(1) 신청 또는 변경 시 허위내용의 등록</p><p id="08e0823c-184b-4730-97cc-b288632680e3" class="">(2) 타인의 정보도용</p><p id="622e87c8-acba-41e3-bbd8-3f60246de4de" class="">(3) 단체가 게시한 정보의 변경</p><p id="32800d60-c0c4-436e-98c6-42bb58ba364d" class="">(3) 단체의 승인을 받지 않고 다른 사용자의 개인정보를 수집 또는 저장하는 행위</p><p id="2a3a5961-f473-47a7-9119-094a0166d5b2" class="">(5) 기타 불법적이거나 부당한 행위</p><p id="ebfe9b4c-a41f-416a-9149-b986d1a2f46c" class="">5. Guest들간 행위의 책임은 회원들에게 귀속됩니다. 단체에서는 신고된 회원의 행위가 추후 다른 게스트에게 추가적인 피해를 입힐 수 있다고 판단되는 경우, 문제 게스트의 아이디 영구 삭제, 등의 후속 조치를 취할 것입니다.</p><p id="cf1bf332-b115-463d-9597-e8135cc83e44" class="">
+</p><h3 id="0bccbcf7-6fe5-4ef8-811d-f5bfd60ca7e3" class=""><strong>제 11조 (“서비스”의 제공 등)</strong></h3><p id="dee3e95c-9f07-45f7-9507-63b041e72fad" class="">1. 단체는 &#x27;Guest&#x27;에게 아래와 같은 서비스를 제공합니다.</p><p id="2ccf0ef2-1075-41e2-b3b2-f798134fab2f" class="">(1) 레디우산 서비스</p><p id="00cf0c28-5357-4337-bfff-880fe9d6e6a0" class="">(2) 기타 단체가 자체 개발하거나 타 회사와의 협력계약을 통해 제공할 일체의 서비스</p><p id="360bd924-b78f-4e0e-9679-f75f08e8a618" class="">2. 단체는 서비스의 일부 또는 전부를 단체의 정책 및 운영의 필요상 수정, 중단, 변경할 수 있으며, Guest에게 별도의 고지 및 보상을 하지 않습니다.</p><p id="2ab49192-ef4b-41fd-8316-6e8828267264" class="">
+</p><h3 id="e05a37fd-f7bb-431b-b77c-30698936e441" class=""><strong>제 12조 (정보의 제공 및 광고의 게재)</strong></h3><p id="968b523b-c3cb-402d-aa60-2df8cb4b7860" class="">1. 단체는 서비스의 운영과 관련하여 서비스 화면, 홈페이지, 전자우편 등에 광고를 게재할 수 있습니다. Guest는 서비스 이용시 노출 되는 광고 게재에 대해 동의합니다.</p><p id="7173560d-73ac-4e25-9125-321aa9e3bad3" class="">2. Guest는 단체가 제공하는 서비스와 관련하여 게시물 또는 기타 정보를 변경, 수정, 제한하는 등의 조치를 취하지 않습니다.</p><p id="a11195ca-8709-4996-ab59-128b499b3410" class="">
+</p><h3 id="721c4d9e-5842-4295-8283-4dadf2904745" class=""><strong>제 13조 (계약해제, 해지 등)</strong></h3><p id="058baf92-16db-4bc3-b576-171caab70cca" class="">1. 회원은 언제든지 정보 관리 메뉴 등을 통하여 이용계약 해지 신청을 할 수 있으며, 단체는 관련법 등이 정하는 바에 따라 이를 즉시 처리하여야 합니다.</p><p id="6a70c867-5393-4042-bd23-5c04bc8490dd" class="">2. 회원이 계약을 해지할 경우, 본 이용약관, 관련법 및 개인정보취급방침에 따라 단체가 회원정보를 보유하는 경우를 제외하고는 해지 즉시 회원의 모든 데이터는 소멸됩니다.</p><p id="74cb2a68-a45f-44a2-ac11-bc5a36564320" class="">3. 회원의 의무를 성실하게 이행하지 않거나, 약관에서 정한 회원의 의무 및 이용정책에 위반되는 해당하는 행위를 한 회원은 사전 동의 없이 강제 탈퇴 처리할 수 있습니다.</p><p id="90847d76-3b8c-4c1c-81c1-f5dd7357d13f" class="">4. 기타 회원의 여건상 지속적인 계약을 이행하지 못한다고 판단될 경우 임의탈퇴 처리할 수 있습니다.</p><p id="f1d5c60a-50a0-4c90-8280-1a2c3bde678e" class="">(예: 사망 또는 행방불명, 3개월 이상 활동을 하지 않는 휴면계정 회원 등)</p><p id="ea7dde3e-cc31-48c5-a485-3e9e0d859bed" class="">
+</p><h3 id="7f7ca48a-80d3-4ab4-83fc-66eaa8d30b3e" class=""><strong>제 14조 (면책조항)</strong></h3><p id="622f95ba-8d8f-4646-99ca-444f8cf269ef" class="">1. 단체는 천재지변 또는 이에 준하는 불가항력으로 인하여 서비스를 제공할 수 없는 경우에는 서비스 제공에 관한 책임이 면제됩니다.</p><p id="d1a0e6dd-4902-451d-b4a8-0bacfa246ce6" class="">2. 단체는 회원이나 Guest의 귀책사유로 인한 서비스 이용 장애에 대한 책임을 면제합니다.</p><p id="dc4f98b9-d625-48d5-a81a-998ec3d7bb01" class="">3. 단체는 회원이나 Guest가 서비스와 관련하여 게재한 정보, 자료, 사실의 신뢰도, 정확성 등의 내용에 관하여는 책임을 지지 않습니다.</p><p id="cd7e9a46-fe4a-431f-a51b-efd05f756287" class="">4. 단체는 회원이나 Guest가 서비스를 이용하여 기대하는 수익을 얻지 못하거나 상실한 것에 대하여 책임을 지지 않습니다.</p><p id="c47aa494-2007-428e-932b-15d5870da554" class="">5. 단체는 회원이나 Guest의 신원을 보증하지 않습니다. 또한 게스트가 이 서비스를 이용하며 타 게스트로 인해 입게 되는 정신적 피해에 대하여 보상할 책임을 지지 않습니다.</p><p id="afae622c-0305-43a3-b893-a1ea3e4cd0d7" class="">6. 단체는 이용자 상호간 및 이용자와 제 3자 상호 간에 서비스를 매개로 발생한 분쟁에 대해 개입할 의무가 없으며, 이로 인한 손해를 배상할 책임도 없습니다.</p><p id="170f9914-be57-4b02-961d-45f3d68bc31c" class="">7. 단체에서 회원이나 Guest에게 무료로 제공하는 서비스의 이용과 관련해서는 어떠한 손해도 책임을 지지 않습니다.</p><h3 id="797bded3-1af4-49d7-bd28-bd7590a529bb" class=""><strong>제 16조 (분쟁의 해결)</strong></h3><p id="92af632f-8f3a-430e-bcb7-aa252b22821e" class="">1. 단체와 회원이나 Guest는 서비스와 관련하여 발생한 분쟁을 원만하게 해결하기 위하여 필요한 노력을 합니다.</p><p id="d489bbdc-72a5-4e3c-9640-effc4eb02428" class="">2. 단체는 회원이나 Guest로부터 제출되는 불만사항 및 의견을 우선적으로 그 사항을 처리합니다. 다만, 신속한 처리가 곤란한 경우에는 게스트에게 그 사유와 처리 일정을 즉시 통보해 드립니다.</p><h3 id="a2561023-5483-4d0c-b9c3-156a8f44c473" class=""><strong>제 17조 (재판권 및 준거법)</strong></h3><p id="7d1414be-f41b-4983-bc33-d3b699bd3e86" class="">1. 이 약관에 명시되지 않은 사항은 전기통신사업법 등 관계법령과 상관습에 따릅니다.</p><p id="3226e02e-a5d8-471e-b626-7204dc24afac" class="">2. 단체의 기타 유료 서비스 이용 회원의 경우, 단체가 별도로 정한 정책에 따릅니다.</p><p id="0a21b615-528d-4da8-a867-cd58244c6306" class="">3. 서비스 이용으로 발생한 분쟁에 대해 소송이 제기되는 경우 단체의 소재지를 관할하는 법원을 관할 법원으로 합니다.</p><p id="2f3aa360-7328-43d4-b539-7459b5227131" class="">[시행일] 본 이용약관은 2023년 10월 15일부터 적용됩니다.</p><p id="f6724bd8-1d42-4ec1-a4f5-09df4d6a373e" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

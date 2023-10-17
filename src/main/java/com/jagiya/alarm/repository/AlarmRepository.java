@@ -10,4 +10,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByUserUserId(Long userId);
 
     List<Alarm> findByEnabledAndAlarmTimeBetween(Integer enabled, String fromTime, String toTime);
+
+    List<Alarm> findByUserUserIdAndAlarmTimeAndEnabledOrderByAlarmId(Long userId, String alarmTime, Integer enabled);
 }

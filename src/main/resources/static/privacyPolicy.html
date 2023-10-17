@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>개인정보처리방침</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="83733163-351c-49c7-9107-d001d7d5ffec" class="page sans"><header><div class="page-header-icon undefined"></div><h1 class="page-title">개인정보처리방침</h1><p class="page-description"></p></header><div class="page-body"><hr id="8640f275-e5dd-4afa-83f8-083dc2506c1b"/><p id="a126fec8-dbe5-49f3-a800-29b4f47a4e9b" class="">&#x27;레디우산(이하 서비스)&#x27;은 통신비밀보호법, 전기통신사업법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률 등 정보통신서비스 제공자가 준수하여야 할 관련 법령상의 개인정보보호 규정을 준수하며, 관련 법령에 의거한 개인정보취급방침을 정하여 이용자 권익 보호에 최선을 다하고 있습니다.</p><h2 id="388c8ac4-3535-417b-a705-a1b57f8620d5" class=""><strong>제 1조 (</strong>개인정보의 수집 및 이용 목적)</h2><p id="ec6bec56-7f1d-4d47-91b0-97bd8dc5c6b2" class="">개인정보는 생존하는 개인에 관한 정보로서 서비스 이용자를 식별할 수 있는 정보(해당 정보만으로는 특정 개인을 식별할 수 없더라도 다른 정보와 용이하게 결합하여 식별할 수 있는 것을 포함)를 말합니다. 서비스가 수집한 개인정보는 서비스의 기본 기능 제공을 목적으로 활용합니다.</p><h2 id="6cb91433-7323-4947-9552-1b888dc5f613" class="">제 2조 (<strong>수집되는 데이터 유형)</strong></h2><h3 id="8d587359-32ac-47f6-9be7-55dff6f47fa1" class=""><strong>계정 데이터</strong></h3><p id="638ad0af-7ead-4816-8cc1-e6d1d9d2aa15" class="">계정 데이터는 회원에게서<strong>만</strong> 수집됩니다.</p><p id="fa2263bd-1001-4ee1-a081-5ff38d74a286" class="">사용자가 카카오 또는 애플 계정으로 회원 가입하는 과정에서 서비스는 아래 정보를 수집합니다.</p><ul id="f676e4fb-6824-4a4f-85d9-34b060405bac" class="bulleted-list"><li style="list-style-type:disc">이름<ul id="5531b068-ee91-4a2f-ae15-7980d469f5ec" class="bulleted-list"><li style="list-style-type:circle">당사가 수집하는 이름 정보는 사용자의 실제 성명과 다를 수 있습니다. 사용자는 회원 가입 후 이름을 편집할 수 있습니다.</li></ul></li></ul><ul id="bc632cdd-43f2-4a41-9093-8c7168d9307f" class="bulleted-list"><li style="list-style-type:disc">이메일 주소<ul id="82048eb1-26f8-4b3d-b5cc-708e099c7277" class="bulleted-list"><li style="list-style-type:circle">사용자가 애플 계정으로 가입하는 경우, 당사는 사용자가 명시적으로 동의한 경우에 한해서만 실제 이메일 주소를 수집할 수 있습니다. 사용자가 동의하지 않은 경우, 당사는 애플에서 임의로 생성한 랜덤 이메일 주소를 수집합니다.</li></ul></li></ul><p id="0b30634c-c5b8-4b8f-a8f3-548a422dc906" class="">본 약관의 최종 업데이트 일자 기준으로, 계정 데이터는 아래 정보를 포함하지 않습니다.:</p><ul id="2a11de83-25fc-4d34-b120-68961144e219" class="bulleted-list"><li style="list-style-type:disc">결제 정보</li></ul><ul id="7f35bed0-080c-4d08-8e1c-348194acb6a0" class="bulleted-list"><li style="list-style-type:disc">사용 데이터</li></ul><p id="09600903-4409-4639-a277-8449a99cd11d" class="">서비스에 회원 가입하는 사용자는 카카오 또는 애플 로그인의 개인 정보 취급 방침의 적용을 받습니다.</p><p id="da2acfb7-f74a-4678-92e0-c4904d01a9f8" class="">애플 로그인의 개인 정보 취급 방침 및 정책에 대한 자세한 내용은 해당 개인 정보 취급 방침 페이지 <a href="https://www.apple.com/legal/privacy/data/en/sign-in-with-apple/">https://www.apple.com/legal/privacy/data/en/sign-in-with-apple/</a>를 참조하십시오.</p><p id="7a6c151a-4d4e-4c73-bc5d-10b0fbc3c332" class="">카카오 로그인의 개인 정보 취급 방침 및 정책에 대한 자세한 내용은 해당 개인 정보 취급 방침 페이지</p><p id="9d617424-8490-42b6-a699-7c13e0c7cfd3" class=""><a href="https://www.kakao.com/ko/privacy">https://www.kakao.com/ko/privacy</a>를 참조하십시오.</p><h3 id="7d5fcdd1-46ee-4ad7-9e0a-27c4a9263555" class=""><strong>개인 데이터</strong></h3><p id="a8337bca-3c95-4aec-bc0a-9b8ff4070263" class="">서비스는 서비스를 사용하는 동안 사용자에게 연락하거나 신원을 확인하는 데 사용할 수 있는 특정 개인 식별 가능 정보를 제공하도록 요청할 수 있습니다. 개인 식별 가능 정보는 다음을 포함할 수 있지만 이에 국한되지는 않습니다.</p><ul id="35502913-47cf-4f29-9b36-3e86305ba77c" class="bulleted-list"><li style="list-style-type:disc">계정 데이터 중 이름</li></ul><ul id="fecb7ddc-9418-4fab-8cfc-6970b5be8ea7" class="bulleted-list"><li style="list-style-type:disc">이메일 주소</li></ul><ul id="ebb4ea82-c5fa-4943-b290-bdba3404a349" class="bulleted-list"><li style="list-style-type:disc">국가, 주소, 주, 도, 시, 우편번호</li></ul><ul id="3a843ac3-66fa-4ca5-a925-e1313e9df249" class="bulleted-list"><li style="list-style-type:disc">사용 데이터</li></ul><ul id="815ea9af-bfcb-4518-ac98-aedf27c1cb20" class="bulleted-list"><li style="list-style-type:disc">광고 식별자(ADID)<ul id="42a7c2fb-27e0-41a5-b1ff-b24d57fb2cba" class="bulleted-list"><li style="list-style-type:circle">Android 기기의 Google Advertising ID(GAID)</li></ul><ul id="94a652ac-17ab-4aa2-a321-40d46e2f7d22" class="bulleted-list"><li style="list-style-type:circle">iOS 기기의 광고주 식별자(IDFA)</li></ul></li></ul><h3 id="26185836-49d0-4c10-a6d4-9946825495ab" class=""><strong>사용 데이터</strong></h3><p id="304169c4-24dc-47fb-b333-0f3d4ebf73d3" class="">서비스 이용 시 사용 데이터는 자동으로 수집됩니다.</p><p id="a32f8dd3-ba0c-487f-b83e-8faa8968c1c9" class="">사용 데이터에는 사용자 기기의 인터넷 프로토콜 주소(예: IP 주소), 브라우저 유형, 브라우저 버전, 사용자가 방문하는 서비스 페이지, 사용자의 방문 시간 및 날짜, 해당 페이지에서 보낸 시간, 고유 장치 식별자 및 기타 진단 데이터와 같은 정보가 포함될 수 있습니다.</p><p id="aea601c1-ebb3-4e07-a231-b776a06e1e47" class="">사용자가 모바일 기기를 통해 또는 모바일 기기를 통한 서비스에 액세스할 때, 당사는 사용자가 사용하는 모바일 기기의 유형, 사용자의 모바일 기기 고유 ID, 사용자의 모바일 기기 IP 주소, 사용자의 모바일 운영체제, 사용자가 사용하는 모바일 인터넷 브라우저의 유형, 고유한 장치 식별자 및 기타 진단 데이터를 포함하되 이에 국한되지 않는 특정 정보를 자동으로 수집할 수 있습니다.</p><p id="c5f09d7e-16b7-4529-8b3d-0a0a73edb1e5" class="">또한, 당사는 사용자가 당사 서비스를 방문할 때마다 또는 사용자가 모바일 기기를 통해 서비스에 액세스할 때 사용자의 브라우저가 보내는 정보를 수집할 수 있습니다.</p><h2 id="962636d1-085b-437a-91ab-1d8162de5e2a" class="">제 3조 (<strong>사용자의 개인 데이터 사용)</strong></h2><p id="f413a103-9710-4085-b0c3-4ab8ff84d8cb" class="">서비스는 다음과 같은 목적으로 개인 데이터를 사용할 수 있습니다.</p><ul id="decdabf4-d62e-4b60-8395-b83412035fcb" class="bulleted-list"><li style="list-style-type:disc">서비스 사용 모니터링을 포함하여 <strong>서비스를 제공하고 유지 관리</strong>.</li></ul><ul id="8f462d64-e257-4076-adcd-dfbf2ea31436" class="bulleted-list"><li style="list-style-type:disc"><strong>계약 이행을 위해</strong>: 사용자가 이용하는 서비스, 또는 서비스를 통해 당사와의 기타 계약에 대한 구매 계약의 개발, 준수 및 착수.</li></ul><ul id="82ea9cf5-293a-4f02-b3f6-1f5afd36d408" class="bulleted-list"><li style="list-style-type:disc"><strong>사용자에게 연락</strong>: 이메일, 전화 통화, SMS 또는 기타 동등한 형태의 전자 통신으로 사용자에게 연락하기 위함. 동등한 형태의 전자 통신은 보안 업데이트가 구현을 위해 필요하거나 합리적인 경우 기능성, 제품 또는 계약된 서비스와 관련된 업데이트나 정보 통신에 관한 모바일 애플리케이션의 푸시 알림 등이 해당됨.</li></ul><ul id="3d3c8b33-493a-438c-9b08-1a6b2596c615" class="bulleted-list"><li style="list-style-type:disc"><strong>사용자에게 제공</strong>: 사용자가 그러한 정보를 수신하지 않기로 선택하지 않는 한 사용자가 이미 구매했거나 문의한 것과 유사한 기타 상품, 서비스 및 이벤트에 대한 뉴스, 특별 제안 및 일반 정보를 사용자에게 제공하기 위해.</li></ul><ul id="5f3796f6-3c4f-4683-8c80-5f29edb9a54e" class="bulleted-list"><li style="list-style-type:disc"><strong>사용자의 요청 관리</strong>: 서비스에 대한 사용자의 요청에 주의를 기울이고 관리하기 위해</li></ul><p id="89d478ea-8605-4e28-adb4-1f053e9c7c43" class="">서비스는 다음과 같은 상황에서 사용자의 개인 정보를 공유할 수 있습니다.</p><table id="722b8ccc-74b1-40b3-881d-20ab6b229578" class="simple-table"><tbody><tr id="3a236a79-6376-4726-bdf1-de89dad0e0b7"><td id="PfNw" class=""><strong>공유받는 자</strong></td><td id="lvqC" class=""><strong>공유하는 항목</strong></td><td id="_KR^" class=""><strong>공유 목적</strong></td><td id="?&gt;MG" class=""><strong>보유 및 이용기간</strong></td></tr><tr id="d677b306-fc90-4ce8-a29d-c5c0f481e718"><td id="PfNw" class="">광고 파트너사</td><td id="lvqC" class="">사용자의 adid</td><td id="_KR^" class="">맞춤형 광고 제공</td><td id="?&gt;MG" class="">서비스 제공 기간</td></tr></tbody></table><ul id="6bf99734-efc8-485a-b87f-003353f61c86" class="bulleted-list"><li style="list-style-type:disc"><strong>서비스 공급자와 함께</strong>: 서비스는 서비스 제공자와 사용자의 개인 정보를 공유하여 서비스 사용을 모니터링 및 분석하고, 서비스를 지원 및 유지하기 위해 사용자에게 광고를 보여주고, 사용자가 당사의 서비스를 방문한 후 제3자 웹 사이트에 서비스를 광고하고, 결제 처리를 위해 사용자에게 연락할 수 있습니다.</li></ul><p id="105dc6ed-2559-4e9b-900c-473fcfcf3f40" class="">
+</p><h2 id="d5ebac40-cabf-4e27-97ec-59b9b8083378" class="">제 4조 (개인정보의 보유 및 이용기간)</h2><p id="2d832c1e-8340-4f03-80be-b6cac18231a5" class="">사용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면 지체 없이 파기합니다.
+단, 다음의 정보에 대해서는 아래의 이유로 명시한 기간 동안 보존합니다.</p><p id="254f565c-5c8d-4391-8add-7bbf7cc4a612" class="">- ID,비밀번호,이메일,서비스이용기록,접속로그,쿠키,접속IP정보
+보존 이유 : 전자상거래등에서의 소비자보호에 관한 법률
+보존 기간 : 5년</p><p id="f95a7f54-9371-4b96-975a-444c5a153fb8" class="">- 표시/광고에 관한 기록
+보존 이유 : 전자상거래등에서의 소비자보호에 관한 법률
+보존 기간 : 6개월</p><p id="a442188f-6e3d-4b4c-a068-5d0cf91bc308" class="">- 계약또는청약철회등에관한기록
+보존 이유 : 전자상거래등에서의 소비자보호에 관한 법률
+보존 기간 : 5년</p><p id="76841f9e-4c41-4182-94c0-53f06053b730" class="">- 소비자의 불만 또는 분쟁처리에 관한 기록
+보존 이유 : 전자상거래등에서의 소비자보호에 관한 법률
+보존 기간 : 3년</p><p id="ee21e8d4-0778-470c-b1de-aa2d1d03c63f" class="">- 방문에 관한 기록
+보존 이유 : 통신비밀보호법
+보존 기간 : 3개월</p><p id="4c0e0c34-fc0a-427a-91d4-267882246903" class="">
+</p><h2 id="cf481732-2340-4973-a5c6-183336543be5" class="">제 5조 (개인정보의 파기절차 및 방법)</h2><p id="5f75b5a1-de44-404d-9c29-6a6923920a94" class="">사용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면 지체 없이 파기합니다.
+개인정보 파기절차 및 방법은 다음과 같습니다.</p><p id="093df345-54f0-4598-aab5-544465e31d4b" class="">1. 파기절차</p><p id="ac50bc55-df31-41ce-a5f5-7f378c62c620" class="">- 사용자의 회원가입 등을 위해 입력한 정보는 목적이 달성된 후 별도의 DB로 옮겨져(종이의<div class="indented"><p id="1d13e9cc-3a87-4ceb-9894-ec97be89839a" class="">경우 별도의 서류함) 내부 방침 및 기타 관련 법령에 의한 정보보호 사유에 따라(보유 및</p><p id="2f901361-a312-4a36-bf40-7f3e12ac9bcb" class="">이용기간 참조)일정 기간 저장된 후 파기됩니다.</p></div></p><p id="7013d8d9-ba84-4806-a1eb-542298079381" class="">- 동 개인정보는 법률에 의한 경우가 아니고서는 보유되는 이외의 다른 목적으로 이용되지<div class="indented"><p id="3694f1fa-433d-442c-a889-5c8b08a12e3e" class="">않습니다.</p></div></p><p id="2468c981-24a7-45db-83c0-225257aaa907" class="">2. 파기방법</p><p id="e54e5f2a-e290-4333-83ac-fbb73f9104ae" class="">- 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각을 통하여 파기합니다.</p><p id="e4763711-33b6-465c-b088-c2e3af5999a4" class="">- 전자적 파일 형태로 저장된 개인정보는 기록을 재생할 수 없는 기술적 방법을 사용하여 삭제합니다.</p><p id="26e33185-a42d-4bf5-93d1-dde5c21f2238" class="">
+</p><h2 id="56d30790-237b-4f34-b267-5e00fbdaee91" class="">제 6조 (개인정보관리책임자 및 담당자의 연락처)</h2><p id="7b4328d7-69f1-439e-b910-fd434ab5df57" class="">서비스를 이용하며 발생하는 모든 개인정보보호 관련 민원을 개인정보관리책임자 혹은
+담당부서로 신고하실 수 있습니다. 서비스는 이용자들의 신고사항에 대해 신속하게 충분한 답변을
+드릴 것입니다.</p><p id="86981e69-0211-4ed6-8d06-ff0dcf1b9fe3" class="">● 이름 : 유종범</p><p id="7cfc264a-1a44-492c-9ee3-d8c2ddf30e30" class="">● 연락처 : whdqja4448@gmail.com</p><p id="fc2d6242-e264-4347-a14d-b65b2dcbc067" class="">기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기 바랍니다.</p><p id="7c02d6dc-e3f3-4107-b2cf-38a8c3439377" class="">● 개인정보침해신고센터 (www.118.or.kr / 118)</p><p id="32236a66-e5ac-4468-b38e-d44d4ee42721" class="">● 정보보호마크인증위원회 (www.eprivacy.or.kr / 02-580-0533~4)</p><p id="9f317fe8-fd38-4a24-80f5-e891b54532a0" class="">● 대검찰청 첨단범죄수사과 (http://www.spo.go.kr / 02-3480-2000)</p><p id="bbcffb9a-7d30-4eb1-a511-e40e73f0d4de" class="">● 경찰청 사이버테러대응센터 (www.ctrc.go.kr / 02-392-0330)</p><p id="48d0a1d8-3ec2-4cca-be73-5a995dc37025" class="">
+</p><h3 id="73f51f29-92d7-4f05-bb0e-2758986fae06" class="">제 7조 (고지의 의무)</h3><p id="1591038f-cce5-4c1a-a322-c1bf01ee52f7" class="">현 개인정보취급방침의 내용 추가, 삭제 및 수정이 있을 시에는 시행일자 최소 7일 전부터 서비스
+내 공지사항을 통해 공고할 것입니다.</p><p id="8c68ef82-193a-45dc-a17b-d13c36b2e919" class="">[시행일] 본 개인정보처리방침은 2023년 10월 15일부터 적용됩니다.</p><p id="3786f7ec-210c-4f8d-a109-569c7f1f8125" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -128,8 +128,21 @@ public class UserService {
         user.edit(usersEditor);
     }
 
-    public HtmlResponse selectTermsAndPrivacy() throws IOException {
-        Resource htmlResource = new ClassPathResource("static/tt.html");
+    public HtmlResponse selectTermsOfUse() throws IOException {
+        Resource htmlResource = new ClassPathResource("static/termsOfUse.html");
+        String htmlContent = StreamUtils.copyToString(htmlResource.getInputStream(), StandardCharsets.UTF_8);
+
+        HtmlResponse htmlResponse = new HtmlResponse();
+
+        htmlContent = htmlContent.replaceAll("\r\n", "").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\\\"", "\'");;
+
+        htmlResponse.setHtml(htmlContent);
+
+        return htmlResponse;
+    }
+
+    public HtmlResponse selectPrivacyPolicy() throws IOException {
+        Resource htmlResource = new ClassPathResource("static/privacyPolicy.html");
         String htmlContent = StreamUtils.copyToString(htmlResource.getInputStream(), StandardCharsets.UTF_8);
 
         HtmlResponse htmlResponse = new HtmlResponse();

@@ -92,7 +92,7 @@ public class AlarmController {
     @GetMapping("/getAlarmLocationWeatherDetail")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public List<AlarmLocationWeatherResponse> getAlarmLocationWeatherDetail(@Schema(description = "알람ID", example = "1", name = "alarmId") Long alarmId) {
+    public List<AlarmLocationWeatherDetailResponse> getAlarmLocationWeatherDetail(@Schema(description = "알람ID", example = "1", name = "alarmId") Long alarmId) {
         return alarmService.selectAlarmLocationWeatherDetail(alarmId);
     }
 

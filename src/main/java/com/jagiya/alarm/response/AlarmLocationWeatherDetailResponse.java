@@ -8,16 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AlarmLocationWeatherResponse {
-
-    @Hidden
-    private Long alarmLocationId;
-
-    @Hidden
-    private LocationGroup locationGroup;
-
-    @Hidden
-    private List<String> locationTimeList;
+public class AlarmLocationWeatherDetailResponse {
 
     @Schema(description = "시도", example = "부천시", name = "cityDo")
     private String cityDo;

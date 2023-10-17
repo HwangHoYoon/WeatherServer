@@ -83,13 +83,27 @@ public class UserController {
         return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
     }
 
-    @Operation(summary = "약관및개인정보처리방침 조회", description = "약관및개인정보처리방침 조회")
-    @GetMapping("/getTermsAndPrivacy")
+    @Operation(summary = "이용약관 조회", description = "이용약관 조회")
+    @GetMapping("/getTermsOfUse")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
     }
     )
-    public HtmlResponse getTermsAndPrivacy() throws IOException {
-        return userService.selectTermsAndPrivacy();
+    public HtmlResponse getTermsOfUse() throws IOException {
+        return userService.selectTermsOfUse();
     }
+
+
+    @Operation(summary = "개인정보처리방침 조회", description = "개인정보처리방침 조회")
+    @GetMapping("/getPrivacyPolicy")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    }
+    )
+    public HtmlResponse getPrivacyPolicy() throws IOException {
+        return userService.selectPrivacyPolicy();
+    }
+
+
+
 }

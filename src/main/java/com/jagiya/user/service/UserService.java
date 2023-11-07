@@ -1,7 +1,11 @@
 package com.jagiya.user.service;
 
 import com.jagiya.alarm.service.AlarmService;
+import com.jagiya.common.dto.Token;
+import com.jagiya.common.dto.TokenDto;
 import com.jagiya.common.exception.CommonException;
+import com.jagiya.common.repository.TokenRepository;
+import com.jagiya.common.utils.JwtUtil;
 import com.jagiya.user.entity.User;
 import com.jagiya.user.entity.UsersEditor;
 import com.jagiya.user.enums.LoginType;
@@ -10,6 +14,7 @@ import com.jagiya.user.request.UserDetailUpdateRequest;
 import com.jagiya.user.response.HtmlResponse;
 import com.jagiya.user.response.UserDetailResponse;
 import com.jagiya.user.response.UserRes;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +38,11 @@ public class UserService {
 
     private final AlarmService alarmService;
 
-    public UserRes login(String snsId, String name, String email, Integer snsType) {
+    private final JwtUtil jwtUtil;
+
+    private final TokenRepository tokenRepository;
+
+    public UserRes login(String snsId, String name, String email, Integer snsType, HttpServletResponse response) {
         Optional<User> usersInfo = userRepository.findBySnsTypeAndSnsId(snsType, snsId);
 
         User usersInfoRst;
@@ -74,6 +83,25 @@ public class UserService {
             usersInfoRst = userRepository.save(user);
         }
 
+        // 아이디 정보로 Token생성
+        TokenDto tokenDto = jwtUtil.createAllToken(String.valueOf(usersInfoRst.getUserId()));
+
+        // Refresh토큰 있는지 확인
+        Optional<Token> refreshToken = tokenRepository.findByUserUserId(String.valueOf(usersInfoRst.getUserId()));
+
+        // 있다면 새토큰 발급후 업데이트
+        // 없다면 새로 만들고 디비 저장
+
+        if(refreshToken.isPresent()) {
+            tokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        }else {
+            Token newToken = new Token(tokenDto.getRefreshToken(),  User.builder().userId(usersInfoRst.getUserId()).build());
+            tokenRepository.save(newToken);
+        }
+
+        // response 헤더에 Access Token / Refresh Token 넣음
+        setHeader(response, tokenDto);
+
         return UserRes.builder()
                 .userId(usersInfoRst.getUserId())
                 .snsId(usersInfoRst.getSnsId())
@@ -84,10 +112,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserRes loginAndUserTransform(Long asisUserId, String snsId, String name, String email, Integer snsType) {
+    public UserRes loginAndUserTransform(Long asisUserId, String snsId, String name, String email, Integer snsType, HttpServletResponse response) {
 
         // 새로운 계정으로 로그인
-        UserRes tobeUserRes = login(snsId, name, email, snsType);
+        UserRes tobeUserRes = login(snsId, name, email, snsType, response);
         Long tobeUserId = tobeUserRes.getUserId();
         if (tobeUserRes == null || tobeUserId == null) {
             throw new CommonException("정상적으로 로그인 되지 않았습니다.", "888");
@@ -152,5 +180,16 @@ public class UserService {
         htmlResponse.setHtml(htmlContent);
 
         return htmlResponse;
+    }
+
+    private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
+        response.addHeader(JwtUtil.ACCESS_TOKEN, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_TOKEN, tokenDto.getRefreshToken());
+    }
+
+    public void logout(HttpServletResponse response, Long userId) {
+        tokenRepository.deleteById(userId);
+        jwtUtil.setHeaderAccessToken(response, "");
+        jwtUtil.setHeaderRefreshToken(response, "");
     }
 }

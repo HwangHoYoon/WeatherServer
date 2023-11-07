@@ -8,6 +8,7 @@ import com.jagiya.alarm.response.*;
 import com.jagiya.alarm.service.AlarmService;
 import com.jagiya.common.response.CommonMsgResponse;
 import com.jagiya.common.response.MessageCode;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,18 +49,16 @@ public class AlarmController {
     @PostMapping("/insertAlarm")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public CommonMsgResponse insertAlarm(@RequestBody AlarmInsertRequest alarmInsertRequest) {
-        alarmService.insertAlarm(alarmInsertRequest);
-        return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
+    public AlarmDetailResponse insertAlarm(@RequestBody AlarmInsertRequest alarmInsertRequest) {
+        return alarmService.insertAlarm(alarmInsertRequest);
     }
 
     @Operation(summary = "알람 수정", description = "알람 수정")
     @PutMapping("/updateAlarm")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public CommonMsgResponse updateAlarm(@RequestBody AlarmUpdateRequest alarmUpdateRequest) {
-        alarmService.updateAlarm(alarmUpdateRequest);
-        return new CommonMsgResponse(MessageCode.SUCCESS_SAVE.getMessage());
+    public AlarmDetailResponse updateAlarm(@RequestBody AlarmUpdateRequest alarmUpdateRequest) {
+        return alarmService.updateAlarm(alarmUpdateRequest);
     }
 
     @Operation(summary = "알람 사용여부 변경", description = "알람 사용여부 변경")
@@ -98,6 +97,7 @@ public class AlarmController {
 
     @Operation(summary = "알람소리리스트 조회", description = "알람소리리스트 조회")
     @GetMapping("/getAlarmSoundList")
+    @Hidden
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
     public List<AlarmSoundResponse> getAlarmSoundList() throws Exception {

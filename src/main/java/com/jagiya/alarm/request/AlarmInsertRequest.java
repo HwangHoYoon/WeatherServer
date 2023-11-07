@@ -25,7 +25,7 @@ public class AlarmInsertRequest {
     private Integer vibration;
 
     @Schema(description = "요일목록",  name = "weekList")
-    private List<AlarmWeekRequest> weekList;
+    private List<AlarmWeekInsertRequest> weekList;
 
     @Schema(description = "알람소리코드", example = "1", name = "alarmSoundId")
     private Long alarmSoundId;
@@ -34,5 +34,5 @@ public class AlarmInsertRequest {
     private Integer volume;
 
     @Schema(description = "알람지역목록",  name = "alarmLocationList")
-    private List<AlarmLocationRequest> alarmLocationList;
+    private List<AlarmLocationInsertRequest> alarmLocationList;
 }

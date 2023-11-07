@@ -50,9 +50,9 @@ public class WebSecurityConfig {
 
         http.authorizeRequests().requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                //.and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                //.exceptionHandling()
+                //.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 
         ;
 

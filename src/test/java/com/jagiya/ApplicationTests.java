@@ -1,46 +1,26 @@
 package com.jagiya;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jagiya.weather.enums.WeatherResponseCode;
-//import com.jagiya.juso.request.GpsTransfer;
-import com.jagiya.main.entity.Temp;
-import com.jagiya.weather.entity.Weather;
-import com.jagiya.main.service.Impl.TestService;
-import com.jagiya.weather.response.WeatherApiResponse;
-import com.jagiya.weather.response.WeatherErrorResponse;
-import com.jagiya.weather.response.WeatherItem;
-import com.jagiya.weather.service.WeatherService;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.StringReader;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Base64;
 
 @SpringBootTest
 class ApplicationTests {
 
-	@Autowired
-	private TestService testService;
 
+	@Test
+	void test() {
+		String originalString = "16_6_BE_jagiya_secretKey_base64Encode_additional_data_20231024_hwang_jwt";
+		byte[] bytesToEncode = originalString.getBytes();
+		String encodedString = Base64.getEncoder().encodeToString(bytesToEncode);
+		System.out.println("Base64 인코딩 결과: " + encodedString);
 
-
-	@Autowired
-	private WeatherService weatherService;
-
+		// Base64 문자열을 디코딩
+		byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+		String decodedString = new String(decodedBytes);
+		System.out.println("Base64 디코딩 결과: " + decodedString);
+	}
 
 //	@Test
 //	void contextLoads() {

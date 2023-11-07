@@ -1,11 +1,10 @@
 package com.jagiya.main.service.Impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jagiya.common.repository.TokenRepository;
 import com.jagiya.main.dto.login.AppleDTO;
 import com.jagiya.main.dto.login.MsgEntity;
-import com.jagiya.main.entity.Token;
 import com.jagiya.main.entity.Users;
-import com.jagiya.main.repository.TokenRepository;
 import com.jagiya.main.repository.UsersRepository;
 import com.jagiya.main.service.inf.AppleService;
 import com.nimbusds.jose.JOSEException;
@@ -62,8 +61,6 @@ public class AppleServiceImpl implements AppleService {
     private String APPLE_KEY_PATH;
 
     private final UsersRepository usersRepository;
-
-    private final TokenRepository tokenRepository;
 
     private final static String APPLE_AUTH_URL = "https://appleid.apple.com";
 
@@ -236,22 +233,6 @@ public class AppleServiceImpl implements AppleService {
                         .build();
 
         usersRepository.save(users);
-
-
-        Token token = Token.builder()
-                                .users(users)
-                                .tokenType("")
-                                .accessToken(msgEntity.getResult().getToken())
-                                .idToken("")
-                                .refreshToken("")
-                                .scope("")
-                                .regDate(new Date())
-                                .build();
-
-        tokenRepository.save(token);
-
-
-
 
     }
 

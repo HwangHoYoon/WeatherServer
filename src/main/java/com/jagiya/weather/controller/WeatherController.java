@@ -31,7 +31,7 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/getLocationForWeather")
-    @Operation(summary = "지역별 날씨", description = "지역코드와 기준날짜를 입력하면 날씨DB를 조회(지역코드는 /location/getLocation에서 조회가능하다.)")
+    @Operation(summary = "지역별 날씨", description = "지역코드와 기준날짜를 입력하면 날씨DB를 조회(지역코드는 /location/getLocation에서 조회가능하다.) 테스트용 실제 사용 X")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
         }
@@ -41,7 +41,7 @@ public class WeatherController {
     }
 
     @GetMapping("/refreshLocationForWeather")
-    @Operation(summary = "지역별 날씨갱신", description = "지역코드와 갱신타입을 입력하면 해당 지역의 날씨를 갱신하여 DB를 저장하고 조회")
+    @Operation(summary = "지역별 날씨갱신", description = "지역코드와 갱신타입을 입력하면 해당 지역의 날씨를 갱신하여 DB를 저장하고 조회 테스트용 실제 사용 X")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
         }

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.util.Base64Utils;
 
 import java.security.PublicKey;
 import java.util.Map;
@@ -22,7 +20,7 @@ public class JwtParser {
     public Map<String, String> parseHeaders(String token) {
         try {
             String encodedHeader = token.split(TOKEN_VALUE_DELIMITER)[HEADER_INDEX];
-            String decodedHeader = new String(Base64Utils.decodeFromUrlSafeString(encodedHeader));
+            String decodedHeader = new String();
             return OBJECT_MAPPER.readValue(decodedHeader, Map.class);
         } catch (JsonProcessingException | ArrayIndexOutOfBoundsException e) {
 //            throw UnauthorizedException.invalid();

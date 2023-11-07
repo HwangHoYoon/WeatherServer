@@ -1,4 +1,4 @@
-package com.jagiya.user.entity;
+package com.jagiya.common.dto;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,31 +16,21 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QToken extends EntityPathBase<Token> {
 
-    private static final long serialVersionUID = 22756753L;
+    private static final long serialVersionUID = -602993529L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QToken token = new QToken("token");
 
-    public final StringPath accessToken = createString("accessToken");
-
-    public final NumberPath<Integer> expiresIn = createNumber("expiresIn", Integer.class);
-
-    public final StringPath idToken = createString("idToken");
+    public final DateTimePath<java.util.Date> modifyDate = createDateTime("modifyDate", java.util.Date.class);
 
     public final StringPath refreshToken = createString("refreshToken");
 
-    public final NumberPath<Integer> refreshTokenExpiresIn = createNumber("refreshTokenExpiresIn", Integer.class);
-
     public final DateTimePath<java.util.Date> regDate = createDateTime("regDate", java.util.Date.class);
 
-    public final StringPath scope = createString("scope");
+    public final NumberPath<Long> tokenId = createNumber("tokenId", Long.class);
 
-    public final NumberPath<Integer> tokenId = createNumber("tokenId", Integer.class);
-
-    public final StringPath tokenType = createString("tokenType");
-
-    public final com.jagiya.main.entity.QUsers usersTb;
+    public final com.jagiya.user.entity.QUser user;
 
     public QToken(String variable) {
         this(Token.class, forVariable(variable), INITS);
@@ -60,7 +50,7 @@ public class QToken extends EntityPathBase<Token> {
 
     public QToken(Class<? extends Token> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.usersTb = inits.isInitialized("usersTb") ? new com.jagiya.main.entity.QUsers(forProperty("usersTb")) : null;
+        this.user = inits.isInitialized("user") ? new com.jagiya.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

@@ -46,7 +46,7 @@
         </root>
     </springProfile>
     <springProfile name="dev">
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="SERVICE_FILE" />
             <appender-ref ref="ERROR_FILE" />

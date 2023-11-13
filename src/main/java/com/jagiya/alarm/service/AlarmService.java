@@ -6,6 +6,7 @@ import com.jagiya.alarm.repository.*;
 import com.jagiya.alarm.request.*;
 import com.jagiya.alarm.response.*;
 import com.jagiya.common.exception.CommonException;
+import com.jagiya.common.utils.DateUtils;
 import com.jagiya.location.entity.Location;
 import com.jagiya.location.entity.LocationGroup;
 import com.jagiya.location.request.LocationRequest;
@@ -20,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -909,5 +911,44 @@ public class AlarmService {
     public void updateAlarmUserId(Long asisUserId, Long tobeUserId) {
         List<Alarm> alarmList = alarmRepository.findByUserUserId(asisUserId);
         alarmList.stream().forEach(alarm -> alarm.setUser(User.builder().userId(tobeUserId).build()));
+    }
+
+    public List<AlarmLocationTimeListResponse> selectAlarmLocationTimeList(String alarmTime) {
+        List<AlarmLocationTimeListResponse> alarmLocationTimeList = new ArrayList<>();
+
+        // 현재 시간을 가져옵니다.
+        LocalTime localTime = LocalTime.parse(alarmTime, DateTimeFormatter.ofPattern("HHmm"));
+        LocalDateTime currentTime = LocalDateTime.now();
+        currentTime = currentTime.withHour(localTime.getHour());
+        currentTime = currentTime.withMinute(localTime.getMinute());
+
+        // 현재 분이 0분이면 현재 시간도 추가
+        if (currentTime.getMinute() == 0) {
+            AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
+            alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
+            alarmLocationTimeList.add(alarmLocationTimeListResponse);
+        }
+
+        // 24시간 동안 1시간씩 증가시키며 출력합니다.
+        for (int i = 0; i < 24; i++) {
+
+            // 1시간을 더한 후, 다음 날인지 체크합니다.
+            currentTime = currentTime.plusHours(1);
+            currentTime = currentTime.withMinute(0);
+            if (currentTime.toLocalDate().isAfter(LocalDateTime.now().toLocalDate())) {
+                // 다음 날이면 루프를 종료합니다.
+                break;
+            }
+            AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
+            alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
+            alarmLocationTimeList.add(alarmLocationTimeListResponse);
+        }
+        return alarmLocationTimeList;
+    }
+
+    // 시간을 원하는 형식으로 포맷팅하는 메서드
+    private static String formatTime(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+        return time.format(formatter);
     }
 }

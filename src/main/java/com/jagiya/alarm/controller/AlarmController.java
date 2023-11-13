@@ -104,4 +104,13 @@ public class AlarmController {
         return alarmService.selectAlarmSoundList();
     }
 
+
+    @Operation(summary = "알람지역시간목록 조회", description = "알람지역시간목록 조회")
+    @GetMapping("/getAlarmLocationTimeList")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
+    )
+    public List<AlarmLocationTimeListResponse> getAlarmLocationTimeList(@Schema(description = "알람시간", example = "0120", name = "alarmTime") String alarmTime) {
+        return alarmService.selectAlarmLocationTimeList(alarmTime);
+    }
+
 }

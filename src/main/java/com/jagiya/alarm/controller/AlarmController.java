@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,7 @@ public class AlarmController {
     @GetMapping("/getAlarmList")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public List<AlarmResponse> getAlarmList(@Schema(description = "유저ID", example = "example1", name = "userId") Long userId) throws Exception {
+    public List<AlarmResponse> getAlarmList(@Schema(description = "유저ID", example = "example1", name = "userId") @NotBlank(message = "userId는 필수입니다.") Long userId) throws Exception {
         return alarmService.selectAlarmList(userId);
     }
 
@@ -41,7 +43,7 @@ public class AlarmController {
     @GetMapping("/getAlarmDetail")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public AlarmDetailResponse getAlarmDetail(@Schema(description = "알람ID", example = "1", name = "alarmId") Long alarmId) throws Exception {
+    public AlarmDetailResponse getAlarmDetail(@Schema(description = "알람ID", example = "1", name = "alarmId") @NotBlank(message = "alarmId는 필수입니다.") Long alarmId) throws Exception {
         return alarmService.selectAlarmDetail(alarmId);
     }
 
@@ -49,7 +51,7 @@ public class AlarmController {
     @PostMapping("/insertAlarm")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public AlarmDetailResponse insertAlarm(@RequestBody AlarmInsertRequest alarmInsertRequest) {
+    public AlarmDetailResponse insertAlarm(@RequestBody @Valid AlarmInsertRequest alarmInsertRequest) {
         return alarmService.insertAlarm(alarmInsertRequest);
     }
 

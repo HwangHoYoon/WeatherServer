@@ -109,7 +109,7 @@ public class AlarmController {
     @GetMapping("/getAlarmLocationTimeList")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public List<AlarmLocationTimeListResponse> getAlarmLocationTimeList(@Schema(description = "알람시간", example = "0120", name = "alarmTime") String alarmTime) {
+    public List<String> getAlarmLocationTimeList(@Schema(description = "알람시간", example = "0120", name = "alarmTime") String alarmTime) {
         return alarmService.selectAlarmLocationTimeList(alarmTime);
     }
 

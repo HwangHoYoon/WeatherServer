@@ -541,25 +541,36 @@ public class AlarmService {
             String reminder = alarm.getReminder();
             alarmLocationNotiResponse.setReminder(reminder);
             List<AlarmLocationWeatherResponse> alarmLocationWeatherResponseList = selectAlarmLocationWeatherList(alarmId);
-            int locationCnt = alarmLocationWeatherResponseList.size() == 0 ? alarmLocationWeatherResponseList.size() : alarmLocationWeatherResponseList.size() - 1;
-            alarmLocationNotiResponse.setLocationCnt(locationCnt);
-
             TimeOfDay[] timeOfDays = TimeOfDay.values();
-            for (TimeOfDay timeOfDay : timeOfDays) {
-                for (AlarmLocationWeatherResponse alarmLocationWeatherResponse : alarmLocationWeatherResponseList) {
-                    if (StringUtils.equals(timeOfDay.getEngName(), alarmLocationWeatherResponse.getTimeOfDay())) {
-                        alarmLocationNotiResponse.setCityDo(alarmLocationWeatherResponse.getCityDo());
-                        alarmLocationNotiResponse.setGuGun(alarmLocationWeatherResponse.getGuGun());
-                        alarmLocationNotiResponse.setEupMyun(alarmLocationWeatherResponse.getEupMyun());
-                        alarmLocationNotiResponse.setTimeOfDay(alarmLocationWeatherResponse.getTimeOfDay());
-                        return alarmLocationNotiResponse;
+            int locationCnt = 0;
+            String cityDo = "";
+            String guGun = "";
+            String eupMyun = "";
+            String timeOfDayTxt = "";
+            for (AlarmLocationWeatherResponse alarmLocationWeatherResponse : alarmLocationWeatherResponseList) {
+                if (alarmLocationWeatherResponse.isLocationRain()) {
+                    if (locationCnt == 0) {
+                        for (TimeOfDay timeOfDay : timeOfDays) {
+                            if (StringUtils.equals(timeOfDay.getEngName(), alarmLocationWeatherResponse.getTimeOfDay())) {
+                                cityDo = alarmLocationWeatherResponse.getCityDo();
+                                guGun = alarmLocationWeatherResponse.getGuGun();
+                                eupMyun = alarmLocationWeatherResponse.getEupMyun();
+                                timeOfDayTxt = alarmLocationWeatherResponse.getTimeOfDay();
+                            }
+                        }
                     }
+                    locationCnt += 1;
                 }
             }
+            alarmLocationNotiResponse.setCityDo(cityDo);
+            alarmLocationNotiResponse.setGuGun(guGun);
+            alarmLocationNotiResponse.setEupMyun(eupMyun);
+            alarmLocationNotiResponse.setTimeOfDay(timeOfDayTxt);
+            alarmLocationNotiResponse.setLocationCnt(locationCnt == 0 ? locationCnt : locationCnt - 1);
+            return alarmLocationNotiResponse;
         } else {
             throw new CommonException("알람정보가 올바르지 않습니다.", "443");
         }
-        return null;
     }
 
     public List<AlarmLocationWeatherResponse> selectAlarmLocationWeatherList(Long alarmId) {
@@ -721,118 +732,6 @@ public class AlarmService {
                             timeOfDay = TimeOfDay.AFTERNOON.getEngName();
                         }
                         alarmLocationWeatherResponse.setTimeOfDay(timeOfDay);
-                        alarmLocationWeatherResponse.setAlarmLocationWeatherList(alarmLocationWeatherDataResponseDataList);
-                    }
-                }
-            });
-        } else {
-            throw new CommonException("알람정보가 잘못되었습니다.", "444");
-        }
-        return alarmLocationWeatherResponseList;
-    }
-
-
-    public List<AlarmLocationWeatherResponse> selectAlarmLocationWeatherDetailList(Long alarmId) {
-        List<AlarmLocationWeatherResponse> alarmLocationWeatherResponseList = new ArrayList<>();
-        if (alarmId != null) {
-            Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new CommonException("알람 정보가 올바르지 않습니다.", "666"));
-
-            // 해당 알람과 동일한 시간대의 유저 알람 목록을 조회한다.
-            String alarmTime = alarm.getAlarmTime();
-            Long userId = alarm.getUser().getUserId();
-            Integer enabled = 1;
-            String baseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-            // 알람 설정 시간 이후 시간 목록
-            List<AlarmLocationTimeListResponse> locationTimeList = selectAlarmLocationTimeList(alarmTime);
-            List<Alarm> alarmList = alarmRepository.findByUserUserIdAndAlarmTimeAndEnabledOrderByAlarmId(userId, alarmTime, enabled);
-
-            alarmList.stream().forEach(alarmData -> {
-                Long alarmDataId = alarmData.getAlarmId();
-
-                // 알람 지역 조회
-                List<AlarmLocation> alarmLocationList = alarmLocationRespository.findByAlarmAlarmIdOrderByAlarmLocationId(alarmDataId);
-
-                alarmLocationList.stream().forEach(alarmLocation -> {
-                    AlarmLocationWeatherResponse alarmLocationWeatherResponse = new AlarmLocationWeatherResponse();
-
-                    Long alarmLocationId = alarmLocation.getAlarmLocationId();
-                    LocationGroup locationGroup = alarmLocation.getLocation().getLocationGroup();
-
-                    String cityDo = alarmLocation.getLocation().getCityDo();
-                    String guGun = alarmLocation.getLocation().getGuGun();
-                    String eupMyun = alarmLocation.getLocation().getEupMyun();
-                    String regionCd = alarmLocation.getLocation().getRegionCd();
-
-                    alarmLocationWeatherResponse.setAlarmLocationId(alarmLocationId);
-                    alarmLocationWeatherResponse.setLocationGroup(locationGroup);
-                    alarmLocationWeatherResponse.setCityDo(cityDo);
-                    alarmLocationWeatherResponse.setGuGun(guGun);
-                    alarmLocationWeatherResponse.setEupMyun(eupMyun);
-                    alarmLocationWeatherResponse.setRegionCd(regionCd);
-                    alarmLocationWeatherResponseList.add(alarmLocationWeatherResponse);
-                });
-            });
-
-            // 데이터 세팅
-            alarmLocationWeatherResponseList.stream().forEach(alarmLocationWeatherResponse -> {
-                List<AlarmLocationWeatherDataResponse> alarmLocationWeatherDataResponseDataList = new ArrayList<>();
-                LocationGroup locationGroup = alarmLocationWeatherResponse.getLocationGroup();
-
-                boolean locationRain = false;
-                boolean amCk = false;
-                boolean pmCk = false;
-                for (AlarmLocationTimeListResponse alarmLocationTimeListResponse : locationTimeList) {
-                    String fcstTime = alarmLocationTimeListResponse.getLocationTime();
-                    AlarmLocationWeatherDataResponse alarmLocationWeatherDataResponse = new AlarmLocationWeatherDataResponse();
-                    Weather weather = weatherService.selectLocationAndTimeForWeather(locationGroup, baseDate, fcstTime);
-
-                    if (weather != null) {
-                        // 비오는 기준 PTY 강수형태
-                        // (초단기)없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7)
-                        // (단기)없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
-                        String ptyTxt = weather.getPty();
-
-                        boolean rain = false;
-                        if (StringUtils.isNotBlank(ptyTxt)) {
-                            try {
-                                int pty = Integer.parseInt(ptyTxt);
-                                // 1 부터 6까지 비
-                                if (pty > 0 && pty < 7) {
-                                    rain = true;
-                                    locationRain = true;
-                                }
-                            } catch (NumberFormatException e) {
-                                log.error("강수량이 숫자형식이 아닙니다. {}, {}", ptyTxt, e);
-                            }
-                        }
-                        alarmLocationWeatherDataResponse.setRain(rain);
-                        // 시간 AM, PM 변환
-                        String timeOfDay = getTimeOfDay(fcstTime);
-                        String alarmLocationTimeConvert = getTime(fcstTime, "HHmm", "hhmm");
-
-                        if (rain) {
-                            if (StringUtils.equals(timeOfDay, TimeOfDay.MORINING.getEngName())) {
-                                amCk = true;
-                            } else if (StringUtils.equals(timeOfDay, TimeOfDay.AFTERNOON.getEngName())) {
-                                pmCk = true;
-                            }
-                        }
-                        alarmLocationWeatherDataResponse.setLocationTime(alarmLocationTimeConvert);
-                        alarmLocationWeatherDataResponse.setTimeOfDay(timeOfDay);
-                        alarmLocationWeatherDataResponseDataList.add(alarmLocationWeatherDataResponse);
-                    }
-                    alarmLocationWeatherResponse.setLocationRain(locationRain);
-                    if (locationRain) {
-                        String timeOfDay = "";
-                        if (amCk && pmCk) {
-                            timeOfDay = TimeOfDay.ALLDAY.getEngName();
-                        } else if (amCk) {
-                            timeOfDay = TimeOfDay.MORINING.getEngName();
-                        } else if (pmCk) {
-                            timeOfDay = TimeOfDay.AFTERNOON.getEngName();
-                        }
-                        alarmLocationWeatherResponse.setTimeOfDay(timeOfDay);
                     }
                     alarmLocationWeatherResponse.setAlarmLocationWeatherList(alarmLocationWeatherDataResponseDataList);
                 }
@@ -871,7 +770,7 @@ public class AlarmService {
     }
 
     public List<AlarmLocationWeatherDetailResponse> selectAlarmLocationWeatherDetail(Long alarmId) {
-        List<AlarmLocationWeatherResponse> alarmLocationWeatherResponseList = selectAlarmLocationWeatherDetailList(alarmId);
+        List<AlarmLocationWeatherResponse> alarmLocationWeatherResponseList = selectAlarmLocationWeatherList(alarmId);
 
         List<AlarmLocationWeatherDetailResponse> alarmLocationWeatherDetailResponses = new ArrayList<>();
 
@@ -1031,8 +930,8 @@ public class AlarmService {
         alarmList.stream().forEach(alarm -> alarm.setUser(User.builder().userId(tobeUserId).build()));
     }
 
-    public List<AlarmLocationTimeListResponse> selectAlarmLocationTimeList(String alarmTime) {
-        List<AlarmLocationTimeListResponse> alarmLocationTimeList = new ArrayList<>();
+    public List<String> selectAlarmLocationTimeList(String alarmTime) {
+        List<String> alarmLocationTimeList = new ArrayList<>();
 
         // 현재 시간을 가져옵니다.
         LocalTime localTime = LocalTime.parse(alarmTime, DateTimeFormatter.ofPattern("HHmm"));
@@ -1042,9 +941,10 @@ public class AlarmService {
 
         // 현재 분이 0분이면 현재 시간도 추가
         if (currentTime.getMinute() == 0) {
-            AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
-            alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
-            alarmLocationTimeList.add(alarmLocationTimeListResponse);
+            //AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
+            //alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
+            //alarmLocationTimeList.add(alarmLocationTimeListResponse);
+            alarmLocationTimeList.add(formatTime(currentTime));
         }
 
         // 24시간 동안 1시간씩 증가시키며 출력합니다.
@@ -1057,9 +957,10 @@ public class AlarmService {
                 // 다음 날이면 루프를 종료합니다.
                 break;
             }
-            AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
-            alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
-            alarmLocationTimeList.add(alarmLocationTimeListResponse);
+            //AlarmLocationTimeListResponse alarmLocationTimeListResponse = new AlarmLocationTimeListResponse();
+           //alarmLocationTimeListResponse.setLocationTime(formatTime(currentTime));
+            //alarmLocationTimeList.add(alarmLocationTimeListResponse);
+            alarmLocationTimeList.add(formatTime(currentTime));
         }
         return alarmLocationTimeList;
     }

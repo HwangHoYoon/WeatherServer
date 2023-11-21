@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AlarmLocationTimeRespository extends JpaRepository<AlarmLocationTime, Long> {
 
-    List<AlarmLocationTime> findByAlarmLocationAlarmLocationIdOrderByAlarmLocationTimeId(Long alarmLocationId);
+    List<AlarmLocationTime> findByAlarmLocationAlarmLocationIdOrderByLocationTime(Long alarmLocationId);
 
 
     List<AlarmLocationTime> findByAlarmLocationAlarmLocationId(Long alarmLocationId);

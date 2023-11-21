@@ -10,6 +10,8 @@ import com.jagiya.common.response.CommonMsgResponse;
 import com.jagiya.common.response.MessageCode;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -109,8 +111,11 @@ public class AlarmController {
 
     @Operation(summary = "알람지역시간목록 조회", description = "알람지역시간목록 조회")
     @GetMapping("/getAlarmLocationTimeList")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
-    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(schema = @Schema(example = "[\"0100\", \"0200\"]"))
+            })
+    })
     public List<String> getAlarmLocationTimeList(@Schema(description = "알람시간", example = "0120", name = "alarmTime") String alarmTime) {
         return alarmService.selectAlarmLocationTimeList(alarmTime);
     }

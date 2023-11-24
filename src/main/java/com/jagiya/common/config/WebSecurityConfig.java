@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().requestMatchers("/user/login").permitAll()
+        http.authorizeRequests().requestMatchers("/user/login", "/user/getTermsOfUse", "/user/getPrivacyPolicy").permitAll()
 
        // http.authorizeRequests().requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()

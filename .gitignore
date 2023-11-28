@@ -39,3 +39,4 @@ out/
 ### application ###
 **/application-dev.yml
 **/application-local.yml
+**/application-real.yml

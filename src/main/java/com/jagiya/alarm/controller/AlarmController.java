@@ -35,7 +35,7 @@ public class AlarmController {
     @GetMapping("/getAlarmList")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")}
     )
-    public List<AlarmResponse> getAlarmList(@Schema(description = "유저ID", example = "example1", name = "userId") Long userId) throws Exception {
+    public List<AlarmResponse> getAlarmList(@Schema(description = "유저ID", example = "1", name = "userId") Long userId) throws Exception {
         return alarmService.selectAlarmList(userId);
     }
 

@@ -46,22 +46,17 @@ public class RecentLocationController {
     @GetMapping("/getRecentLocation")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public RecentLocationResponse getRecentLocation(
-            @Schema(description = "소셜 계정 ID (비회원은 디바이스 ID)", example = "example1", name = "snsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String snsId,
-            @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType,
+            @Schema(description = "userId", example = "1", name = "userId") @NotBlank(message = "userId를 입력해주세요.") Long userId,
             @Schema(description = "시/도", example = "경상남도", name = "cityDo") String cityDo,
             @Schema(description = "구/군", example = "거제시", name = "guGun") String guGun,
             @Schema(description = "읍면동", example = "상동동", name = "eupMyun") String eupMyun,
             @Schema(description = "법정동코드", example = "4831011000", name = "regionCd") String regionCd
     ) throws Exception {
 
-
-        User usersInfo = usersRepository.findBySnsTypeAndSnsId(snsType, snsId).orElseThrow(() -> new MemberNotFoundException("회원이 존재하지 않습니다."));
+        User usersInfo = usersRepository.findById(userId).orElseThrow(() -> new MemberNotFoundException("회원이 존재하지 않습니다."));
 
         //만약 최근 주소 검색에서 가져온 주소일 경우 기존데이터 삭제후 재등록
         return recentLocationService.recentSaveLocation(usersInfo, cityDo, guGun, eupMyun, regionCd);
-
-
-
 
     }
 
@@ -69,15 +64,10 @@ public class RecentLocationController {
     @Operation(summary = "최근검색 주소목록", description = "최근 검색한 주소목록")
     @GetMapping("/getRecentSelectLocation")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    public List<RecentLocation> getRecentSelectLocation(
-            @Schema(description = "소셜 계정 ID (비회원은 디바이스 ID)", example = "example1", name = "snsId") @NotBlank(message = "소셜계정ID를 입력해주세요.") String snsId,
-            @Schema(description = "소셜 타입(0 비회원, 1 카카오, 2 애플)", example = "0", name = "snsType") @NotBlank(message = "소셜타입을 입력해주세요.") Integer snsType
+    public List<RecentLocationResponse> getRecentSelectLocation(
+            @Schema(description = "userId", example = "1", name = "userId") @NotBlank(message = "userId를 입력해주세요.") Long userId
     ) throws Exception {
-
-        User usersInfo = usersRepository.findBySnsTypeAndSnsId(snsType, snsId).orElseThrow(() -> new MemberNotFoundException("회원이 존재하지 않습니다."));
-        return recentLocationRepository.findTop10ByUserTbOrderByRegDateDesc(usersInfo);
-
-
+        return recentLocationService.selectRecentSelectLocation(userId);
     }
 
 

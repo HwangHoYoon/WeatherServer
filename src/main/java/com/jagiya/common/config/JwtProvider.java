@@ -22,10 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtProvider {
 
-
-    private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer";
-
     private final long ACCESS_TOKEN_EXPIRE_TIME;            // 30분
     private final long REFRESH_TOKEN_EXPIRE_TIME;  // 7일
 

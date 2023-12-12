@@ -11,4 +11,5 @@ public interface WeatherRepository extends JpaRepository<Weather, Long> {
 
     Weather findByLocationGroupLocationGroupIdAndFcstDateAndFcstTime(Long locationoGroupId, String fcstDate, String fcstTime);
 
+    List<Weather> findByBaseDateLessThanEqual(String baseDate);
 }

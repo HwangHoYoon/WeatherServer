@@ -493,4 +493,14 @@ public class WeatherService {
             }
         }
     }
+
+    @Transactional
+    public void deleteBeforeWeather() {
+        String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<Weather> weatherList = weatherRepository.findByBaseDateLessThanEqual(baseDate);
+        if (weatherList != null) {
+            log.info("deleteBeforeWeather Size {}, baseTime {}", weatherList.size() , baseDate);
+        }
+        weatherRepository.deleteAll(weatherList);
+    }
 }

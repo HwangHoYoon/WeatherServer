@@ -16,7 +16,7 @@ public class WeatherScheduledTask {
     @Scheduled(cron = "0 00 6 * * ?")
     public void runTask() throws Exception {
         log.info("weather Scheduled start");
-        //weatherService.insertWeather();
+        weatherService.deleteBeforeWeather();
         log.info("weather Scheduled end");
     }
 }
